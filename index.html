@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เรียนภาษาฝรั่งเศส 🇫🇷</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        body { font-family: 'Inter', 'Sarabun', sans-serif; background: #F5F5F7; color: #1D1D1F; }
+        .thai { font-family: 'Sarabun', sans-serif; }
+
+        /* Sidebar */
+        #sidebar { transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1); }
+        #overlay { transition: opacity 0.25s ease; }
+        .lesson-btn { transition: background 0.15s ease, color 0.15s ease; }
+        .lesson-btn:hover { background: #F5F5F7; }
+        .lesson-btn.active { background: rgba(0, 113, 227, 0.09); color: #0071E3; }
+        .lesson-btn.active .lesson-title { color: #0071E3; font-weight: 600; }
+
+        /* Animations */
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in { animation: fadeSlideIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner { animation: spin 0.75s linear infinite; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+
+        /* Input */
+        .answer-input { transition: border-color 0.2s, box-shadow 0.2s, background 0.2s; }
+        .answer-input:focus { outline: none; box-shadow: 0 0 0 3.5px rgba(0,113,227,0.22); border-color: #0071E3; }
+
+        /* Chevron */
+        .chevron { transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+        .chevron.open { transform: rotate(180deg); }
+
+        /* Phase content */
+        .phase-lessons { transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease; overflow: hidden; max-height: 0; opacity: 0; }
+        .phase-lessons.open { max-height: 600px; opacity: 1; }
+
+        /* Button press */
+        .btn-press:active { transform: scale(0.975); }
+
+        /* Lesson tables */
+        .ltable { width:100%; border-collapse:collapse; font-size:13px; }
+        .ltable th { background:#F5F5F7; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#6E6E73; padding:7px 12px; text-align:left; }
+        .ltable td { padding:8px 12px; border-top:1px solid #F0F0F0; vertical-align:top; }
+        .ltable tr:first-child td { border-top:none; }
+        .ltable .fr { font-weight:600; color:#1D1D1F; }
+        .ltable .th { font-family:'Sarabun',sans-serif; color:#4B5563; }
+        .ltable .note { font-size:11px; color:#9CA3AF; font-style:italic; }
+        .rule-box { background:#EFF6FF; border:1px solid #BFDBFE; border-radius:14px; padding:12px 14px; }
+        .tip-box  { background:#FFF7ED; border:1px solid #FED7AA; border-radius:14px; padding:12px 14px; }
+        .ex-box   { background:#F0FDF4; border:1px solid #BBF7D0; border-radius:14px; padding:12px 14px; }
+        .sec-head { font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#9CA3AF; margin-bottom:8px; }
+
+        /* Lesson collapsible */
+        .lesson-body { transition: max-height .4s cubic-bezier(.16,1,.3,1), opacity .3s ease; overflow:hidden; }
+        .lesson-body.collapsed { max-height:0 !important; opacity:0; }
+
+        /* Debug modal */
+        #debug-modal { display:none; }
+        #debug-modal.open { display:flex; }
+        #debug-btn { opacity:0; pointer-events:none; transition:opacity .2s; }
+        #debug-btn.visible { opacity:1; pointer-events:auto; }
+    </style>
+</head>
+<body class="min-h-screen">
+
+<!-- ========== MOBILE OVERLAY ========== -->
+<div id="overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-20 hidden opacity-0" onclick="closeSidebar()"></div>
+
+<!-- ========== SIDEBAR ========== -->
+<aside id="sidebar" class="fixed top-0 left-0 h-full w-72 bg-white/96 backdrop-blur-2xl border-r border-gray-100/80 z-30 flex flex-col -translate-x-full lg:translate-x-0 shadow-2xl lg:shadow-none">
+
+    <!-- Logo -->
+    <div class="p-5 border-b border-gray-100">
+        <div class="flex items-center gap-3">
+            <div class="w-11 h-11 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-xl shadow-md select-none">🇫🇷</div>
+            <div>
+                <h1 class="font-bold text-[15px] text-[#1D1D1F] tracking-tight">Le Français</h1>
+                <p class="text-[12px] text-[#6E6E73] thai">เรียนภาษาฝรั่งเศส</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nav -->
+    <nav id="lessons-nav" class="flex-1 overflow-y-auto p-3 space-y-0.5"></nav>
+
+    <!-- Footer -->
+    <div class="p-4 border-t border-gray-100">
+        <p class="text-[11px] text-[#6E6E73] text-center thai leading-relaxed">สร้างด้วยความรัก ❤️ สำหรับคุณ</p>
+    </div>
+</aside>
+
+<!-- ========== MAIN AREA ========== -->
+<div class="lg:ml-72 min-h-screen flex flex-col">
+
+    <!-- Mobile header -->
+    <header class="lg:hidden sticky top-0 z-10 bg-white/92 backdrop-blur-2xl border-b border-gray-100 px-4 py-3 flex items-center gap-3">
+        <button onclick="openSidebar()" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-gray-100 transition-colors">
+            <svg class="w-5 h-5 text-[#1D1D1F]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </button>
+        <div class="flex items-center gap-2">
+            <span class="text-lg">🇫🇷</span>
+            <span class="font-semibold text-[15px]">Le Français</span>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 flex items-start justify-center p-4 md:p-8 lg:p-10">
+        <div class="w-full max-w-2xl">
+
+            <!-- Welcome Screen -->
+            <div id="welcome-screen" class="flex flex-col items-center justify-center min-h-[70vh] text-center animate-in">
+                <div class="text-7xl mb-6 select-none">🇫🇷</div>
+                <h2 class="text-3xl font-bold text-[#1D1D1F] mb-2 tracking-tight">Bienvenue !</h2>
+                <p class="text-[#6E6E73] thai text-xl mb-1">ยินดีต้อนรับ</p>
+                <p class="text-[#6E6E73] text-sm mb-10">เลือกบทเรียนจากเมนูด้านซ้ายเพื่อเริ่มต้น ☜</p>
+                <div class="grid grid-cols-3 gap-4 w-full max-w-xs">
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col items-center">
+                        <div class="text-2xl mb-1.5">📚</div>
+                        <div class="text-[12px] font-semibold text-[#1D1D1F]">31 บทเรียน</div>
+                        <div class="text-[10px] text-[#6E6E73] thai">6 phases</div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col items-center">
+                        <div class="text-2xl mb-1.5">✨</div>
+                        <div class="text-[12px] font-semibold text-[#1D1D1F]">AI สอน</div>
+                        <div class="text-[10px] text-[#6E6E73] thai">Gemini</div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col items-center">
+                        <div class="text-2xl mb-1.5">🇹🇭</div>
+                        <div class="text-[12px] font-semibold text-[#1D1D1F]">ไทย</div>
+                        <div class="text-[10px] text-[#6E6E73] thai">อธิบายไทย</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lesson Content (injected by JS) -->
+            <div id="lesson-content" class="hidden pb-10"></div>
+
+        </div>
+    </main>
+</div>
+
+<script>
+// ============================================================
+// CONFIG — Remplis ta clé API Gemini ici
+// ============================================================
+const GEMINI_API_KEY = "AIzaSyDcTcbzlMfWQTuTt0kqhPPvdw2sN_LSUrE";
+
+// ============================================================
+// CURRICULUM
+// ============================================================
+const curriculum = [
+    {
+        id: 1, phase: "Phase 1", title: "Les Fondations", titleTh: "การปูพื้นฐาน", icon: "🌱", color: "emerald",
+        lessons: [
+            { id: "1-1", title: "L'Alphabet et la Prononciation", titleTh: "พยัญชนะและการออกเสียง",
+              topic: "the French alphabet and pronunciation, specifically focusing on sounds absent in Thai: the French R (guttural), the French U vowel, and nasal vowels (an/en, on, in/ain, un)" },
+            { id: "1-2", title: "Les Salutations et Se présenter", titleTh: "การทักทายและการแนะนำตัว",
+              topic: "French greetings (Bonjour, Bonsoir, Salut, Bonne nuit, Au revoir, À bientôt) and self-introduction phrases (Je m'appelle..., J'ai ... ans, Je suis de..., Je suis...)" },
+            { id: "1-3", title: "Tu ou Vous — La Politesse", titleTh: "การใช้ Tu และ Vous",
+              topic: "the sociolinguistic distinction between Tu (informal, with friends/family/peers) and Vous (formal, with strangers/elders/authority figures), with clear examples and context" },
+            { id: "1-4", title: "Les Nombres (0 – 1000)", titleTh: "ตัวเลข (0–1000)",
+              topic: "French numbers: 0–20 (irregular), 21–69, then the tricky 70 (soixante-dix), 80 (quatre-vingts), 90 (quatre-vingt-dix), up to 1000" },
+            { id: "1-5", title: "Les Pronoms Sujets", titleTh: "สรรพนามบุรุษ",
+              topic: "the eight French subject pronouns: Je, Tu, Il, Elle, On, Nous, Vous, Ils, Elles — their meaning and how to choose the right one" },
+            { id: "1-6", title: "Liaisons, Élisions et Voyelles", titleTh: "การเชื่อมเสียงและสระประสม",
+              topic: "French élision (je→j', le/la→l', de→d'), liaison rules (linking final consonants to the next vowel: les-z-enfants, vous-z-avez), and essential vowel combinations (eau=o, ou=u, oi=wa, ai=é, eu=oe, ui)" },
+        ]
+    },
+    {
+        id: 2, phase: "Phase 2", title: "Décrire le Monde", titleTh: "การอธิบายสิ่งรอบตัว", icon: "🌍", color: "blue",
+        lessons: [
+            { id: "2-1", title: "Les Articles et le Genre (Le/La, Un/Une)", titleTh: "คำนำหน้าและเพศของคำนาม",
+              topic: "definite articles (le, la, l', les) and indefinite articles (un, une, des), and how grammatical gender (masculine/feminine) is assigned to French nouns" },
+            { id: "2-2", title: "Les Verbes de Base — Être, Avoir, Aller", titleTh: "กริยาพื้นฐานที่สำคัญที่สุด",
+              topic: "full conjugation in the present tense of the three most essential French verbs: Être (to be), Avoir (to have), Aller (to go), with typical usage examples" },
+            { id: "2-3", title: "L'Accord des Adjectifs", titleTh: "การเปลี่ยนรูปคำคุณศัพท์",
+              topic: "how French adjectives must agree with the noun they describe in gender (masculine/feminine: petit/petite) and number (singular/plural: petits/petites)" },
+            { id: "2-4", title: "Couleurs, Vêtements et Corps Humain", titleTh: "สี เสื้อผ้า และร่างกาย",
+              topic: "vocabulary for French colors (rouge, bleu, vert...), clothing items (chemise, robe, pantalon...), and body parts (tête, main, jambe...)" },
+            { id: "2-5", title: "Les Articles Partitifs", titleTh: "คำนำหน้าแสดงปริมาณ (du, de la, de l')",
+              topic: "French partitive articles: du (de+le), de la, de l', des — used for uncountable or partial quantities like food/drinks. Key negation rule: all become de/d' after pas. Full contrast table with definite (le/la) and indefinite (un/une) articles." },
+        ]
+    },
+    {
+        id: 3, phase: "Phase 3", title: "La Vie Quotidienne", titleTh: "ชีวิตประจำวัน", icon: "☀️", color: "amber",
+        lessons: [
+            { id: "3-1", title: "Le Présent — Verbes en -ER, -IR, -RE", titleTh: "กาลปัจจุบัน",
+              topic: "present tense conjugation of regular French verbs: -ER group (parler, manger, aimer), -IR group (finir, choisir), -RE group (vendre, attendre, répondre)" },
+            { id: "3-2", title: "La Négation (Ne…pas, Ne…jamais…)", titleTh: "การสร้างประโยคปฏิเสธ",
+              topic: "French negation structures: ne...pas (not), ne...jamais (never), ne...plus (no longer), ne...rien (nothing), ne...personne (nobody) — placement around the verb" },
+            { id: "3-3", title: "Les Verbes Pronominaux — La Routine", titleTh: "กริยาที่ใช้กับตัวเอง",
+              topic: "French reflexive/pronominal verbs for daily routines: se lever, se réveiller, se laver, s'habiller, se coucher, se brosser les dents — with reflexive pronoun placement" },
+            { id: "3-4", title: "Les Adjectifs Possessifs", titleTh: "การแสดงความเป็นเจ้าของ",
+              topic: "French possessive adjectives: mon/ma/mes (my), ton/ta/tes (your), son/sa/ses (his/her/its), notre/nos (our), votre/vos (your), leur/leurs (their) — agreement with noun gender" },
+            { id: "3-5", title: "La Famille, la Maison et la Nourriture", titleTh: "ครอบครัว บ้าน และอาหาร",
+              topic: "vocabulary for family members (père, mère, frère, sœur...), rooms of a house (salon, cuisine, chambre...), and common French foods and drinks" },
+            { id: "3-6", title: "Verbes Irréguliers — Faire, Prendre, Venir", titleTh: "กริยาไม่สม่ำเสมอที่จำเป็น",
+              topic: "full present tense conjugation of essential irregular verbs: Faire (je fais, tu fais, il fait, faisons, faites, font), Prendre (prends, prend, prenons, prenez, prennent — also apprendre/comprendre), Venir (viens, vient, venons, venez, viennent — also venir de + infinitif = just did), plus Savoir vs Connaître distinction" },
+        ]
+    },
+    {
+        id: 4, phase: "Phase 4", title: "Interagir et Se Déplacer", titleTh: "การสื่อสารและการเดินทาง", icon: "✈️", color: "violet",
+        lessons: [
+            { id: "4-1", title: "Poser des Questions", titleTh: "การตั้งคำถาม",
+              topic: "French question words: Qui (who), Que/Quoi (what), Où (where), Quand (when), Comment (how), Pourquoi (why), Combien (how many/much) — with est-ce que and inversion" },
+            { id: "4-2", title: "Les Verbes Modaux — Vouloir, Pouvoir, Devoir", titleTh: "กริยาช่วย",
+              topic: "conjugation and meaning of French modal verbs: Vouloir (to want), Pouvoir (to be able to / can), Devoir (must / to have to) — used before an infinitive" },
+            { id: "4-3", title: "L'Heure, les Jours, Mois et Saisons", titleTh: "เวลา วัน เดือน ฤดูกาล",
+              topic: "telling time in French (Il est... heures), days of the week, months of the year, and four seasons — with useful time expressions (matin, soir, demain...)" },
+            { id: "4-4", title: "Transports et Directions", titleTh: "การเดินทางและทิศทาง",
+              topic: "French transportation vocabulary (le bus, le métro, le train, l'avion...) and giving or asking for directions (Tournez à gauche, Allez tout droit, Prenez la deuxième rue...)" },
+            { id: "4-5", title: "Les Émotions et la Météo", titleTh: "ความรู้สึกและสภาพอากาศ",
+              topic: "expressing emotions with être (heureux/heureuse, triste, fâché(e), fatigué(e), content(e), inquiet/inquiète, surpris(e)) and avoir (avoir peur, avoir honte, avoir mal à, avoir envie de, avoir besoin de), plus weather expressions (Il fait beau/chaud/froid, Il pleut, Il neige, Il y a du soleil/vent/brouillard)" },
+        ]
+    },
+    {
+        id: 5, phase: "Phase 5", title: "Parler du Temps", titleTh: "การเล่าเรื่องตามกาลเวลา", icon: "⏳", color: "rose",
+        lessons: [
+            { id: "5-1", title: "Le Passé Composé", titleTh: "อดีตกาล",
+              topic: "the French passé composé: formation with auxiliary avoir or être + past participle, agreement rules with être, and how to use it for completed past events (J'ai mangé, Je suis allé...)" },
+            { id: "5-2", title: "L'Imparfait — Introduction", titleTh: "อดีตกาลแบบต่อเนื่อง",
+              topic: "the French imparfait: formation (stem from nous present + imperfect endings), usage for past descriptions, habits, or ongoing background actions — contrasted with passé composé" },
+            { id: "5-3", title: "Le Futur Proche et le Futur Simple", titleTh: "อนาคตกาล",
+              topic: "futur proche (aller + infinitive for near future: Je vais manger) and futur simple (conjugation with endings -ai, -as, -a, -ons, -ez, -ont for planned or certain future events)" },
+            { id: "5-4", title: "Les Pronoms Objets (Le, La, Lui, Leur…)", titleTh: "สรรพนามทำหน้าที่เป็นกรรม",
+              topic: "French direct object pronouns (le, la, les) and indirect object pronouns (lui, leur) — their position before the verb and how they replace nouns to avoid repetition" },
+            { id: "5-5", title: "Le Comparatif et le Superlatif", titleTh: "การเปรียบเทียบ",
+              topic: "comparative adjectives: plus...que (more than), aussi...que (as...as), moins...que (less than); superlative: le/la/les plus and le/la/les moins + adjective; irregular forms bon→meilleur, bien→mieux, mauvais→pire; quantity comparison: plus de/moins de/autant de + noun + que" },
+        ]
+    },
+    {
+        id: 6, phase: "Phase 6", title: "Culture et Politesse", titleTh: "วัฒนธรรมและความสุภาพ", icon: "🥐", color: "teal",
+        lessons: [
+            { id: "6-1", title: "Le Conditionnel de Politesse", titleTh: "การขอร้องอย่างสุภาพ",
+              topic: "using the French conditional for polite requests: Je voudrais... (I would like), Pourriez-vous...? (Could you...?), Il faudrait... — contrasted with the blunt present tense" },
+            { id: "6-2", title: "Faire les Courses et au Restaurant", titleTh: "การซื้อของและการสั่งอาหาร",
+              topic: "dialogues for shopping at a French market or store, and ordering food at a restaurant (Je voudrais..., L'addition s'il vous plaît, Avez-vous...?, C'est combien?) with polite formulas" },
+            { id: "6-3", title: "La Bise, les Repas et le Savoir-vivre", titleTh: "วัฒนธรรมฝรั่งเศส",
+              topic: "French cultural etiquette: la bise (cheek-kiss greeting — when and how), table manners (Bon appétit, waiting to eat, cheese course), and general social savoir-vivre customs" },
+            { id: "6-4", title: "Les Prépositions de Lieu", titleTh: "บุพบทบอกสถานที่",
+              topic: "prepositions of place: dans (in), sur (on), sous (under), devant (in front), derrière (behind), entre (between), à côté de (next to), en face de (opposite), près de (near), loin de (far); and à/en/au/aux for cities and countries" },
+        ]
+    }
+];
+
+// ============================================================
+// LESSONS CONTENT (bilingual FR + TH)
+// ============================================================
+const LESSONS_CONTENT = {
+
+"1-1": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">ภาษาฝรั่งเศสมีตัวอักษร 26 ตัวเหมือนภาษาอังกฤษ แต่การออกเสียงแตกต่างกันมาก! มีเสียงพิเศษที่ไม่มีในภาษาไทย ฝึกบ่อยๆ แล้วจะติดปาก!</p><p class="text-[12px] text-amber-700 mt-1 italic">L'alphabet français a 26 lettres identiques à l'anglais, mais la prononciation est très différente !</p></div>
+
+  <div><p class="sec-head">🔤 ตัวอักษรทั้ง 26 ตัว — L'alphabet complet</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:6px;margin-bottom:4px">
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">A a</span><br><span class="thai" style="font-size:10px;color:#4B5563">อา</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">B b</span><br><span class="thai" style="font-size:10px;color:#4B5563">เบ</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">C c</span><br><span class="thai" style="font-size:10px;color:#4B5563">เซ</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">D d</span><br><span class="thai" style="font-size:10px;color:#4B5563">เด</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">E e</span><br><span class="thai" style="font-size:10px;color:#4B5563">เออ</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">F f</span><br><span class="thai" style="font-size:10px;color:#4B5563">แอฟ</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">G g</span><br><span class="thai" style="font-size:10px;color:#4B5563">เฌ</span></div>
+    <div style="background:#FFF3F0;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#DC2626">H h</span><br><span class="thai" style="font-size:10px;color:#DC2626">อาช🔇</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">I i</span><br><span class="thai" style="font-size:10px;color:#4B5563">อี</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">J j</span><br><span class="thai" style="font-size:10px;color:#4B5563">ฌี</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">K k</span><br><span class="thai" style="font-size:10px;color:#4B5563">กา</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">L l</span><br><span class="thai" style="font-size:10px;color:#4B5563">แอล</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">M m</span><br><span class="thai" style="font-size:10px;color:#4B5563">แอม</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">N n</span><br><span class="thai" style="font-size:10px;color:#4B5563">แอน</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">O o</span><br><span class="thai" style="font-size:10px;color:#4B5563">โอ</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">P p</span><br><span class="thai" style="font-size:10px;color:#4B5563">เป</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">Q q</span><br><span class="thai" style="font-size:10px;color:#4B5563">กู</span></div>
+    <div style="background:#FFF0F5;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#BE185D">R r</span><br><span class="thai" style="font-size:10px;color:#BE185D">แอร์🗣️</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">S s</span><br><span class="thai" style="font-size:10px;color:#4B5563">แอส</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">T t</span><br><span class="thai" style="font-size:10px;color:#4B5563">เต</span></div>
+    <div style="background:#F0FFF4;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#15803D">U u</span><br><span class="thai" style="font-size:10px;color:#15803D">อู👄</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">V v</span><br><span class="thai" style="font-size:10px;color:#4B5563">เว</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">W w</span><br><span class="thai" style="font-size:10px;color:#4B5563">ดูเบล-เว</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">X x</span><br><span class="thai" style="font-size:10px;color:#4B5563">อิกส์</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">Y y</span><br><span class="thai" style="font-size:10px;color:#4B5563">อิกแกร็ก</span></div>
+    <div style="background:#F0F4FF;border-radius:10px;padding:8px 4px;text-align:center"><span class="fr" style="font-size:17px;font-weight:700;color:#1D1D1F">Z z</span><br><span class="thai" style="font-size:10px;color:#4B5563">เซด</span></div>
+  </div>
+  <p class="text-[11px] text-gray-400 px-1">🔴 H = ไม่ออกเสียง · 🩷 R = เสียงจากลำคอ · 🟢 U = ออก อี แต่ห่อปาก</p></div>
+
+  <div><p class="sec-head">🔤 เสียงพิเศษ — Sons qui n'existent pas en thaï (เสียงที่ไม่มีในภาษาไทย)</p>
+  <table class="ltable"><thead><tr><th>Son / เสียง</th><th class="thai">ตัวอย่างคำ</th><th class="thai">วิธีออกเสียง</th></tr></thead><tbody>
+  <tr><td class="fr">R français [ʁ]</td><td class="note">rouge (สีแดง), rue (ถนน), merci (ขอบคุณ)</td><td class="th">เสียงจากลำคอ กลั้วคอเบาๆ เหมือน "ฆ" แต่นุ่มกว่า</td></tr>
+  <tr><td class="fr">U [y]</td><td class="note">tu (คุณ), lune (พระจันทร์), rue (ถนน)</td><td class="th">ออกเสียง "อี" แต่ห่อริมฝีปากกลม → ลอง: "อี" + ห่อปาก</td></tr>
+  <tr><td class="fr">AN / EN [ɑ̃]</td><td class="note">France (ฝรั่งเศส), enfant (เด็ก), blanc (ขาว)</td><td class="th">เสียง "อ็อง" สั้นๆ พูดออกทางจมูก</td></tr>
+  <tr><td class="fr">ON [ɔ̃]</td><td class="note">bonjour (สวัสดี), pont (สะพาน), maison (บ้าน)</td><td class="th">เสียง "ออง" ออกทางจมูก</td></tr>
+  <tr><td class="fr">IN / AIN [ɛ̃]</td><td class="note">vin (ไวน์), pain (ขนมปัง), matin (เช้า)</td><td class="th">เสียง "แอ็ง" สั้นๆ ออกทางจมูก</td></tr>
+  <tr><td class="fr">EU [ø/œ]</td><td class="note">feu (ไฟ), peur (กลัว), bleu (น้ำเงิน)</td><td class="th">ออกเสียง "เออ" แต่ห่อริมฝีปาก</td></tr>
+  <tr><td class="fr">OU [u]</td><td class="note">ou (หรือ), rouge (แดง), bonjour (สวัสดี)</td><td class="th">เสียง "อู" ปกติ (ต่างจาก U ที่ห่อปาก)</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">📌 เครื่องหมายกำกับเสียง — Accents (สัญลักษณ์บนตัวอักษร)</p>
+  <table class="ltable"><thead><tr><th>Accent / สัญลักษณ์</th><th class="thai">ตัวอย่าง</th><th class="thai">เสียงและความหมาย</th></tr></thead><tbody>
+  <tr><td class="fr">é (accent aigu / สระเอ)</td><td class="note">été (ฤดูร้อน), café (กาแฟ), beauté (ความสวยงาม)</td><td class="th">เสียง "เอ" ชัดเจน สูง</td></tr>
+  <tr><td class="fr">è / ê (grave/circ. / สระแอ)</td><td class="note">père (พ่อ), fête (เทศกาล), très (มาก)</td><td class="th">เสียง "แอ" เปิดกว้าง ต่ำกว่า é</td></tr>
+  <tr><td class="fr">à / â</td><td class="note">à (ที่), château (ปราสาท)</td><td class="th">à = บุพบท "ที่" · â เสียง "อา" ยาว</td></tr>
+  <tr><td class="fr">ç (cédille / ซีดิย)</td><td class="note">français (ฝรั่งเศส), garçon (เด็กผู้ชาย)</td><td class="th">ออกเสียง "ส" ไม่ใช่ "ค"</td></tr>
+  <tr><td class="fr">ë / ï (tréma / เทรมา)</td><td class="note">Noël (คริสต์มาส), naïf (ไร้เดียงสา)</td><td class="th">ออกเสียงตัวอักษรนั้นแยกออกชัดเจน</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">🔇 H ไม่ออกเสียง! — Le H muet</p>
+  <p class="thai text-[13px] text-blue-900">ตัว H ในภาษาฝรั่งเศสส่วนใหญ่ไม่ออกเสียง:<br>
+  <strong>hôtel</strong> (โรงแรม) → ออกว่า "โอเตล" ไม่ใช่ "ฮอเตล"<br>
+  <strong>heure</strong> (ชั่วโมง) → ออกว่า "เออร์"<br>
+  <strong>homme</strong> (ผู้ชาย) → ออกว่า "ออม"</p></div>
+
+  <div><p class="sec-head">🔡 L'Épellation — การสะกดคำ</p>
+  <p class="thai text-[12.5px] text-gray-700 mb-2">เมื่อต้องสะกดชื่อหรือคำ ให้พูดทีละตัวอักษรเป็นภาษาฝรั่งเศส</p>
+  <table class="ltable"><thead><tr><th>Prénom<br><span class="note">ชื่อ</span></th><th>Épellation<br><span class="note">การสะกด</span></th><th class="thai">ออกเสียง</span></th></tr></thead><tbody>
+  <tr><td class="fr">MARIE</td><td class="note">M - A - R - I - E</td><td class="th">แอม · อา · แอร์ · อี · เออ</td></tr>
+  <tr><td class="fr">PARIS</td><td class="note">P - A - R - I - S</td><td class="th">เป · อา · แอร์ · อี · แอส</td></tr>
+  <tr><td class="fr">NONG</td><td class="note">N - O - N - G</td><td class="th">แอน · โอ · แอน · เฌ</td></tr>
+  </tbody></table>
+  <p class="text-[12px] mt-2 px-1"><span class="fr">— Comment ça s'écrit ?</span> <span class="thai">(สะกดอย่างไร?)</span><br><span class="fr">— Ça s'écrit : N - O - N - G.</span> <span class="thai">(สะกดว่า...)</span></p></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ตัวอย่างประโยค</p>
+  <p class="text-[13px]"><span class="fr">Le français est une belle langue.</span><br><span class="thai text-green-800 text-[12.5px]">ภาษาฝรั่งเศสเป็นภาษาที่สวยงาม</span></p>
+  <p class="text-[13px] mt-2"><span class="fr">Je m'appelle Marie. Je suis française.</span><br><span class="thai text-green-800 text-[12.5px]">ฉันชื่อมารี ฉันเป็นชาวฝรั่งเศส</span></p></div>
+</div>`,
+
+"1-2": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">ในฝรั่งเศส การทักทายสำคัญมาก! เมื่อเข้าร้าน เข้าลิฟต์ หรือพบหน้าใครก็ตาม ต้องพูด "Bonjour" เสมอ ถือว่าสุภาพ ไม่พูดถือว่าหยาบคาย</p><p class="text-[12px] text-amber-700 mt-1 italic">En France, dire "Bonjour" en entrant quelque part est une règle sociale fondamentale !</p></div>
+
+  <div><p class="sec-head">👋 การทักทาย — Salutations</p>
+  <table class="ltable"><thead><tr><th>Français</th><th class="thai">ภาษาไทย</th><th>Contexte</th></tr></thead><tbody>
+  <tr><td class="fr">Bonjour</td><td class="th">สวัสดี (กลางวัน)</td><td class="note">ทุกสถานการณ์</td></tr>
+  <tr><td class="fr">Bonsoir</td><td class="th">สวัสดีตอนเย็น/ค่ำ</td><td class="note">หลัง 18h00</td></tr>
+  <tr><td class="fr">Salut</td><td class="th">หวัดดี / ไฮ</td><td class="note">กับเพื่อน เท่านั้น</td></tr>
+  <tr><td class="fr">Bonne nuit</td><td class="th">ราตรีสวัสดิ์</td><td class="note">ก่อนนอน</td></tr>
+  <tr><td class="fr">Au revoir</td><td class="th">ลาก่อน</td><td class="note">ทุกสถานการณ์</td></tr>
+  <tr><td class="fr">À bientôt</td><td class="th">แล้วเจอกันนะ</td><td class="note">เจอกันเร็วๆ นี้</td></tr>
+  <tr><td class="fr">À tout à l'heure</td><td class="th">แล้วเจอกันในไม่ช้า</td><td class="note">วันเดียวกัน</td></tr>
+  <tr><td class="fr">Enchanté(e)</td><td class="th">ยินดีที่ได้รู้จัก</td><td class="note">พบกันครั้งแรก</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🙋 การแนะนำตัว — Se présenter</p>
+  <table class="ltable"><thead><tr><th>Phrase</th><th class="thai">ความหมาย</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">Je m'appelle…</td><td class="th">ฉันชื่อ…</td><td class="note">Je m'appelle Léa.</td></tr>
+  <tr><td class="fr">J'ai … ans</td><td class="th">ฉันอายุ… ปี</td><td class="note">J'ai vingt ans.</td></tr>
+  <tr><td class="fr">Je suis de…</td><td class="th">ฉันมาจาก…</td><td class="note">Je suis de Bangkok.</td></tr>
+  <tr><td class="fr">Je suis étudiant(e)</td><td class="th">ฉันเป็นนักเรียน</td><td class="note">Je suis étudiante.</td></tr>
+  <tr><td class="fr">Je parle thaï</td><td class="th">ฉันพูดภาษาไทย</td><td class="note">Je parle un peu français.</td></tr>
+  <tr><td class="fr">J'habite à…</td><td class="th">ฉันอาศัยอยู่ที่…</td><td class="note">J'habite à Chiang Mai.</td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ บทสนทนาตัวอย่าง</p>
+  <p class="text-[13px]">— <strong>Bonjour ! Comment vous appelez-vous ?</strong><br><span class="thai text-[12.5px] text-green-800">สวัสดี! คุณชื่ออะไร?</span></p>
+  <p class="text-[13px] mt-2">— <strong>Je m'appelle Nong. Et vous ?</strong><br><span class="thai text-[12.5px] text-green-800">ฉันชื่อน้อง แล้วคุณล่ะ?</span></p>
+  <p class="text-[13px] mt-2">— <strong>Je m'appelle Pierre. Enchanté !</strong><br><span class="thai text-[12.5px] text-green-800">ฉันชื่อปิแอร์ ยินดีที่ได้รู้จัก!</span></p></div>
+</div>`,
+
+"1-3": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">ในภาษาฝรั่งเศส "คุณ" มีสองแบบ: <strong>tu</strong> ใช้กับคนที่สนิท และ <strong>vous</strong> ใช้กับคนที่ไม่สนิทหรือผู้ใหญ่ การเลือกผิดอาจทำให้ดูหยาบคายหรืออึดอัดได้</p><p class="text-[12px] text-amber-700 mt-1 italic">Choisir entre "tu" et "vous" est une règle sociale très importante en France.</p></div>
+
+  <div class="rule-box"><p class="sec-head">📌 กฎการใช้งาน</p>
+  <table class="ltable"><thead><tr><th>Pronom</th><th class="thai">ใช้กับ</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">TU<br><span class="note">ไม่เป็นทางการ</span></td><td class="th">• เพื่อน / เพื่อนร่วมชั้น<br>• สมาชิกในครอบครัว<br>• เด็ก (อายุต่ำกว่า 15)<br>• สัตว์เลี้ยง</td><td class="note">Tu viens ce soir ?<br>(คืนนี้มาไหม?)</td></tr>
+  <tr><td class="fr">VOUS<br><span class="note">เป็นทางการ / พหูพจน์</span></td><td class="th">• คนที่ไม่รู้จัก<br>• ผู้สูงอายุ<br>• หัวหน้า / ครู / ลูกค้า<br>• สถานการณ์ทางการ<br>• พูดกับหลายคน</td><td class="note">Vous parlez français ?<br>(คุณพูดภาษาฝรั่งเศสไหม?)</td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ตัวอย่าง</p>
+  <p class="text-[13px]"><strong>Tu t'appelles comment ?</strong> <span class="thai text-[12.5px] text-green-800">(ถามเพื่อน) — คุณชื่ออะไร?</span></p>
+  <p class="text-[13px] mt-1.5"><strong>Comment vous appelez-vous ?</strong> <span class="thai text-[12.5px] text-green-800">(ถามผู้ใหญ่) — คุณชื่ออะไร?</span></p>
+  <p class="text-[13px] mt-1.5"><strong>Vous avez une table pour deux ?</strong> <span class="thai text-[12.5px] text-green-800">(ในร้านอาหาร) — มีโต๊ะสำหรับสองคนไหม?</span></p></div>
+
+  <div><p class="sec-head">💡 เคล็ดลับ</p><p class="thai text-[13px] text-gray-700">หากไม่แน่ใจ → ใช้ <strong>vous</strong> ปลอดภัยกว่าเสมอ! ชาวฝรั่งเศสจะบอกเองว่า "On peut se tutoyer ?" (เราใช้ tu ได้นะ)</p></div>
+</div>`,
+
+"1-4": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">ตัวเลขภาษาฝรั่งเศส 0-69 ไม่ยาก แต่ 70-99 มีระบบพิเศษที่ต่างจากภาษาอื่น ต้องจำเป็นพิเศษ!</p></div>
+
+  <div><p class="sec-head">🔢 0 — 20 (ต้องจำทีละคำ)</p>
+  <table class="ltable"><thead><tr><th>#</th><th>Nombre</th><th>#</th><th>Nombre</th></tr></thead><tbody>
+  <tr><td>0</td><td class="fr">zéro</td><td>11</td><td class="fr">onze</td></tr>
+  <tr><td>1</td><td class="fr">un / une</td><td>12</td><td class="fr">douze</td></tr>
+  <tr><td>2</td><td class="fr">deux</td><td>13</td><td class="fr">treize</td></tr>
+  <tr><td>3</td><td class="fr">trois</td><td>14</td><td class="fr">quatorze</td></tr>
+  <tr><td>4</td><td class="fr">quatre</td><td>15</td><td class="fr">quinze</td></tr>
+  <tr><td>5</td><td class="fr">cinq</td><td>16</td><td class="fr">seize</td></tr>
+  <tr><td>6</td><td class="fr">six</td><td>17</td><td class="fr">dix-sept</td></tr>
+  <tr><td>7</td><td class="fr">sept</td><td>18</td><td class="fr">dix-huit</td></tr>
+  <tr><td>8</td><td class="fr">huit</td><td>19</td><td class="fr">dix-neuf</td></tr>
+  <tr><td>9</td><td class="fr">neuf</td><td>20</td><td class="fr">vingt</td></tr>
+  <tr><td>10</td><td class="fr">dix</td><td></td><td></td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🔢 21 — 69 (สม่ำเสมอ)</p>
+  <table class="ltable"><thead><tr><th>Nombre</th><th>Logique</th></tr></thead><tbody>
+  <tr><td class="fr">vingt et un (21)</td><td class="note">vingt + et + un</td></tr>
+  <tr><td class="fr">vingt-deux (22)</td><td class="note">vingt + deux</td></tr>
+  <tr><td class="fr">trente (30), quarante (40), cinquante (50), soixante (60)</td><td class="note">จำเป็นคำ</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">⚠️ 70 — 99 (ระวัง! ระบบพิเศษ)</p>
+  <table class="ltable"><thead><tr><th>Nombre</th><th>Logique</th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td class="fr">70 = soixante-dix</td><td class="note">60 + 10</td><td class="th">หกสิบบวกสิบ! ไม่มีคำว่า "septante"</td></tr>
+  <tr><td class="fr">71 = soixante et onze</td><td class="note">60 + 11</td><td class="th">หกสิบบวกสิบเอ็ด</td></tr>
+  <tr><td class="fr">75 = soixante-quinze</td><td class="note">60 + 15</td><td class="th">หกสิบบวกสิบห้า</td></tr>
+  <tr><td class="fr">80 = quatre-vingts</td><td class="note">4 × 20</td><td class="th">สี่คูณยี่สิบ! ไม่มีคำว่า "huitante"</td></tr>
+  <tr><td class="fr">81 = quatre-vingt-un</td><td class="note">4×20 + 1</td><td class="th">⚠️ ไม่มี "et" เหมือน 21, 31…</td></tr>
+  <tr><td class="fr">90 = quatre-vingt-dix</td><td class="note">4×20 + 10</td><td class="th">สี่คูณยี่สิบบวกสิบ!</td></tr>
+  <tr><td class="fr">99 = quatre-vingt-dix-neuf</td><td class="note">4×20 + 19</td><td class="th">สี่คูณยี่สิบบวกสิบเก้า</td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ 100 — 1000</p>
+  <table class="ltable"><tbody>
+  <tr><td class="fr">100</td><td>cent</td><td class="fr">200</td><td>deux cents</td></tr>
+  <tr><td class="fr">101</td><td>cent un</td><td class="fr">1 000</td><td>mille</td></tr>
+  <tr><td class="fr">500</td><td>cinq cents</td><td class="fr">2 000</td><td>deux mille</td></tr>
+  </tbody></table></div>
+</div>`,
+
+"1-5": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">สรรพนามบุรุษใช้แทนชื่อคน สำคัญมากเพราะกริยาในภาษาฝรั่งเศสจะเปลี่ยนรูปตามสรรพนาม ต้องจำให้แม่น!</p></div>
+
+  <div><p class="sec-head">👥 สรรพนาม 9 ตัว</p>
+  <table class="ltable"><thead><tr><th>Pronom</th><th class="thai">ความหมาย</th><th>Usage</th></tr></thead><tbody>
+  <tr><td class="fr">Je (J')</td><td class="th">ฉัน / ผม / หนู</td><td class="note">J' devant voyelle : J'aime</td></tr>
+  <tr><td class="fr">Tu</td><td class="th">คุณ (ไม่เป็นทางการ)</td><td class="note">สนิทกัน</td></tr>
+  <tr><td class="fr">Il</td><td class="th">เขา (ชาย)</td><td class="note">Il mange.</td></tr>
+  <tr><td class="fr">Elle</td><td class="th">เธอ (หญิง)</td><td class="note">Elle mange.</td></tr>
+  <tr><td class="fr">On</td><td class="th">เรา (ไม่เป็นทางการ) / คนทั่วไป</td><td class="note">On mange à midi. = เรากินตอนเที่ยง</td></tr>
+  <tr><td class="fr">Nous</td><td class="th">เรา (เป็นทางการ)</td><td class="note">Nous mangeons.</td></tr>
+  <tr><td class="fr">Vous</td><td class="th">คุณ (ทางการ) / พวกคุณ</td><td class="note">ทางการ หรือหลายคน</td></tr>
+  <tr><td class="fr">Ils</td><td class="th">พวกเขา (ชาย หรือผสม)</td><td class="note">Pierre et Marie → Ils</td></tr>
+  <tr><td class="fr">Elles</td><td class="th">พวกเธอ (หญิงล้วน)</td><td class="note">Marie et Léa → Elles</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">📌 กฎสำคัญ</p><p class="thai text-[13px] text-blue-900">กลุ่มที่มีผู้ชายแม้แต่คนเดียว → ใช้ <strong>Ils</strong><br>ผู้หญิงทั้งหมด → ใช้ <strong>Elles</strong><br>ในการสนทนาทั่วไป <strong>on</strong> มักแทน <strong>nous</strong> เสมอ</p></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ตัวอย่าง</p>
+  <p class="text-[13px]"><strong>On va au cinéma ?</strong> <span class="thai text-[12.5px] text-green-800">เราไปดูหนังกันไหม? (พูดกันทั่วไป)</span></p>
+  <p class="text-[13px] mt-1.5"><strong>Ils sont français.</strong> <span class="thai text-[12.5px] text-green-800">พวกเขาเป็นชาวฝรั่งเศส (มีผู้ชายอยู่ด้วย)</span></p></div>
+</div>`,
+
+"2-1": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">ในภาษาฝรั่งเศส คำนามทุกคำมีเพศ — เพศชาย (masculin) หรือเพศหญิง (féminin) ไม่มีเพศกลาง! และต้องใส่ "คำนำหน้า" ให้ถูกเพศ ถือเป็นหัวใจของภาษาฝรั่งเศส</p></div>
+
+  <div><p class="sec-head">📖 คำนำหน้าแน่นอน — Articles définis (= the)</p>
+  <table class="ltable"><thead><tr><th>Article</th><th class="thai">ใช้กับ</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">le</td><td class="th">คำนามเพศชาย เอกพจน์</td><td class="note">le livre (หนังสือ)</td></tr>
+  <tr><td class="fr">la</td><td class="th">คำนามเพศหญิง เอกพจน์</td><td class="note">la table (โต๊ะ)</td></tr>
+  <tr><td class="fr">l'</td><td class="th">หน้าคำที่ขึ้นต้นด้วยสระ (ทั้งสองเพศ)</td><td class="note">l'ami, l'école</td></tr>
+  <tr><td class="fr">les</td><td class="th">พหูพจน์ (ทั้งสองเพศ)</td><td class="note">les livres, les tables</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">📖 คำนำหน้าไม่แน่นอน — Articles indéfinis (= a/an)</p>
+  <table class="ltable"><thead><tr><th>Article</th><th class="thai">ใช้กับ</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">un</td><td class="th">คำนามเพศชาย เอกพจน์</td><td class="note">un chat (แมว)</td></tr>
+  <tr><td class="fr">une</td><td class="th">คำนามเพศหญิง เอกพจน์</td><td class="note">une fleur (ดอกไม้)</td></tr>
+  <tr><td class="fr">des</td><td class="th">พหูพจน์ (ทั้งสองเพศ)</td><td class="note">des chats, des fleurs</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">💡 คำใบ้เรื่องเพศ (ไม่มีกฎแน่นอน แต่มีแนวโน้ม!)</p>
+  <table class="ltable"><thead><tr><th class="thai">มักเป็นเพศหญิง</th><th class="thai">มักเป็นเพศชาย</th></tr></thead><tbody>
+  <tr><td class="th">ลงท้าย -tion, -sion : la nation<br>ลงท้าย -té : la liberté<br>ลงท้าย -ette : la baguette<br>ลงท้าย -eur (abstract) : la chaleur</td><td class="th">ลงท้าย -ment : le gouvernement<br>ลงท้าย -age : le fromage<br>ลงท้าย -isme : le tourisme<br>ลงท้าย -eau : le gâteau</td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ตัวอย่าง</p>
+  <p class="text-[13px]"><strong>Je mange une pizza.</strong> <span class="thai text-[12.5px] text-green-800">ฉันกินพิซซ่า (une = หญิง, ไม่ทราบว่าอันไหน)</span></p>
+  <p class="text-[13px] mt-1.5"><strong>La pizza est délicieuse.</strong> <span class="thai text-[12.5px] text-green-800">พิซซ่าอร่อย (la = หญิง, พิซซ่าที่รู้จักแล้ว)</span></p></div>
+</div>`,
+
+"2-2": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">กริยาสามตัวนี้สำคัญที่สุดในภาษาฝรั่งเศส ต้องจำให้ขึ้นใจ! ใช้ทุกวันในทุกประโยค เป็นรากฐานของภาษาทั้งหมด</p></div>
+
+  <div><p class="sec-head">🔵 ÊTRE = เป็น / อยู่ / คือ</p>
+  <table class="ltable"><thead><tr><th>Pronom</th><th>Conjugaison</th><th class="thai">ตัวอย่าง</th></tr></thead><tbody>
+  <tr><td>Je</td><td class="fr">suis</td><td class="th">Je suis thaïlandaise. (ฉันเป็นคนไทย)</td></tr>
+  <tr><td>Tu</td><td class="fr">es</td><td class="th">Tu es gentil. (คุณใจดี)</td></tr>
+  <tr><td>Il/Elle/On</td><td class="fr">est</td><td class="th">Il est médecin. (เขาเป็นหมอ)</td></tr>
+  <tr><td>Nous</td><td class="fr">sommes</td><td class="th">Nous sommes amis. (เราเป็นเพื่อนกัน)</td></tr>
+  <tr><td>Vous</td><td class="fr">êtes</td><td class="th">Vous êtes français ? (คุณเป็นชาวฝรั่งเศสไหม?)</td></tr>
+  <tr><td>Ils/Elles</td><td class="fr">sont</td><td class="th">Elles sont belles. (พวกเธอสวยงาม)</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🔴 AVOIR = มี / อายุ</p>
+  <table class="ltable"><thead><tr><th>Pronom</th><th>Conjugaison</th><th class="thai">ตัวอย่าง</th></tr></thead><tbody>
+  <tr><td>Je</td><td class="fr">ai</td><td class="th">J'ai faim. (ฉันหิว — มีความหิว)</td></tr>
+  <tr><td>Tu</td><td class="fr">as</td><td class="th">Tu as quel âge ? (คุณอายุเท่าไร?)</td></tr>
+  <tr><td>Il/Elle/On</td><td class="fr">a</td><td class="th">Elle a un chat. (เธอมีแมว)</td></tr>
+  <tr><td>Nous</td><td class="fr">avons</td><td class="th">Nous avons le temps. (เรามีเวลา)</td></tr>
+  <tr><td>Vous</td><td class="fr">avez</td><td class="th">Vous avez une chambre ? (มีห้องพักไหม?)</td></tr>
+  <tr><td>Ils/Elles</td><td class="fr">ont</td><td class="th">Ils ont vingt ans. (พวกเขาอายุยี่สิบปี)</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🟢 ALLER = ไป</p>
+  <table class="ltable"><thead><tr><th>Pronom</th><th>Conjugaison</th><th class="thai">ตัวอย่าง</th></tr></thead><tbody>
+  <tr><td>Je</td><td class="fr">vais</td><td class="th">Je vais à l'école. (ฉันไปโรงเรียน)</td></tr>
+  <tr><td>Tu</td><td class="fr">vas</td><td class="th">Ça va ? (เป็นอย่างไรบ้าง?) Tu vas bien ?</td></tr>
+  <tr><td>Il/Elle/On</td><td class="fr">va</td><td class="th">On va au restaurant ! (ไปร้านอาหารกัน!)</td></tr>
+  <tr><td>Nous</td><td class="fr">allons</td><td class="th">Nous allons en France. (เราไปฝรั่งเศส)</td></tr>
+  <tr><td>Vous</td><td class="fr">allez</td><td class="th">Vous allez bien ? (คุณสบายดีไหม?)</td></tr>
+  <tr><td>Ils/Elles</td><td class="fr">vont</td><td class="th">Ils vont à Paris. (พวกเขาไปปารีส)</td></tr>
+  </tbody></table></div>
+</div>`,
+
+"2-3": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">ในภาษาฝรั่งเศส คำคุณศัพท์ต้องเปลี่ยนรูปตามเพศและจำนวนของคำนามที่ขยาย — ต่างจากภาษาไทยมาก! นี่คือหนึ่งในจุดที่ยากที่สุดสำหรับคนไทย</p></div>
+
+  <div class="rule-box"><p class="sec-head">📌 กฎการเปลี่ยนรูป</p>
+  <table class="ltable"><thead><tr><th></th><th>ชาย เอกพจน์<br><span class="note">Masculin sing.</span></th><th>หญิง เอกพจน์ (+e)<br><span class="note">Féminin sing.</span></th><th>ชาย พหูพจน์ (+s)<br><span class="note">Masc. pl.</span></th><th>หญิง พหูพจน์ (+es)<br><span class="note">Fém. pl.</span></th></tr></thead><tbody>
+  <tr><td class="note">Base</td><td class="fr">petit</td><td class="fr">petite</td><td class="fr">petits</td><td class="fr">petites</td></tr>
+  <tr><td class="note"></td><td class="fr">grand</td><td class="fr">grande</td><td class="fr">grands</td><td class="fr">grandes</td></tr>
+  <tr><td class="note">déjà en -e</td><td class="fr">rouge</td><td class="fr">rouge</td><td class="fr">rouges</td><td class="fr">rouges</td></tr>
+  <tr><td class="note">irrégulier</td><td class="fr">beau</td><td class="fr">belle</td><td class="fr">beaux</td><td class="fr">belles</td></tr>
+  <tr><td class="note">irrégulier</td><td class="fr">bon</td><td class="fr">bonne</td><td class="fr">bons</td><td class="fr">bonnes</td></tr>
+  <tr><td class="note">irrégulier</td><td class="fr">vieux</td><td class="fr">vieille</td><td class="fr">vieux</td><td class="fr">vieilles</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">📍 ตำแหน่งของคำคุณศัพท์ — Position de l'adjectif</p>
+  <table class="ltable"><thead><tr><th class="thai">ส่วนใหญ่ → หลังคำนาม (après le nom)</th><th class="thai">BAGS → หน้าคำนาม (avant le nom)</th></tr></thead><tbody>
+  <tr><td class="note">une robe <strong>rouge</strong> (ชุดสีแดง)<br>un chat <strong>noir</strong> (แมวดำ)<br>un homme <strong>intelligent</strong> (ชายฉลาด)</td><td class="note"><strong>B</strong>eau (สวย) / Bon (ดี)<br><strong>A</strong>ncien (เก่า/อดีต)<br><strong>G</strong>rand (ใหญ่) / Gros (อ้วน/ใหญ่)<br><strong>S</strong>: petit (เล็ก), jeune (หนุ่ม/สาว), vieux (แก่), nouveau (ใหม่), joli (สวย)</td></tr>
+  <tr><td class="th">คำคุณศัพท์มักอยู่หลังคำนาม</td><td class="note">un <strong>beau</strong> garçon (หนุ่มหล่อ)<br>une <strong>petite</strong> maison (บ้านเล็ก)<br>un <strong>vieux</strong> livre (หนังสือเก่า)</td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ตัวอย่าง</p>
+  <p class="text-[13px]"><strong>une belle femme</strong> <span class="thai text-[12.5px] text-green-800">หญิงสาวสวย (belle = หญิง → เปลี่ยนจาก beau)</span></p>
+  <p class="text-[13px] mt-1.5"><strong>des chats noirs</strong> <span class="thai text-[12.5px] text-green-800">แมวดำหลายตัว (noirs = ชาย พหูพจน์)</span></p></div>
+</div>`,
+
+"2-4": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">บทเรียนนี้เป็นคำศัพท์ล้วน! อ่านและท่อง ฝึกใช้ในประโยคสั้นๆ เช่น "Le ciel est bleu." (ท้องฟ้าสีน้ำเงิน)</p></div>
+
+  <div><p class="sec-head">🎨 สี — Couleurs</p>
+  <table class="ltable"><thead><tr><th>Couleur</th><th class="thai">ภาษาไทย</th><th>Couleur</th><th class="thai">ภาษาไทย</th></tr></thead><tbody>
+  <tr><td class="fr">rouge</td><td class="th">แดง</td><td class="fr">blanc/blanche</td><td class="th">ขาว</td></tr>
+  <tr><td class="fr">bleu(e)</td><td class="th">น้ำเงิน</td><td class="fr">noir(e)</td><td class="th">ดำ</td></tr>
+  <tr><td class="fr">vert(e)</td><td class="th">เขียว</td><td class="fr">gris(e)</td><td class="th">เทา</td></tr>
+  <tr><td class="fr">jaune</td><td class="th">เหลือง</td><td class="fr">rose</td><td class="th">ชมพู</td></tr>
+  <tr><td class="fr">orange</td><td class="th">ส้ม</td><td class="fr">violet(te)</td><td class="th">ม่วง</td></tr>
+  <tr><td class="fr">marron</td><td class="th">น้ำตาล</td><td class="fr">beige</td><td class="th">เบจ</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">👕 เสื้อผ้า — Vêtements</p>
+  <table class="ltable"><thead><tr><th>Vêtement</th><th class="thai">ภาษาไทย</th><th>Vêtement</th><th class="thai">ภาษาไทย</th></tr></thead><tbody>
+  <tr><td class="fr">une chemise</td><td class="th">เสื้อเชิ้ต</td><td class="fr">un manteau</td><td class="th">เสื้อโค้ต</td></tr>
+  <tr><td class="fr">une robe</td><td class="th">ชุดกระโปรง</td><td class="fr">des chaussures</td><td class="th">รองเท้า</td></tr>
+  <tr><td class="fr">un pantalon</td><td class="th">กางเกงขายาว</td><td class="fr">des chaussettes</td><td class="th">ถุงเท้า</td></tr>
+  <tr><td class="fr">un short</td><td class="th">กางเกงขาสั้น</td><td class="fr">un chapeau</td><td class="th">หมวก</td></tr>
+  <tr><td class="fr">une jupe</td><td class="th">กระโปรง</td><td class="fr">un sac</td><td class="th">กระเป๋า</td></tr>
+  <tr><td class="fr">une veste</td><td class="th">แจ็คเก็ต</td><td class="fr">une ceinture</td><td class="th">เข็มขัด</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🧍 ร่างกาย — Corps humain</p>
+  <table class="ltable"><thead><tr><th>Partie du corps</th><th class="thai">ภาษาไทย</th><th>Partie du corps</th><th class="thai">ภาษาไทย</th></tr></thead><tbody>
+  <tr><td class="fr">la tête</td><td class="th">หัว</td><td class="fr">la main</td><td class="th">มือ</td></tr>
+  <tr><td class="fr">les yeux (un œil)</td><td class="th">ตา</td><td class="fr">le bras</td><td class="th">แขน</td></tr>
+  <tr><td class="fr">le nez</td><td class="th">จมูก</td><td class="fr">la jambe</td><td class="th">ขา</td></tr>
+  <tr><td class="fr">la bouche</td><td class="th">ปาก</td><td class="fr">le pied</td><td class="th">เท้า</td></tr>
+  <tr><td class="fr">l'oreille</td><td class="th">หู</td><td class="fr">le dos</td><td class="th">หลัง</td></tr>
+  <tr><td class="fr">les cheveux</td><td class="th">ผม</td><td class="fr">le ventre</td><td class="th">ท้อง</td></tr>
+  </tbody></table></div>
+</div>`,
+
+"3-1": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">กริยาในภาษาฝรั่งเศสแบ่งเป็น 3 กลุ่มตามลงท้าย -ER, -IR, -RE กลุ่ม -ER มีมากที่สุดและสม่ำเสมอที่สุด เรียนให้แม่นก่อนเลย!</p></div>
+
+  <div><p class="sec-head">🔴 กลุ่ม -ER → PARLER (พูด) · กริยา -ER มีมากที่สุด!</p>
+  <table class="ltable"><thead><tr><th>สรรพนาม</th><th>ลงท้าย<br><span class="note">Terminaison</span></th><th>Parler<br><span class="note">(พูด)</span></th><th class="thai">ตัวอย่างอื่น + แปล</th></tr></thead><tbody>
+  <tr><td>Je</td><td>-e</td><td class="fr">parle</td><td class="th">mange (กิน), aime (รัก), écoute (ฟัง)</td></tr>
+  <tr><td>Tu</td><td>-es</td><td class="fr">parles</td><td class="th">manges, travailles (ทำงาน)</td></tr>
+  <tr><td>Il/Elle/On</td><td>-e</td><td class="fr">parle</td><td class="th">mange, arrive (มาถึง)</td></tr>
+  <tr><td>Nous</td><td>-ons</td><td class="fr">parlons</td><td class="th">mangeons, regardons (ดู)</td></tr>
+  <tr><td>Vous</td><td>-ez</td><td class="fr">parlez</td><td class="th">mangez, habitez (อาศัย)</td></tr>
+  <tr><td>Ils/Elles</td><td>-ent<br><span class="note">ไม่ออกเสียง!</span></td><td class="fr">parlent</td><td class="th">mangent, aiment</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🔵 กลุ่ม -IR → FINIR (เสร็จ/จบ)</p>
+  <table class="ltable"><thead><tr><th>สรรพนาม</th><th>ลงท้าย<br><span class="note">Terminaison</span></th><th>Finir<br><span class="note">(เสร็จ)</span></th><th class="thai">ตัวอย่างอื่น + แปล</th></tr></thead><tbody>
+  <tr><td>Je</td><td>-is</td><td class="fr">finis</td><td class="th">choisis (เลือก), réussis (สำเร็จ)</td></tr>
+  <tr><td>Tu</td><td>-is</td><td class="fr">finis</td><td class="th">choisis</td></tr>
+  <tr><td>Il/Elle/On</td><td>-it</td><td class="fr">finit</td><td class="th">choisit, réussit</td></tr>
+  <tr><td>Nous</td><td>-issons</td><td class="fr">finissons</td><td class="th">choisissons</td></tr>
+  <tr><td>Vous</td><td>-issez</td><td class="fr">finissez</td><td class="th">choisissez</td></tr>
+  <tr><td>Ils/Elles</td><td>-issent</td><td class="fr">finissent</td><td class="th">choisissent</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🟢 กลุ่ม -RE → VENDRE (ขาย)</p>
+  <table class="ltable"><thead><tr><th>สรรพนาม</th><th>ลงท้าย<br><span class="note">Terminaison</span></th><th>Vendre<br><span class="note">(ขาย)</span></th><th class="thai">ตัวอย่างอื่น + แปล</th></tr></thead><tbody>
+  <tr><td>Je</td><td>-s</td><td class="fr">vends</td><td class="th">réponds (ตอบ), attends (รอ)</td></tr>
+  <tr><td>Tu</td><td>-s</td><td class="fr">vends</td><td class="th">réponds, attends</td></tr>
+  <tr><td>Il/Elle/On</td><td>— (ไม่มีลงท้าย)</td><td class="fr">vend</td><td class="th">répond, attend</td></tr>
+  <tr><td>Nous</td><td>-ons</td><td class="fr">vendons</td><td class="th">répondons, attendons</td></tr>
+  <tr><td>Vous</td><td>-ez</td><td class="fr">vendez</td><td class="th">répondez, attendez</td></tr>
+  <tr><td>Ils/Elles</td><td>-ent</td><td class="fr">vendent</td><td class="th">répondent, attendent</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">⚠️ สำคัญ</p><p class="thai text-[13px] text-blue-900">-ent ที่ท้ายกริยาพหูพจน์ <strong>ไม่ออกเสียง!</strong><br>ils parlent, ils mangent → ออกเสียงเหมือน "il parle" / "il mange"</p></div>
+</div>`,
+
+"3-2": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">การปฏิเสธในภาษาฝรั่งเศสใช้คำสองคำ "หนีบ" กริยา: <strong>ne … pas</strong> อยู่คนละด้านของกริยา ต่างจากภาษาไทยที่ใส่ "ไม่" ไว้ข้างหน้า</p></div>
+
+  <div class="rule-box"><p class="sec-head">📌 โครงสร้าง: Sujet + NE + Verbe + PAS</p>
+  <table class="ltable"><thead><tr><th>Affirmatif ✅</th><th>Négatif ❌</th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td class="fr">Je mange.</td><td class="fr">Je <u>ne</u> mange <u>pas</u>.</td><td class="th">ฉันไม่กิน</td></tr>
+  <tr><td class="fr">Il parle.</td><td class="fr">Il <u>ne</u> parle <u>pas</u>.</td><td class="th">เขาไม่พูด</td></tr>
+  <tr><td class="fr">Nous avons.</td><td class="fr">Nous <u>n'</u>avons <u>pas</u>.</td><td class="th">เราไม่มี (n' ก่อนสระ)</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">📋 ปฏิเสธแบบต่างๆ</p>
+  <table class="ltable"><thead><tr><th>Structure</th><th class="thai">ความหมาย</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">ne … pas</td><td class="th">ไม่</td><td class="note">Je ne dors pas.</td></tr>
+  <tr><td class="fr">ne … jamais</td><td class="th">ไม่เคย</td><td class="note">Je ne mange jamais de viande.</td></tr>
+  <tr><td class="fr">ne … plus</td><td class="th">ไม่อีกแล้ว</td><td class="note">Il ne travaille plus ici.</td></tr>
+  <tr><td class="fr">ne … rien</td><td class="th">ไม่มีอะไร</td><td class="note">Je ne comprends rien.</td></tr>
+  <tr><td class="fr">ne … personne</td><td class="th">ไม่มีใคร</td><td class="note">Il ne voit personne.</td></tr>
+  <tr><td class="fr">ne … que</td><td class="th">เฉพาะแค่</td><td class="note">Je n'ai que dix euros.</td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ภาษาพูด</p><p class="thai text-[13px] text-green-800">ในภาษาพูดทั่วไป มักละ <strong>ne</strong> ออก:<br>"Je mange pas." / "Il parle pas." — ถูกต้องในภาษาพูด แต่ไม่ควรเขียน</p></div>
+</div>`,
+
+"3-3": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">กริยาสะท้อนกลับ (verbes pronominaux) ใช้เมื่อ "ประธานทำสิ่งนั้นกับตัวเอง" เช่น ล้างตัวเอง แต่งตัวตัวเอง ฯลฯ ต้องมี "สรรพนามสะท้อน" อยู่ข้างหน้ากริยาเสมอ</p></div>
+
+  <div class="rule-box"><p class="sec-head">📌 สรรพนามสะท้อน</p>
+  <table class="ltable"><thead><tr><th>Sujet</th><th>Pronom réfléchi</th><th>Exemple (se lever)</th></tr></thead><tbody>
+  <tr><td>Je</td><td class="fr">me (m')</td><td class="fr">Je me lève.</td></tr>
+  <tr><td>Tu</td><td class="fr">te (t')</td><td class="fr">Tu te lèves.</td></tr>
+  <tr><td>Il/Elle/On</td><td class="fr">se (s')</td><td class="fr">Il se lève.</td></tr>
+  <tr><td>Nous</td><td class="fr">nous</td><td class="fr">Nous nous levons.</td></tr>
+  <tr><td>Vous</td><td class="fr">vous</td><td class="fr">Vous vous levez.</td></tr>
+  <tr><td>Ils/Elles</td><td class="fr">se (s')</td><td class="fr">Ils se lèvent.</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🌅 กิจวัตรประจำวัน — La routine</p>
+  <table class="ltable"><thead><tr><th>Verbe</th><th class="thai">ความหมาย</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">se réveiller</td><td class="th">ตื่นนอน</td><td class="note">Je me réveille à 7h.</td></tr>
+  <tr><td class="fr">se lever</td><td class="th">ลุกขึ้น</td><td class="note">Tu te lèves tard ?</td></tr>
+  <tr><td class="fr">se laver</td><td class="th">ล้างตัว/อาบน้ำ</td><td class="note">Elle se lave le matin.</td></tr>
+  <tr><td class="fr">se brosser les dents</td><td class="th">แปรงฟัน</td><td class="note">Il se brosse les dents.</td></tr>
+  <tr><td class="fr">s'habiller</td><td class="th">แต่งตัว</td><td class="note">On s'habille vite.</td></tr>
+  <tr><td class="fr">se coucher</td><td class="th">เข้านอน</td><td class="note">Je me couche à 22h.</td></tr>
+  <tr><td class="fr">s'appeler</td><td class="th">ชื่อ</td><td class="note">Je m'appelle Nong.</td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ตัวอย่างประโยค</p>
+  <p class="text-[13px]"><strong>Le matin, je me réveille à 6h, je me lève, je me lave et je m'habille.</strong><br><span class="thai text-[12.5px] text-green-800">ตอนเช้า ฉันตื่นนอนตี 6 ลุกขึ้น อาบน้ำ และแต่งตัว</span></p></div>
+</div>`,
+
+"3-4": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">คำแสดงความเป็นเจ้าของในภาษาฝรั่งเศสต้องตรงกับเพศและจำนวนของ <strong>สิ่งที่ถูกครอบครอง</strong> ไม่ใช่ผู้ครอบครอง! จุดนี้ต่างจากภาษาไทยมาก</p></div>
+
+  <div class="rule-box"><p class="sec-head">📌 ตารางสมบูรณ์</p>
+  <table class="ltable"><thead><tr><th>เจ้าของ<br><span class="note">Possesseur</span></th><th>คำนามชาย เอกพจน์<br><span class="note">Masculin sing.</span></th><th>คำนามหญิง เอกพจน์<br><span class="note">Féminin sing.</span></th><th>พหูพจน์ (ทั้งสองเพศ)<br><span class="note">Pluriel</span></th></tr></thead><tbody>
+  <tr><td class="th">ฉัน (je)</td><td class="fr">mon</td><td class="fr">ma</td><td class="fr">mes</td></tr>
+  <tr><td class="th">คุณ (tu)</td><td class="fr">ton</td><td class="fr">ta</td><td class="fr">tes</td></tr>
+  <tr><td class="th">เขา/เธอ (il/elle)</td><td class="fr">son</td><td class="fr">sa</td><td class="fr">ses</td></tr>
+  <tr><td class="th">เรา (nous)</td><td class="fr">notre</td><td class="fr">notre</td><td class="fr">nos</td></tr>
+  <tr><td class="th">คุณ (vous)</td><td class="fr">votre</td><td class="fr">votre</td><td class="fr">vos</td></tr>
+  <tr><td class="th">พวกเขา (ils/elles)</td><td class="fr">leur</td><td class="fr">leur</td><td class="fr">leurs</td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">⚠️ กฎพิเศษ</p><p class="thai text-[13px] text-green-800">ก่อนคำนามเพศหญิงที่ขึ้นต้นด้วยสระ → ใช้ <strong>mon / ton / son</strong> แทน ma/ta/sa<br>✅ <strong>mon amie</strong> (ไม่ใช่ "ma amie") → เพื่อนหญิงของฉัน<br>✅ <strong>mon école</strong> (ไม่ใช่ "ma école") → โรงเรียนของฉัน</p></div>
+
+  <div><p class="sec-head">✅ ตัวอย่าง</p>
+  <table class="ltable"><tbody>
+  <tr><td class="fr">mon livre</td><td class="th">หนังสือของฉัน (livre = ชาย)</td></tr>
+  <tr><td class="fr">ma maison</td><td class="th">บ้านของฉัน (maison = หญิง)</td></tr>
+  <tr><td class="fr">ses enfants</td><td class="th">ลูกๆ ของเขา/เธอ (พหูพจน์)</td></tr>
+  <tr><td class="fr">leur voiture</td><td class="th">รถของพวกเขา (voiture = หญิง)</td></tr>
+  </tbody></table></div>
+</div>`,
+
+"3-5": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">บทนี้เป็นคำศัพท์ที่ใช้ในชีวิตประจำวัน เรียนรู้คำเหล่านี้แล้วจะสื่อสารเรื่องครอบครัว บ้าน และอาหารได้ทันที!</p></div>
+
+  <div><p class="sec-head">👨‍👩‍👧 ครอบครัว — La famille</p>
+  <table class="ltable"><thead><tr><th>Français</th><th class="thai">ภาษาไทย</th><th>Français</th><th class="thai">ภาษาไทย</th></tr></thead><tbody>
+  <tr><td class="fr">le père</td><td class="th">พ่อ</td><td class="fr">les parents</td><td class="th">พ่อแม่</td></tr>
+  <tr><td class="fr">la mère</td><td class="th">แม่</td><td class="fr">le mari</td><td class="th">สามี</td></tr>
+  <tr><td class="fr">le frère</td><td class="th">พี่ชาย/น้องชาย</td><td class="fr">la femme</td><td class="th">ภรรยา</td></tr>
+  <tr><td class="fr">la sœur</td><td class="th">พี่สาว/น้องสาว</td><td class="fr">l'enfant</td><td class="th">ลูก/เด็ก</td></tr>
+  <tr><td class="fr">le grand-père</td><td class="th">ปู่/ตา</td><td class="fr">le fils</td><td class="th">ลูกชาย</td></tr>
+  <tr><td class="fr">la grand-mère</td><td class="th">ย่า/ยาย</td><td class="fr">la fille</td><td class="th">ลูกสาว</td></tr>
+  <tr><td class="fr">l'oncle</td><td class="th">ลุง/น้า/อา</td><td class="fr">le cousin/la cousine</td><td class="th">ลูกพี่ลูกน้อง</td></tr>
+  <tr><td class="fr">la tante</td><td class="th">ป้า/น้า/อา</td><td class="fr">le bébé</td><td class="th">ทารก</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🏠 บ้าน — La maison</p>
+  <table class="ltable"><thead><tr><th>Pièce</th><th class="thai">ภาษาไทย</th><th>Pièce</th><th class="thai">ภาษาไทย</th></tr></thead><tbody>
+  <tr><td class="fr">le salon</td><td class="th">ห้องนั่งเล่น</td><td class="fr">la salle de bain</td><td class="th">ห้องน้ำ</td></tr>
+  <tr><td class="fr">la cuisine</td><td class="th">ห้องครัว</td><td class="fr">les toilettes</td><td class="th">ห้องส้วม</td></tr>
+  <tr><td class="fr">la chambre</td><td class="th">ห้องนอน</td><td class="fr">le jardin</td><td class="th">สวน</td></tr>
+  <tr><td class="fr">la salle à manger</td><td class="th">ห้องรับประทานอาหาร</td><td class="fr">le balcon</td><td class="th">ระเบียง</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🍽️ อาหาร — La nourriture</p>
+  <table class="ltable"><thead><tr><th>Aliment</th><th class="thai">ภาษาไทย</th><th>Aliment</th><th class="thai">ภาษาไทย</th></tr></thead><tbody>
+  <tr><td class="fr">le pain / la baguette</td><td class="th">ขนมปัง/บาแกตต์</td><td class="fr">les légumes</td><td class="th">ผัก</td></tr>
+  <tr><td class="fr">le fromage</td><td class="th">ชีส</td><td class="fr">les fruits</td><td class="th">ผลไม้</td></tr>
+  <tr><td class="fr">la viande</td><td class="th">เนื้อ</td><td class="fr">l'eau</td><td class="th">น้ำ</td></tr>
+  <tr><td class="fr">le poulet</td><td class="th">ไก่</td><td class="fr">le vin</td><td class="th">ไวน์</td></tr>
+  <tr><td class="fr">le poisson</td><td class="th">ปลา</td><td class="fr">le café</td><td class="th">กาแฟ</td></tr>
+  <tr><td class="fr">les œufs</td><td class="th">ไข่</td><td class="fr">le jus d'orange</td><td class="th">น้ำส้มคั้น</td></tr>
+  </tbody></table></div>
+</div>`,
+
+"4-1": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">ภาษาฝรั่งเศสมีสามวิธีในการตั้งคำถาม ตั้งแต่แบบง่ายสุด (เน้นเสียงขึ้น) ไปถึงแบบทางการที่สุด (inversion) ในชีวิตจริงมักใช้แบบง่าย!</p></div>
+
+  <div><p class="sec-head">❓ คำถาม — Mots interrogatifs</p>
+  <table class="ltable"><thead><tr><th>Mot</th><th class="thai">ความหมาย</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">Qui ?</td><td class="th">ใคร?</td><td class="note">Qui est là ? (ใครอยู่ที่นั่น?)</td></tr>
+  <tr><td class="fr">Que ? / Quoi ?</td><td class="th">อะไร?</td><td class="note">Que fais-tu ? / Tu fais quoi ?</td></tr>
+  <tr><td class="fr">Où ?</td><td class="th">ที่ไหน?</td><td class="note">Où habites-tu ?</td></tr>
+  <tr><td class="fr">Quand ?</td><td class="th">เมื่อไร?</td><td class="note">Quand arrives-tu ?</td></tr>
+  <tr><td class="fr">Comment ?</td><td class="th">อย่างไร?</td><td class="note">Comment tu t'appelles ?</td></tr>
+  <tr><td class="fr">Pourquoi ?</td><td class="th">ทำไม?</td><td class="note">Pourquoi tu ris ?</td></tr>
+  <tr><td class="fr">Combien (de) ?</td><td class="th">เท่าไร? / กี่?</td><td class="note">Combien ça coûte ?</td></tr>
+  <tr><td class="fr">Quel(le) ?</td><td class="th">อันไหน? / ชนิดไหน?</td><td class="note">Quelle heure est-il ?</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">📌 3 วิธีตั้งคำถาม (ง่าย → ทางการ)</p>
+  <table class="ltable"><thead><tr><th>วิธี<br><span class="note">Méthode</span></th><th class="thai">ระดับ</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="note">1. เน้นเสียงขึ้น<br>Intonation montante</td><td class="th">พูดทั่วไป (ง่ายสุด)</td><td class="fr">Tu parles français ? <span class="th">(เสียงขึ้นที่ท้าย)</span></td></tr>
+  <tr><td class="note">2. Est-ce que… + ประโยค</td><td class="th">กลาง</td><td class="fr">Est-ce que tu parles français ?</td></tr>
+  <tr><td class="note">3. Inversion = กริยา + สรรพนาม</td><td class="th">ทางการ/เขียน</td><td class="fr">Parles-tu français ? <span class="th">(กริยาขึ้นก่อน)</span></td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ตัวอย่างคำถามจริง</p>
+  <p class="text-[13px]"><strong>Où est la gare ?</strong> <span class="thai text-[12.5px] text-green-800">สถานีรถไฟอยู่ที่ไหน?</span></p>
+  <p class="text-[13px] mt-1.5"><strong>Combien coûte ce livre ?</strong> <span class="thai text-[12.5px] text-green-800">หนังสือเล่มนี้ราคาเท่าไร?</span></p>
+  <p class="text-[13px] mt-1.5"><strong>Pourquoi est-ce que tu pleures ?</strong> <span class="thai text-[12.5px] text-green-800">ทำไมถึงร้องไห้?</span></p></div>
+</div>`,
+
+"4-2": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">กริยาช่วยสามตัวนี้ใช้บ่อยมาก! หลังกริยาช่วยเหล่านี้ต้องใช้กริยา <strong>infinitif</strong> (รูปฐาน) เสมอ เหมือนภาษาไทย "อยากกิน" "ต้องไป"</p></div>
+
+  <div><p class="sec-head">🔴 VOULOIR = อยากได้ / ต้องการ</p>
+  <table class="ltable"><thead><tr><th>Pronom</th><th>Conjugaison</th><th class="thai">ตัวอย่าง</th></tr></thead><tbody>
+  <tr><td>Je</td><td class="fr">veux</td><td class="th">Je veux manger. (ฉันอยากกิน)</td></tr>
+  <tr><td>Tu</td><td class="fr">veux</td><td class="th">Tu veux venir ? (อยากมาไหม?)</td></tr>
+  <tr><td>Il/Elle/On</td><td class="fr">veut</td><td class="th">Elle veut partir. (เธออยากไป)</td></tr>
+  <tr><td>Nous</td><td class="fr">voulons</td><td class="th">Nous voulons danser.</td></tr>
+  <tr><td>Vous</td><td class="fr">voulez</td><td class="th">Vous voulez du café ?</td></tr>
+  <tr><td>Ils/Elles</td><td class="fr">veulent</td><td class="th">Ils veulent jouer.</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🔵 POUVOIR = สามารถ / ได้</p>
+  <table class="ltable"><thead><tr><th>สรรพนาม</th><th>การผัน</th><th class="thai">ตัวอย่าง</th></tr></thead><tbody>
+  <tr><td>Je</td><td class="fr">peux</td><td class="th">Je peux t'aider. (ฉันช่วยคุณได้)</td></tr>
+  <tr><td>Tu</td><td class="fr">peux</td><td class="th">Tu peux venir demain ? (มาได้ไหม?)</td></tr>
+  <tr><td>Il/Elle/On</td><td class="fr">peut</td><td class="th">On peut entrer ? (เข้าได้ไหม?)</td></tr>
+  <tr><td>Nous</td><td class="fr">pouvons</td><td class="th">Nous pouvons partir. (เราสามารถออกไปได้)</td></tr>
+  <tr><td>Vous</td><td class="fr">pouvez</td><td class="th">Vous pouvez m'aider ? (คุณช่วยฉันได้ไหม?)</td></tr>
+  <tr><td>Ils/Elles</td><td class="fr">peuvent</td><td class="th">Ils peuvent attendre. (พวกเขารอได้)</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🟢 DEVOIR = ต้อง / จำเป็น</p>
+  <table class="ltable"><thead><tr><th>สรรพนาม</th><th>การผัน</th><th class="thai">ตัวอย่าง</th></tr></thead><tbody>
+  <tr><td>Je</td><td class="fr">dois</td><td class="th">Je dois travailler. (ฉันต้องทำงาน)</td></tr>
+  <tr><td>Tu</td><td class="fr">dois</td><td class="th">Tu dois dormir ! (ต้องนอนนะ!)</td></tr>
+  <tr><td>Il/Elle/On</td><td class="fr">doit</td><td class="th">Elle doit partir. (เธอต้องออกไป)</td></tr>
+  <tr><td>Nous</td><td class="fr">devons</td><td class="th">Nous devons étudier. (เราต้องเรียน)</td></tr>
+  <tr><td>Vous</td><td class="fr">devez</td><td class="th">Vous devez arriver à l'heure. (ต้องมาตรงเวลา)</td></tr>
+  <tr><td>Ils/Elles</td><td class="fr">doivent</td><td class="th">Ils doivent payer. (พวกเขาต้องจ่าย)</td></tr>
+  </tbody></table></div>
+</div>`,
+
+"4-3": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">การบอกเวลาในภาษาฝรั่งเศสมีเอกลักษณ์! ใช้ระบบ 12 ชั่วโมงในชีวิตประจำวัน และ 24 ชั่วโมงในตารางเวลาทางการ</p></div>
+
+  <div><p class="sec-head">🕐 การบอกเวลา — Dire l'heure</p>
+  <table class="ltable"><thead><tr><th>Heure</th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td class="fr">Il est huit heures.</td><td class="th">ตอนนี้ 8 โมง</td></tr>
+  <tr><td class="fr">Il est huit heures et quart.</td><td class="th">8 โมง 15 นาที</td></tr>
+  <tr><td class="fr">Il est huit heures et demie.</td><td class="th">8 โมงครึ่ง</td></tr>
+  <tr><td class="fr">Il est neuf heures moins le quart.</td><td class="th">8 โมง 45 นาที (9 โมงก่อน 15 นาที)</td></tr>
+  <tr><td class="fr">Il est midi / minuit.</td><td class="th">เที่ยงวัน / เที่ยงคืน</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">📅 วันในสัปดาห์ — Jours de la semaine</p>
+  <table class="ltable"><thead><tr><th>Jour</th><th class="thai">ภาษาไทย</th><th>Jour</th><th class="thai">ภาษาไทย</th></tr></thead><tbody>
+  <tr><td class="fr">lundi</td><td class="th">จันทร์</td><td class="fr">vendredi</td><td class="th">ศุกร์</td></tr>
+  <tr><td class="fr">mardi</td><td class="th">อังคาร</td><td class="fr">samedi</td><td class="th">เสาร์</td></tr>
+  <tr><td class="fr">mercredi</td><td class="th">พุธ</td><td class="fr">dimanche</td><td class="th">อาทิตย์</td></tr>
+  <tr><td class="fr">jeudi</td><td class="th">พฤหัส</td><td></td><td class="th">ไม่มีตัวพิมพ์ใหญ่!</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">📆 เดือน — Mois (ไม่มีตัวพิมพ์ใหญ่)</p>
+  <table class="ltable"><thead><tr><th>Mois</th><th class="thai">ภาษาไทย</th><th>Mois</th><th class="thai">ภาษาไทย</th></tr></thead><tbody>
+  <tr><td class="fr">janvier</td><td class="th">มกราคม</td><td class="fr">juillet</td><td class="th">กรกฎาคม</td></tr>
+  <tr><td class="fr">février</td><td class="th">กุมภาพันธ์</td><td class="fr">août</td><td class="th">สิงหาคม</td></tr>
+  <tr><td class="fr">mars</td><td class="th">มีนาคม</td><td class="fr">septembre</td><td class="th">กันยายน</td></tr>
+  <tr><td class="fr">avril</td><td class="th">เมษายน</td><td class="fr">octobre</td><td class="th">ตุลาคม</td></tr>
+  <tr><td class="fr">mai</td><td class="th">พฤษภาคม</td><td class="fr">novembre</td><td class="th">พฤศจิกายน</td></tr>
+  <tr><td class="fr">juin</td><td class="th">มิถุนายน</td><td class="fr">décembre</td><td class="th">ธันวาคม</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">🍂 ฤดูกาล — Saisons</p>
+  <p class="text-[13px]"><strong>le printemps</strong> <span class="thai">(ฤดูใบไม้ผลิ)</span> · <strong>l'été</strong> <span class="thai">(ฤดูร้อน)</span> · <strong>l'automne</strong> <span class="thai">(ฤดูใบไม้ร่วง)</span> · <strong>l'hiver</strong> <span class="thai">(ฤดูหนาว)</span></p></div>
+</div>`,
+
+"4-4": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">เมื่อท่องเที่ยวฝรั่งเศส คำศัพท์เรื่องการเดินทางและทิศทางนี้จำเป็นมาก! ชาวฝรั่งเศสยินดีช่วยเสมอหากถามอย่างสุภาพ</p></div>
+
+  <div><p class="sec-head">🚌 การเดินทาง — Transports</p>
+  <table class="ltable"><thead><tr><th>ยานพาหนะ<br><span class="note">Moyen de transport</span></th><th class="thai">ภาษาไทย</th><th>บุพบท (ใช้นำหน้า)<br><span class="note">Préposition</span></th></tr></thead><tbody>
+  <tr><td class="fr">le bus</td><td class="th">รถบัส</td><td class="fr">en bus</td></tr>
+  <tr><td class="fr">le métro</td><td class="th">รถไฟใต้ดิน</td><td class="fr">en métro</td></tr>
+  <tr><td class="fr">le train</td><td class="th">รถไฟ</td><td class="fr">en train</td></tr>
+  <tr><td class="fr">l'avion</td><td class="th">เครื่องบิน</td><td class="fr">en avion</td></tr>
+  <tr><td class="fr">le vélo</td><td class="th">จักรยาน</td><td class="fr">à vélo</td></tr>
+  <tr><td class="fr">la voiture</td><td class="th">รถยนต์</td><td class="fr">en voiture</td></tr>
+  <tr><td class="fr">le taxi</td><td class="th">แท็กซี่</td><td class="fr">en taxi</td></tr>
+  <tr><td class="fr">à pied</td><td class="th">เดินเท้า</td><td class="fr">à pied</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🗺️ ทิศทาง — Directions</p>
+  <table class="ltable"><thead><tr><th>Expression</th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td class="fr">Allez tout droit.</td><td class="th">ตรงไป</td></tr>
+  <tr><td class="fr">Tournez à gauche.</td><td class="th">เลี้ยวซ้าย</td></tr>
+  <tr><td class="fr">Tournez à droite.</td><td class="th">เลี้ยวขวา</td></tr>
+  <tr><td class="fr">Prenez la première rue à gauche.</td><td class="th">เลี้ยวซ้ายที่ถนนแรก</td></tr>
+  <tr><td class="fr">C'est à 5 minutes à pied.</td><td class="th">เดินประมาณ 5 นาที</td></tr>
+  <tr><td class="fr">C'est en face de / à côté de</td><td class="th">อยู่ตรงข้าม / อยู่ข้างๆ</td></tr>
+  <tr><td class="fr">Où est la gare / l'hôtel ?</td><td class="th">สถานีรถไฟ/โรงแรมอยู่ที่ไหน?</td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ บทสนทนา</p>
+  <p class="text-[13px]">— <strong>Excusez-moi, où est le musée du Louvre ?</strong><br><span class="thai text-[12.5px] text-green-800">ขอโทษ พิพิธภัณฑ์ลูฟวร์อยู่ที่ไหนครับ?</span></p>
+  <p class="text-[13px] mt-2">— <strong>Allez tout droit, puis tournez à gauche au feu rouge.</strong><br><span class="thai text-[12.5px] text-green-800">ตรงไปแล้วเลี้ยวซ้ายที่ไฟแดง</span></p></div>
+</div>`,
+
+"5-1": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">Passé composé ใช้บอกเหตุการณ์ที่เกิดขึ้นและ<strong>สิ้นสุดแล้วในอดีต</strong> เป็นกาลอดีตที่ใช้บ่อยที่สุดในการพูด เทียบได้กับ "กิน<u>แล้ว</u>" "ไป<u>แล้ว</u>" ในภาษาไทย</p></div>
+
+  <div class="rule-box"><p class="sec-head">📌 โครงสร้าง: Sujet + AVOIR/ÊTRE + Participe passé</p></div>
+
+  <div><p class="sec-head">🔵 กริยาส่วนใหญ่ → ใช้ AVOIR</p>
+  <table class="ltable"><thead><tr><th>Infinitif<br><span class="note">รูปฐาน</span></th><th>Participe passé<br><span class="note">กริยาช่อง 3</span></th><th class="thai">ตัวอย่าง + แปล</th></tr></thead><tbody>
+  <tr><td class="fr">manger</td><td class="fr">mangé</td><td class="note">J'ai mangé du riz. (ฉันกินข้าวแล้ว)</td></tr>
+  <tr><td class="fr">finir</td><td class="fr">fini</td><td class="note">Tu as fini ton travail. (คุณทำงานเสร็จแล้ว)</td></tr>
+  <tr><td class="fr">vendre</td><td class="fr">vendu</td><td class="note">Il a vendu sa voiture. (เขาขายรถแล้ว)</td></tr>
+  <tr><td class="fr">faire</td><td class="fr">fait ⚠️</td><td class="note">Nous avons fait un gâteau. (เราทำเค้กแล้ว)</td></tr>
+  <tr><td class="fr">prendre</td><td class="fr">pris ⚠️</td><td class="note">Vous avez pris le métro ? (คุณนั่งรถไฟใต้ดินไหม?)</td></tr>
+  <tr><td class="fr">voir</td><td class="fr">vu ⚠️</td><td class="note">Ils ont vu un film. (พวกเขาดูหนังแล้ว)</td></tr>
+  <tr><td class="fr">dire</td><td class="fr">dit ⚠️</td><td class="note">J'ai dit la vérité. (ฉันพูดความจริงแล้ว)</td></tr>
+  <tr><td class="fr">écrire</td><td class="fr">écrit ⚠️</td><td class="note">J'ai écrit une lettre. (ฉันเขียนจดหมายแล้ว)</td></tr>
+  <tr><td class="fr">lire</td><td class="fr">lu ⚠️</td><td class="note">Elle a lu ce livre. (เธออ่านหนังสือเล่มนี้แล้ว)</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🟢 กริยาการเคลื่อนที่ → ใช้ ÊTRE · จำด้วย DR MRS VANDERTRAMP</p>
+  <p class="text-[11.5px] text-gray-500 mb-1.5 italic">DR MRS VANDERTRAMP = อักษรย่อของกริยาทั้ง 16 ตัวที่ใช้ être</p>
+  <table class="ltable"><thead><tr><th>Infinitif<br><span class="note">รูปฐาน</span></th><th class="thai">ความหมาย</th><th>Participe passé<br><span class="note">กริยาช่อง 3</span></th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">aller</td><td class="th">ไป</td><td class="fr">allé(e)</td><td class="note">Je suis allé(e) à Paris.</td></tr>
+  <tr><td class="fr">venir</td><td class="th">มา</td><td class="fr">venu(e)</td><td class="note">Elle est venue hier. (เธอมาเมื่อวาน)</td></tr>
+  <tr><td class="fr">partir</td><td class="th">ออกจาก</td><td class="fr">parti(e)</td><td class="note">Ils sont partis tôt. (พวกเขาออกไปแต่เช้า)</td></tr>
+  <tr><td class="fr">arriver</td><td class="th">มาถึง</td><td class="fr">arrivé(e)</td><td class="note">Tu es arrivé(e) ? (มาถึงแล้วหรือ?)</td></tr>
+  <tr><td class="fr">entrer</td><td class="th">เข้า</td><td class="fr">entré(e)</td><td class="note">Il est entré. (เขาเข้ามา)</td></tr>
+  <tr><td class="fr">sortir</td><td class="th">ออกไป</td><td class="fr">sorti(e)</td><td class="note">Elle est sortie. (เธอออกไป)</td></tr>
+  <tr><td class="fr">monter</td><td class="th">ขึ้น</td><td class="fr">monté(e)</td><td class="note">Il est monté. (เขาขึ้นไป)</td></tr>
+  <tr><td class="fr">descendre</td><td class="th">ลงมา</td><td class="fr">descendu(e)</td><td class="note">Elle est descendue. (เธอลงมา)</td></tr>
+  <tr><td class="fr">naître</td><td class="th">เกิด</td><td class="fr">né(e)</td><td class="note">Il est né en 1990. (เขาเกิดปี 1990)</td></tr>
+  <tr><td class="fr">mourir</td><td class="th">ตาย</td><td class="fr">mort(e)</td><td class="note">Elle est morte. (เธอเสียชีวิต)</td></tr>
+  <tr><td class="fr">rester</td><td class="th">อยู่/พัก</td><td class="fr">resté(e)</td><td class="note">Je suis resté(e) à la maison. (ฉันอยู่บ้าน)</td></tr>
+  <tr><td class="fr">tomber</td><td class="th">ล้ม/ตก</td><td class="fr">tombé(e)</td><td class="note">Il est tombé. (เขาล้ม)</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">⚠️ Accord avec ÊTRE</p><p class="thai text-[13px] text-blue-900">เมื่อใช้ être ต้องเพิ่ม <strong>-e</strong> สำหรับผู้หญิง และ <strong>-s</strong> สำหรับพหูพจน์<br>Il est allé → Elle est allé<strong>e</strong> → Ils sont allé<strong>s</strong> → Elles sont allé<strong>es</strong></p></div>
+</div>`,
+
+"5-2": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">Imparfait ใช้บรรยายสิ่งที่เกิดขึ้น<strong>เป็นประจำ</strong>หรือ<strong>ต่อเนื่อง</strong>ในอดีต เช่น "ตอนเด็กๆ ฉันกินข้าวเช้าทุกวัน" หรือ "ฝนกำลังตกอยู่เมื่อเขาโทรหาฉัน"</p></div>
+
+  <div class="rule-box"><p class="sec-head">📌 วิธีสร้าง Imparfait</p><p class="text-[13px]">นำ <strong>nous</strong> ปัจจุบัน → ตัด -<em>ons</em> → เพิ่ม endings: <strong>-ais, -ais, -ait, -ions, -iez, -aient</strong><br>
+  Ex: parler → nous <em>parlons</em> → parl- + ais = <strong>parlais</strong></p></div>
+
+  <div><p class="sec-head">🔵 PARLER à l'imparfait (พูด — ในอดีต)</p>
+  <table class="ltable"><thead><tr><th>สรรพนาม</th><th>รูปกริยา<br><span class="note">Forme</span></th><th class="thai">ตัวอย่าง</th></tr></thead><tbody>
+  <tr><td>Je</td><td class="fr">parlais</td><td class="th">Je parlais trop vite. (ฉันพูดเร็วเกินไป เมื่อก่อน)</td></tr>
+  <tr><td>Tu</td><td class="fr">parlais</td><td class="th">Tu parlais souvent. (คุณพูดบ่อย เมื่อก่อน)</td></tr>
+  <tr><td>Il/Elle/On</td><td class="fr">parlait</td><td class="th">Il parlait tout le temps. (เขาพูดตลอดเวลา)</td></tr>
+  <tr><td>Nous</td><td class="fr">parlions</td><td class="th">Nous parlions ensemble. (เราพูดคุยกัน)</td></tr>
+  <tr><td>Vous</td><td class="fr">parliez</td><td class="th">Vous parliez trop fort. (คุณพูดดังเกินไป)</td></tr>
+  <tr><td>Ils/Elles</td><td class="fr">parlaient</td><td class="th">Ils parlaient français. (พวกเขาพูดภาษาฝรั่งเศส)</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">📊 Imparfait vs Passé composé</p>
+  <table class="ltable"><thead><tr><th>Imparfait</th><th>Passé composé</th></tr></thead><tbody>
+  <tr><td class="note">Habitude: Je <em>mangeais</em> du riz chaque soir.<br>(ฉันกินข้าวทุกเย็น — เป็นประจำ)</td><td class="note">Événement: J'<em>ai mangé</em> du riz hier soir.<br>(ฉันกินข้าวเมื่อคืน — ครั้งเดียว)</td></tr>
+  <tr><td class="note">Arrière-plan: Il <em>pleuvait</em>…<br>(ฝนกำลังตก… — พื้นหลัง)</td><td class="note">Action: …quand tu <em>es arrivé</em>.<br>(…เมื่อคุณมาถึง — เหตุการณ์)</td></tr>
+  <tr><td class="note">Description: La maison <em>était</em> belle.<br>(บ้านสวยงาม)</td><td class="note">Changement: Soudain il <em>a crié</em>.<br>(ทันใดนั้นเขาตะโกน)</td></tr>
+  </tbody></table></div>
+</div>`,
+
+"5-3": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">ภาษาฝรั่งเศสมีสองแบบสำหรับอนาคต: <strong>futur proche</strong> (ใกล้) ใช้บ่อยในการพูด และ <strong>futur simple</strong> สำหรับแผนการหรือการพยากรณ์</p></div>
+
+  <div class="rule-box"><p class="sec-head">🟢 Futur proche = ALLER + Infinitif (ง่ายมาก!)</p>
+  <table class="ltable"><thead><tr><th>Sujet</th><th>ALLER</th><th>+ Infinitif</th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td>Je</td><td class="fr">vais</td><td class="fr">manger</td><td class="th">ฉันกำลังจะกิน</td></tr>
+  <tr><td>Tu</td><td class="fr">vas</td><td class="fr">partir</td><td class="th">คุณกำลังจะออกไป</td></tr>
+  <tr><td>Il/Elle</td><td class="fr">va</td><td class="fr">arriver</td><td class="th">เขากำลังจะมาถึง</td></tr>
+  <tr><td>Nous</td><td class="fr">allons</td><td class="fr">voyager</td><td class="th">เรากำลังจะเดินทาง</td></tr>
+  <tr><td>Vous</td><td class="fr">allez</td><td class="fr">voir</td><td class="th">คุณกำลังจะดู</td></tr>
+  <tr><td>Ils/Elles</td><td class="fr">vont</td><td class="fr">finir</td><td class="th">พวกเขากำลังจะเสร็จ</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🔵 Futur simple — endings: -ai, -as, -a, -ons, -ez, -ont</p>
+  <table class="ltable"><thead><tr><th>Pronom</th><th>Parler</th><th>Finir</th><th class="thai">เหตุการณ์อนาคตชัดเจน</th></tr></thead><tbody>
+  <tr><td>Je</td><td class="fr">parlerai</td><td class="fr">finirai</td><td></td></tr>
+  <tr><td>Tu</td><td class="fr">parleras</td><td class="fr">finiras</td><td></td></tr>
+  <tr><td>Il/Elle</td><td class="fr">parlera</td><td class="fr">finira</td><td class="th">Il pleuvra demain. (พรุ่งนี้ฝนจะตก)</td></tr>
+  <tr><td>Nous</td><td class="fr">parlerons</td><td class="fr">finirons</td><td></td></tr>
+  <tr><td>Vous</td><td class="fr">parlerez</td><td class="fr">finirez</td><td></td></tr>
+  <tr><td>Ils</td><td class="fr">parleront</td><td class="fr">finiront</td><td></td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">⚠️ รากกริยาไม่สม่ำเสมอ — Radicaux irréguliers (ต้องจำ!)</p>
+  <table class="ltable"><thead><tr><th>Infinitif<br><span class="note">รูปฐาน</span></th><th class="thai">ความหมาย</th><th>Radical futur<br><span class="note">ราก + endings</span></th><th>Exemple (je)</th></tr></thead><tbody>
+  <tr><td class="fr">être</td><td class="th">เป็น/อยู่</td><td class="fr">ser-</td><td class="fr">je serai (ฉันจะเป็น)</td></tr>
+  <tr><td class="fr">avoir</td><td class="th">มี</td><td class="fr">aur-</td><td class="fr">j'aurai (ฉันจะมี)</td></tr>
+  <tr><td class="fr">aller</td><td class="th">ไป</td><td class="fr">ir-</td><td class="fr">j'irai (ฉันจะไป)</td></tr>
+  <tr><td class="fr">faire</td><td class="th">ทำ</td><td class="fr">fer-</td><td class="fr">je ferai (ฉันจะทำ)</td></tr>
+  <tr><td class="fr">vouloir</td><td class="th">ต้องการ</td><td class="fr">voudr-</td><td class="fr">je voudrai (ฉันจะต้องการ)</td></tr>
+  <tr><td class="fr">pouvoir</td><td class="th">สามารถ</td><td class="fr">pourr-</td><td class="fr">je pourrai (ฉันจะสามารถ)</td></tr>
+  <tr><td class="fr">venir</td><td class="th">มา</td><td class="fr">viendr-</td><td class="fr">je viendrai (ฉันจะมา)</td></tr>
+  <tr><td class="fr">savoir</td><td class="th">รู้</td><td class="fr">saur-</td><td class="fr">je saurai (ฉันจะรู้)</td></tr>
+  </tbody></table></div>
+</div>`,
+
+"5-4": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">สรรพนามกรรมช่วยหลีกเลี่ยงการพูดซ้ำ แทนที่จะพูด "Je mange la pizza" ซ้ำ เราพูด "Je <strong>la</strong> mange" ฟังดูเป็นธรรมชาติมากกว่า</p></div>
+
+  <div><p class="sec-head">🔵 COD (Complément d'Objet Direct) — สรรพนามกรรมตรง</p>
+  <p class="thai text-[12px] text-gray-600 mb-1.5">COD = สิ่งที่ถูกกระทำโดยตรง ไม่มีคำบุพบท "à" นำหน้า<br>เช่น Je mange <u>la pizza</u> → Je <strong>la</strong> mange.</p>
+  <table class="ltable"><thead><tr><th>สรรพนาม<br><span class="note">Pronom COD</span></th><th class="thai">แทนใคร/อะไร</th><th class="thai">ตัวอย่าง + แปล</th></tr></thead><tbody>
+  <tr><td class="fr">me / m'</td><td class="th">ฉัน (กรรม)</td><td class="note">Il me regarde. (เขามองฉัน)</td></tr>
+  <tr><td class="fr">te / t'</td><td class="th">คุณ (กรรม)</td><td class="note">Je t'aime. (ฉันรักคุณ)</td></tr>
+  <tr><td class="fr">le / l'</td><td class="th">เขา/มัน (ชาย)</td><td class="note">Je le mange. (ฉันกินมัน)</td></tr>
+  <tr><td class="fr">la / l'</td><td class="th">เธอ/มัน (หญิง)</td><td class="note">Je la connais. (ฉันรู้จักเธอ)</td></tr>
+  <tr><td class="fr">nous</td><td class="th">เรา</td><td class="note">Elle nous invite. (เธอเชิญพวกเรา)</td></tr>
+  <tr><td class="fr">vous</td><td class="th">คุณ/พวกคุณ</td><td class="note">Je vous comprends.</td></tr>
+  <tr><td class="fr">les</td><td class="th">พวกเขา/พวกมัน</td><td class="note">Tu les aimes ? (คุณชอบพวกนั้นไหม?)</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🟢 COI (Complément d'Objet Indirect) — สรรพนามกรรมรอง</p>
+  <p class="thai text-[12px] text-gray-600 mb-1.5">COI = แทน "à + คน" เช่น Je parle <u>à Marie</u> → Je <strong>lui</strong> parle.</p>
+  <table class="ltable"><thead><tr><th>สรรพนาม<br><span class="note">Pronom COI</span></th><th class="thai">แทนใคร</th><th class="thai">ตัวอย่าง + แปล</th></tr></thead><tbody>
+  <tr><td class="fr">lui</td><td class="th">แก่เขา/เธอ (เอกพจน์)</td><td class="note">Je lui parle. (ฉันพูดกับเขา/เธอ)</td></tr>
+  <tr><td class="fr">leur</td><td class="th">แก่พวกเขา/เธอ</td><td class="note">Je leur écris. (ฉันเขียนถึงพวกเขา)</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">📍 ตำแหน่ง: สรรพนามอยู่ ก่อน กริยา</p>
+  <p class="text-[13px]">✅ <strong>Je le mange.</strong> (ฉันกินมัน)<br>✅ <strong>Je ne le mange pas.</strong> (ฉันไม่กินมัน)<br>✅ Futur proche: <strong>Je vais le manger.</strong> (ฉันกำลังจะกินมัน)</p></div>
+</div>`,
+
+"6-1": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">ในฝรั่งเศส ความสุภาพเป็นเรื่องสำคัญมาก! Conditionnel ช่วยทำให้การขอร้องนุ่มนวลและสุภาพ เหมือนการใช้ "ขอ... ได้ไหมครับ" แทน "ให้ฉัน..."</p></div>
+
+  <div class="rule-box"><p class="sec-head">📌 วิธีสร้าง Conditionnel: รากกริยาอนาคต + endings: -ais, -ais, -ait, -ions, -iez, -aient</p>
+  <p class="thai text-[12px] text-blue-800 mb-2">= เอาราก futur simple มา + ลงท้ายเหมือน imparfait</p>
+  <table class="ltable"><thead><tr><th>สรรพนาม</th><th>VOULOIR (voudr-)<br><span class="note">ต้องการ/อยาก</span></th><th>POUVOIR (pourr-)<br><span class="note">สามารถ/ได้</span></th></tr></thead><tbody>
+  <tr><td>Je</td><td class="fr">voudrais</td><td class="fr">pourrais</td></tr>
+  <tr><td>Tu</td><td class="fr">voudrais</td><td class="fr">pourrais</td></tr>
+  <tr><td>Il/Elle/On</td><td class="fr">voudrait</td><td class="fr">pourrait</td></tr>
+  <tr><td>Nous</td><td class="fr">voudrions</td><td class="fr">pourrions</td></tr>
+  <tr><td>Vous</td><td class="fr">voudriez</td><td class="fr">pourriez</td></tr>
+  <tr><td>Ils/Elles</td><td class="fr">voudraient</td><td class="fr">pourraient</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🤝 ประโยคสุภาพที่ควรจำ</p>
+  <table class="ltable"><thead><tr><th>ประโยคสุภาพ<br><span class="note">Expression polie</span></th><th class="thai">ความหมาย</th><th>เทียบกับแบบตรงๆ<br><span class="note">vs. version directe</span></th></tr></thead><tbody>
+  <tr><td class="fr">Je voudrais un café.</td><td class="th">ขอกาแฟหนึ่งแก้วครับ</td><td class="note">Je veux un café. (ตรงไป)</td></tr>
+  <tr><td class="fr">Pourriez-vous m'aider ?</td><td class="th">คุณช่วยฉันได้ไหม?</td><td class="note">Aidez-moi ! (หยาบ)</td></tr>
+  <tr><td class="fr">Est-ce que vous pourriez…?</td><td class="th">คุณสามารถ… ได้ไหม?</td><td></td></tr>
+  <tr><td class="fr">Il faudrait…</td><td class="th">น่าจะ… / ควรจะ…</td><td class="note">Il faut… (ต้อง — ตรงกว่า)</td></tr>
+  <tr><td class="fr">Ce serait possible de…?</td><td class="th">มีความเป็นไปได้ที่จะ…?</td><td></td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ตัวอย่าง</p>
+  <p class="text-[13px]"><strong>Je voudrais réserver une table pour deux personnes, s'il vous plaît.</strong><br><span class="thai text-[12.5px] text-green-800">ขอจองโต๊ะสำหรับสองคนด้วยครับ (สุภาพมาก)</span></p></div>
+</div>`,
+
+"6-2": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">บทนี้เรียนประโยคจริงที่ใช้เมื่อไปช้อปปิ้งหรือกินอาหารในฝรั่งเศส จำประโยคเหล่านี้ไว้แล้วจะใช้ได้ทันที!</p></div>
+
+  <div><p class="sec-head">🛒 ในร้าน/ตลาด — Au magasin / au marché</p>
+  <table class="ltable"><thead><tr><th>ประโยคที่ใช้บ่อย<br><span class="note">Phrase utile</span></th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td class="fr">Bonjour ! Je voudrais… s'il vous plaît.</td><td class="th">สวัสดี ขอ… ครับ/ค่ะ</td></tr>
+  <tr><td class="fr">Avez-vous… ?</td><td class="th">มี… ไหม?</td></tr>
+  <tr><td class="fr">C'est combien ? / Ça coûte combien ?</td><td class="th">ราคาเท่าไร?</td></tr>
+  <tr><td class="fr">C'est trop cher.</td><td class="th">แพงเกินไป</td></tr>
+  <tr><td class="fr">Je vais prendre ça.</td><td class="th">ฉันจะเอาอันนี้</td></tr>
+  <tr><td class="fr">Vous payez comment ?</td><td class="th">จ่ายอย่างไร? (ถามโดยพนักงาน)</td></tr>
+  <tr><td class="fr">Par carte, s'il vous plaît.</td><td class="th">จ่ายด้วยบัตรครับ</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🍽️ ในร้านอาหาร — Au restaurant</p>
+  <table class="ltable"><thead><tr><th>ประโยคที่ใช้บ่อย<br><span class="note">Phrase utile</span></th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td class="fr">Une table pour deux, s'il vous plaît.</td><td class="th">ขอโต๊ะสำหรับสองคนครับ</td></tr>
+  <tr><td class="fr">La carte, s'il vous plaît.</td><td class="th">ขอเมนูด้วยครับ</td></tr>
+  <tr><td class="fr">Qu'est-ce que vous recommandez ?</td><td class="th">คุณแนะนำอะไร?</td></tr>
+  <tr><td class="fr">Je voudrais le plat du jour.</td><td class="th">ขออาหารเมนูวันนี้ครับ</td></tr>
+  <tr><td class="fr">C'est délicieux !</td><td class="th">อร่อยมาก!</td></tr>
+  <tr><td class="fr">L'addition, s'il vous plaît.</td><td class="th">เช็คบิลด้วยครับ</td></tr>
+  <tr><td class="fr">Le service est inclus ?</td><td class="th">รวมค่าบริการแล้วไหม?</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">💡 เคล็ดลับ</p><p class="thai text-[13px] text-blue-900">ในฝรั่งเศส <strong>ต้องพูด "Bonjour" ก่อนเสมอ</strong> เมื่อเข้าร้าน ถ้าข้ามขั้นตอนนี้ถือว่าหยาบคายมาก!<br>และ "Merci" + "Au revoir" เมื่อออกจากร้าน</p></div>
+</div>`,
+
+"6-3": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">ฝรั่งเศสมีวัฒนธรรมเฉพาะตัวที่น่าสนใจมาก! การรู้จักธรรมเนียมเหล่านี้จะช่วยให้คุณกลมกลืนและไม่ทำให้ใครเขินอาย</p></div>
+
+  <div><p class="sec-head">😘 La Bise — การแตะแก้ม</p>
+  <table class="ltable"><thead><tr><th class="thai">สถานการณ์</th><th class="thai">ธรรมเนียม</th></tr></thead><tbody>
+  <tr><td class="th">ผู้หญิง + ผู้หญิง</td><td class="note">La bise เสมอ (แตะแก้มกัน)</td></tr>
+  <tr><td class="th">ผู้หญิง + ผู้ชาย</td><td class="note">La bise มักทำ (ถ้าสนิท)</td></tr>
+  <tr><td class="th">ผู้ชาย + ผู้ชาย</td><td class="note">จับมือกัน หรือ bise ถ้าเป็นเพื่อนสนิท</td></tr>
+  <tr><td class="th">จำนวน bise</td><td class="note">แตกต่างตามภูมิภาค: ปารีส = 2 ครั้ง, ภาคใต้ = 3 ครั้ง, บางพื้นที่ = 4 ครั้ง</td></tr>
+  <tr><td class="th">แก้มไหนก่อน?</td><td class="note">แก้มซ้ายก่อนในส่วนใหญ่ (เลี้ยวไปทางขวาของอีกฝ่าย)</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🍽️ มารยาทที่โต๊ะอาหาร — À table</p>
+  <table class="ltable"><thead><tr><th class="thai">ธรรมเนียม</th><th class="thai">รายละเอียด</th></tr></thead><tbody>
+  <tr><td class="th">รอให้ทุกคนได้รับอาหาร</td><td class="note">ไม่กินก่อนที่ทุกคนจะได้รับอาหาร</td></tr>
+  <tr><td class="th">Bon appétit !</td><td class="note">พูดก่อนเริ่มกินเสมอ (อร่อยนะ!)</td></tr>
+  <tr><td class="th">ลำดับคอร์ส</td><td class="note">Entrée → Plat principal → Fromage → Dessert</td></tr>
+  <tr><td class="th">ชีส = คอร์สแยก</td><td class="note">ในฝรั่งเศส ชีสมาหลังอาหารหลัก ก่อนของหวาน!</td></tr>
+  <tr><td class="th">ขนมปัง</td><td class="note">วางบนโต๊ะโดยตรง ไม่มีจาน</td></tr>
+  <tr><td class="th">วางมือไว้บนโต๊ะ</td><td class="note">ไม่ซ่อนมือใต้โต๊ะขณะกิน (ธรรมเนียมโบราณ)</td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ประโยคสำคัญ</p>
+  <p class="text-[13px]"><strong>Bon appétit !</strong> <span class="thai text-[12.5px] text-green-800">อร่อยนะ! (พูดก่อนเริ่มกินเสมอ)</span></p>
+  <p class="text-[13px] mt-1.5"><strong>C'est délicieux, vous avez bien cuisiné !</strong> <span class="thai text-[12.5px] text-green-800">อร่อยมาก คุณทำอาหารเก่งมาก!</span></p>
+  <p class="text-[13px] mt-1.5"><strong>Excusez-moi de vous déranger.</strong> <span class="thai text-[12.5px] text-green-800">ขอโทษที่รบกวน</span></p></div>
+</div>`,
+
+"1-6": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">ภาษาฝรั่งเศสมีกฎพิเศษ 2 อย่างที่ทำให้การพูดไหลลื่น: <strong>Élision</strong> (ตัดสระก่อนสระ) และ <strong>Liaison</strong> (เชื่อมพยัญชนะท้ายกับสระต้นคำถัดไป) รู้สองอย่างนี้แล้วฟังดูเหมือนเจ้าของภาษาทันที!</p><p class="text-[12px] text-amber-700 mt-1 italic">L'élision et la liaison rendent la parole française naturelle et fluide.</p></div>
+
+  <div class="rule-box"><p class="sec-head">✂️ L'Élision — ตัดสระออกก่อนสระหรือ H muet</p>
+  <table class="ltable"><thead><tr><th>Avant</th><th>Après élision</th><th class="thai">ตัวอย่าง + แปล</th></tr></thead><tbody>
+  <tr><td class="fr">le / la → l'</td><td class="fr">l'ami, l'école, l'hôtel</td><td class="th">เพื่อน, โรงเรียน, โรงแรม</td></tr>
+  <tr><td class="fr">je → j'</td><td class="fr">j'aime, j'ai, j'arrive</td><td class="th">ฉันรัก, ฉันมี, ฉันมาถึง</td></tr>
+  <tr><td class="fr">de → d'</td><td class="fr">d'accord, d'abord, d'eau</td><td class="th">ตกลง, ก่อนอื่น, น้ำ</td></tr>
+  <tr><td class="fr">ne → n'</td><td class="fr">n'est pas, n'a pas</td><td class="th">ไม่ใช่, ไม่มี</td></tr>
+  <tr><td class="fr">que → qu'</td><td class="fr">qu'il, qu'elle, qu'on</td><td class="th">ที่เขา, ที่เธอ, ที่เรา</td></tr>
+  <tr><td class="fr">se → s'</td><td class="fr">s'appelle, s'habille</td><td class="th">ชื่อ, แต่งตัว</td></tr>
+  <tr><td class="fr">ce → c'</td><td class="fr">c'est, c'était</td><td class="th">นี่คือ, นั่นคือ</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🔗 La Liaison — เชื่อมเสียง (พยัญชนะท้ายคำ + สระต้นคำถัดไป)</p>
+  <p class="thai text-[12.5px] text-gray-700 mb-2">โดยปกติ พยัญชนะท้ายคำ<strong>ไม่ออกเสียง</strong> แต่ถ้าคำถัดไปขึ้นต้นด้วยสระ จะ<strong>ออกเสียงพยัญชนะนั้น</strong>และเชื่อมติดกัน</p>
+  <table class="ltable"><thead><tr><th>Exemple</th><th class="thai">ออกเสียงว่า</th><th class="thai">สังเกต</th></tr></thead><tbody>
+  <tr><td class="fr">les enfants</td><td class="note">le-ZAN-fan</td><td class="th">s ออกเสียงเป็น Z</td></tr>
+  <tr><td class="fr">vous avez</td><td class="note">vou-ZA-vé</td><td class="th">s ออกเสียงเป็น Z</td></tr>
+  <tr><td class="fr">ils arrivent</td><td class="note">il-ZA-riiv</td><td class="th">s ออกเสียงเป็น Z</td></tr>
+  <tr><td class="fr">un ami</td><td class="note">u-NA-mi</td><td class="th">n ออกเสียงต่อเนื่อง</td></tr>
+  <tr><td class="fr">mon ami</td><td class="note">mo-NA-mi</td><td class="th">n ออกเสียงต่อเนื่อง</td></tr>
+  <tr><td class="fr">un grand ami</td><td class="note">un gra-TA-mi</td><td class="th">d ออกเสียงเป็น T</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🔤 สระประสมสำคัญ — Combinaisons de voyelles</p>
+  <table class="ltable"><thead><tr><th>Combinaison</th><th class="thai">ออกเสียงว่า</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">eau / au</td><td class="th">โอ</td><td class="note">eau (น้ำ), beau (สวย), chaud (ร้อน), gauche (ซ้าย)</td></tr>
+  <tr><td class="fr">ou</td><td class="th">อู</td><td class="note">rouge (แดง), bonjour, tout (ทั้งหมด), vous</td></tr>
+  <tr><td class="fr">oi</td><td class="th">วา</td><td class="note">moi (ฉัน), toi (คุณ), voiture (รถ), boire (ดื่ม)</td></tr>
+  <tr><td class="fr">ai / ei / et</td><td class="th">แอ</td><td class="note">j'ai (ฉันมี), mais (แต่), lait (นม), poulet (ไก่)</td></tr>
+  <tr><td class="fr">eu / œu</td><td class="th">เออ (ห่อปาก)</td><td class="note">feu (ไฟ), peur (กลัว), heure (ชั่วโมง), cœur (หัวใจ)</td></tr>
+  <tr><td class="fr">ui</td><td class="th">อุ-อี (รวดเร็ว)</td><td class="note">nuit (กลางคืน), lui (เขา), fruit (ผลไม้), cuisine</td></tr>
+  <tr><td class="fr">ill / ille</td><td class="th">อิย</td><td class="note">fille (สาว), famille (ครอบครัว), travailler (ทำงาน)</td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ตัวอย่าง</p>
+  <p class="text-[13px]"><strong>J'aime les enfants.</strong> <span class="thai text-[12.5px] text-green-800">ฉันรักเด็กๆ — j' (élision de je) + les-ZAN-fants (liaison)</span></p>
+  <p class="text-[13px] mt-1.5"><strong>Vous avez un ami ici ?</strong> <span class="thai text-[12.5px] text-green-800">คุณมีเพื่อนที่นี่ไหม? — vou-ZA-vé + u-NA-mi (deux liaisons!)</span></p>
+  <p class="text-[13px] mt-1.5"><strong>C'est l'école de mon ami.</strong> <span class="thai text-[12.5px] text-green-800">นั่นคือโรงเรียนของเพื่อนฉัน — c'est (élision) + l'école (élision)</span></p></div>
+</div>`,
+
+"2-5": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">Articles partitifs ใช้กับสิ่งที่ <strong>นับไม่ได้</strong> หรือ <strong>ส่วนหนึ่ง</strong> ของบางสิ่ง เช่น "กินข้าว" — ไม่ได้กินข้าวทั้งโลก แต่กินแค่บางส่วน ภาษาฝรั่งเศสต้องระบุเรื่องนี้ให้ชัดเจน!</p><p class="text-[12px] text-amber-700 mt-1 italic">Les articles partitifs indiquent une quantité non définie d'une chose non comptable.</p></div>
+
+  <div><p class="sec-head">📖 Articles partitifs — รูปแบบ 4 แบบ</p>
+  <table class="ltable"><thead><tr><th>Article</th><th class="thai">ใช้กับ</th><th>Exemple</th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td class="fr">du (= de + le)</td><td class="th">คำนามชาย เอกพจน์</td><td class="fr">du pain, du riz, du café</td><td class="th">ขนมปัง, ข้าว, กาแฟ (บางส่วน)</td></tr>
+  <tr><td class="fr">de la</td><td class="th">คำนามหญิง เอกพจน์</td><td class="fr">de la viande, de la soupe</td><td class="th">เนื้อ, ซุป (บางส่วน)</td></tr>
+  <tr><td class="fr">de l'</td><td class="th">ขึ้นต้นด้วยสระ (ทั้งสองเพศ)</td><td class="fr">de l'eau, de l'argent, de l'huile</td><td class="th">น้ำ, เงิน, น้ำมัน</td></tr>
+  <tr><td class="fr">des</td><td class="th">พหูพจน์</td><td class="fr">des légumes, des fruits</td><td class="th">ผัก, ผลไม้ (หลายอย่าง)</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">⚠️ Forme négative → TOUJOURS de / d' (ไม่มีข้อยกเว้น!)</p>
+  <table class="ltable"><thead><tr><th>Affirmatif ✅</th><th>Négatif ❌</th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td class="fr">Je mange du pain.</td><td class="fr">Je ne mange <u>pas de</u> pain.</td><td class="th">ฉันไม่กินขนมปัง</td></tr>
+  <tr><td class="fr">Il boit de la bière.</td><td class="fr">Il ne boit <u>pas de</u> bière.</td><td class="th">เขาไม่ดื่มเบียร์</td></tr>
+  <tr><td class="fr">Tu as de l'argent.</td><td class="fr">Tu n'as <u>pas d'</u>argent.</td><td class="th">คุณไม่มีเงิน</td></tr>
+  <tr><td class="fr">Ils mangent des fruits.</td><td class="fr">Ils ne mangent <u>pas de</u> fruits.</td><td class="th">พวกเขาไม่กินผลไม้</td></tr>
+  </tbody></table>
+  <p class="thai text-[12.5px] text-blue-900 mt-2">⚠️ ในประโยคปฏิเสธ du / de la / de l' / des → กลายเป็น <strong>de</strong> (หรือ <strong>d'</strong> ก่อนสระ) ทั้งหมด!</p></div>
+
+  <div><p class="sec-head">📊 เปรียบเทียบ Articles ทั้งสามแบบ</p>
+  <table class="ltable"><thead><tr><th>Article</th><th class="thai">ใช้เมื่อ</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">le / la / les<br><span class="note">défini</span></td><td class="th">รู้จักแล้ว / ระบุได้ว่าอันไหน</td><td class="note">Le pain de cette boulangerie est délicieux.<br><span class="thai text-[11.5px]">(ขนมปังของร้านนั้น — ร้านที่รู้จักแล้ว)</span></td></tr>
+  <tr><td class="fr">un / une / des<br><span class="note">indéfini</span></td><td class="th">นับได้ / หนึ่งชิ้น</td><td class="note">Je voudrais une baguette.<br><span class="thai text-[11.5px]">(บาแกตต์หนึ่งอัน — นับได้)</span></td></tr>
+  <tr><td class="fr">du / de la / de l'<br><span class="note">partitif</span></td><td class="th">นับไม่ได้ / ส่วนหนึ่ง</td><td class="note">Je mange du pain.<br><span class="thai text-[11.5px]">(กินขนมปังบางส่วน — ไม่ระบุปริมาณ)</span></td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ตัวอย่างในชีวิตจริง</p>
+  <p class="text-[13px]"><strong>Le matin, je bois du café et je mange du pain avec du beurre.</strong><br><span class="thai text-[12.5px] text-green-800">ตอนเช้าฉันดื่มกาแฟและกินขนมปังกับเนย</span></p>
+  <p class="text-[13px] mt-2"><strong>— Vous voulez de la soupe ? — Non merci, je ne mange pas de soupe.</strong><br><span class="thai text-[12.5px] text-green-800">— ต้องการซุปไหม? — ไม่ขอบคุณ ฉันไม่กินซุป</span></p>
+  <p class="text-[13px] mt-2"><strong>Il faut de la patience pour apprendre le français !</strong><br><span class="thai text-[12.5px] text-green-800">ต้องมีความอดทนในการเรียนภาษาฝรั่งเศส!</span></p></div>
+</div>`,
+
+"3-6": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">กริยาเหล่านี้ไม่ทำตามกฎปกติ แต่ใช้ทุกวันในทุกการสนทนา! จำให้ขึ้นใจแล้วจะพูดได้ลื่นมาก</p></div>
+
+  <div><p class="sec-head">🔴 FAIRE = ทำ / ทำอาหาร / เล่นกีฬา / กิจกรรม</p>
+  <table class="ltable"><thead><tr><th>สรรพนาม</th><th>Conjugaison</th><th class="thai">ตัวอย่าง + แปล</th></tr></thead><tbody>
+  <tr><td>Je</td><td class="fr">fais</td><td class="th">Je fais la cuisine. (ฉันทำอาหาร)</td></tr>
+  <tr><td>Tu</td><td class="fr">fais</td><td class="th">Tu fais du sport ? (คุณออกกำลังกายไหม?)</td></tr>
+  <tr><td>Il/Elle/On</td><td class="fr">fait</td><td class="th">Il fait ses devoirs. (เขาทำการบ้าน)</td></tr>
+  <tr><td>Nous</td><td class="fr">faisons</td><td class="th">Nous faisons une promenade. (เราเดินเล่น)</td></tr>
+  <tr><td>Vous</td><td class="fr">faites</td><td class="th">Vous faites quoi ce soir ? (คืนนี้คุณทำอะไร?)</td></tr>
+  <tr><td>Ils/Elles</td><td class="fr">font</td><td class="th">Ils font du vélo. (พวกเขาขี่จักรยาน)</td></tr>
+  </tbody></table>
+  <p class="note mt-1.5 px-1">💡 <strong>faire du/de la + activité :</strong> faire du foot, faire de la natation, faire du yoga, faire la vaisselle (ล้างจาน)</p></div>
+
+  <div><p class="sec-head">🔵 PRENDRE = เอา / กิน / ดื่ม / นั่ง (พาหนะ)</p>
+  <table class="ltable"><thead><tr><th>สรรพนาม</th><th>Conjugaison</th><th class="thai">ตัวอย่าง + แปล</th></tr></thead><tbody>
+  <tr><td>Je</td><td class="fr">prends</td><td class="th">Je prends le métro. (ฉันนั่งรถไฟใต้ดิน)</td></tr>
+  <tr><td>Tu</td><td class="fr">prends</td><td class="th">Tu prends un café ? (เอากาแฟไหม?)</td></tr>
+  <tr><td>Il/Elle/On</td><td class="fr">prend</td><td class="th">Elle prend son sac. (เธอเอากระเป๋า)</td></tr>
+  <tr><td>Nous</td><td class="fr">prenons</td><td class="th">Nous prenons le train. (เรานั่งรถไฟ)</td></tr>
+  <tr><td>Vous</td><td class="fr">prenez</td><td class="th">Vous prenez quoi ? (จะเอาอะไร?)</td></tr>
+  <tr><td>Ils/Elles</td><td class="fr">prennent</td><td class="th">Ils prennent leur temps. (พวกเขาไม่รีบ)</td></tr>
+  </tbody></table>
+  <p class="note mt-1.5 px-1">💡 ครอบครัวเดียวกัน: <strong>apprendre</strong> (เรียน) · <strong>comprendre</strong> (เข้าใจ) · <strong>surprendre</strong> (เซอร์ไพรส์) → ผันเหมือน prendre ทุกอย่าง!</p></div>
+
+  <div><p class="sec-head">🟢 VENIR = มา</p>
+  <table class="ltable"><thead><tr><th>สรรพนาม</th><th>Conjugaison</th><th class="thai">ตัวอย่าง + แปล</th></tr></thead><tbody>
+  <tr><td>Je</td><td class="fr">viens</td><td class="th">Je viens de Bangkok. (ฉันมาจากกรุงเทพ)</td></tr>
+  <tr><td>Tu</td><td class="fr">viens</td><td class="th">Tu viens avec nous ? (มากับเราไหม?)</td></tr>
+  <tr><td>Il/Elle/On</td><td class="fr">vient</td><td class="th">Elle vient de rentrer. (เธอเพิ่งกลับมา)</td></tr>
+  <tr><td>Nous</td><td class="fr">venons</td><td class="th">Nous venons d'arriver. (เราเพิ่งมาถึง)</td></tr>
+  <tr><td>Vous</td><td class="fr">venez</td><td class="th">D'où venez-vous ? (คุณมาจากที่ไหน?)</td></tr>
+  <tr><td>Ils/Elles</td><td class="fr">viennent</td><td class="th">Ils viennent demain. (พวกเขามาพรุ่งนี้)</td></tr>
+  </tbody></table>
+  <p class="note mt-1.5 px-1">💡 <strong>venir de + infinitif = เพิ่งจะ:</strong> Je viens de manger. (ฉันเพิ่งกินเสร็จ) · Elle vient de partir. (เธอเพิ่งออกไป)</p></div>
+
+  <div class="rule-box"><p class="sec-head">📌 SAVOIR vs CONNAÎTRE — ทั้งสองแปลว่า "รู้" แต่ต่างกัน!</p>
+  <table class="ltable"><thead><tr><th>Verbe</th><th class="thai">ใช้กับ</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">SAVOIR<br><span class="note">je sais · il sait · nous savons</span></td><td class="th">ข้อเท็จจริง · วิธีทำสิ่งนั้น · ข้อมูล</td><td class="note">Je sais nager. (ฉันว่ายน้ำเป็น)<br>Tu sais quelle heure il est ? (รู้ไหมกี่โมงแล้ว?)</td></tr>
+  <tr><td class="fr">CONNAÎTRE<br><span class="note">je connais · il connaît · nous connaissons</span></td><td class="th">คน · สถานที่ · สิ่งที่คุ้นเคย</td><td class="note">Je connais Marie. (ฉันรู้จักมารี)<br>Tu connais Paris ? (คุณรู้จักปารีสไหม?)</td></tr>
+  </tbody></table></div>
+</div>`,
+
+"4-5": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">ความรู้สึกและสภาพอากาศ — สองหัวข้อที่พูดถึงทุกวัน! เรียนสองหัวข้อนี้แล้วจะสื่อสารในชีวิตประจำวันได้ทันที</p></div>
+
+  <div><p class="sec-head">😊 ความรู้สึก — Les émotions (avec ÊTRE)</p>
+  <table class="ltable"><thead><tr><th>Adjectif</th><th class="thai">ชาย / หญิง</th><th class="thai">ความหมาย</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">heureux / heureuse</td><td class="note">masc / fém</td><td class="th">มีความสุข</td><td class="note">Je suis heureux !</td></tr>
+  <tr><td class="fr">triste</td><td class="note">masc = fém</td><td class="th">เศร้า</td><td class="note">Elle est triste aujourd'hui.</td></tr>
+  <tr><td class="fr">fâché(e)</td><td class="note">fâché / fâchée</td><td class="th">โกรธ</td><td class="note">Il est fâché contre moi.</td></tr>
+  <tr><td class="fr">fatigué(e)</td><td class="note">fatigué / fatiguée</td><td class="th">เหนื่อย/เพลีย</td><td class="note">Je suis fatiguée ce soir.</td></tr>
+  <tr><td class="fr">content(e)</td><td class="note">content / contente</td><td class="th">พอใจ/ดีใจ</td><td class="note">Je suis content de te voir !</td></tr>
+  <tr><td class="fr">inquiet / inquiète</td><td class="note">masc / fém (irrégulier)</td><td class="th">กังวล</td><td class="note">Tu es inquiète ?</td></tr>
+  <tr><td class="fr">surpris(e)</td><td class="note">surpris / surprise</td><td class="th">ตกใจ/แปลกใจ</td><td class="note">Je suis surprise !</td></tr>
+  <tr><td class="fr">amoureux / amoureuse</td><td class="note">masc / fém</td><td class="th">หลงรัก</td><td class="note">Il est amoureux d'elle.</td></tr>
+  <tr><td class="fr">stressé(e)</td><td class="note">stressé / stressée</td><td class="th">เครียด</td><td class="note">Je suis très stressée !</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">💬 Expressions avec AVOIR (ใช้ avoir ไม่ใช่ être!)</p>
+  <table class="ltable"><thead><tr><th>Expression</th><th class="thai">ความหมาย</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">avoir peur (de)</td><td class="th">กลัว</td><td class="note">J'ai peur des araignées. (ฉันกลัวแมงมุม)</td></tr>
+  <tr><td class="fr">avoir honte</td><td class="th">อาย/ละอาย</td><td class="note">J'ai honte. (ฉันอาย)</td></tr>
+  <tr><td class="fr">avoir envie de</td><td class="th">อยากจะ</td><td class="note">J'ai envie de dormir. (ฉันอยากนอน)</td></tr>
+  <tr><td class="fr">avoir besoin de</td><td class="th">ต้องการ</td><td class="note">J'ai besoin d'aide. (ฉันต้องการความช่วยเหลือ)</td></tr>
+  <tr><td class="fr">avoir mal à</td><td class="th">ปวด...</td><td class="note">J'ai mal à la tête. / J'ai mal au ventre. (ปวดหัว / ปวดท้อง)</td></tr>
+  <tr><td class="fr">avoir confiance en</td><td class="th">ไว้วางใจ</td><td class="note">J'ai confiance en toi. (ฉันไว้ใจคุณ)</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">⛅ สภาพอากาศ — La météo</p>
+  <table class="ltable"><thead><tr><th>Expression</th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td class="fr">Il fait beau.</td><td class="th">อากาศดี / ท้องฟ้าแจ่มใส</td></tr>
+  <tr><td class="fr">Il fait chaud / froid.</td><td class="th">อากาศร้อน / หนาว</td></tr>
+  <tr><td class="fr">Il fait mauvais.</td><td class="th">อากาศไม่ดี</td></tr>
+  <tr><td class="fr">Il pleut. (verbe : pleuvoir)</td><td class="th">ฝนตก</td></tr>
+  <tr><td class="fr">Il neige. (verbe : neiger)</td><td class="th">หิมะตก</td></tr>
+  <tr><td class="fr">Il y a du soleil.</td><td class="th">มีแดด</td></tr>
+  <tr><td class="fr">Il y a du vent.</td><td class="th">มีลม</td></tr>
+  <tr><td class="fr">Il y a des nuages.</td><td class="th">มีเมฆ</td></tr>
+  <tr><td class="fr">Il y a du brouillard.</td><td class="th">มีหมอก</td></tr>
+  <tr><td class="fr">Il fait … degrés.</td><td class="th">อุณหภูมิ… องศา</td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ตัวอย่างประโยค</p>
+  <p class="text-[13px]"><strong>Aujourd'hui il fait chaud et il y a du soleil, je suis contente !</strong><br><span class="thai text-[12.5px] text-green-800">วันนี้อากาศร้อนและมีแดด ฉันดีใจ!</span></p>
+  <p class="text-[13px] mt-2"><strong>Je suis fatiguée et j'ai mal à la tête parce qu'il fait trop chaud.</strong><br><span class="thai text-[12.5px] text-green-800">ฉันเหนื่อยและปวดหัวเพราะอากาศร้อนเกินไป</span></p>
+  <p class="text-[13px] mt-2"><strong>Il pleut, mais je suis heureux parce que j'ai envie de rester à la maison.</strong><br><span class="thai text-[12.5px] text-green-800">ฝนตก แต่ฉันมีความสุขเพราะอยากอยู่บ้าน</span></p></div>
+</div>`,
+
+"5-5": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">การเปรียบเทียบในภาษาฝรั่งเศสมีโครงสร้างที่ชัดเจนและสม่ำเสมอ เรียนสูตรไม่กี่อย่างก็เปรียบเทียบได้ทุกเรื่อง!</p><p class="text-[12px] text-amber-700 mt-1 italic">Le comparatif et le superlatif permettent de comparer personnes, objets et situations.</p></div>
+
+  <div class="rule-box"><p class="sec-head">📊 Comparatif — การเปรียบเทียบ (3 ระดับ)</p>
+  <table class="ltable"><thead><tr><th class="thai">ระดับ</th><th>Structure</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="th">มากกว่า ➕</td><td class="fr">plus + adj + que</td><td class="note">Le français est plus difficile que l'anglais.<br><span class="thai text-[11.5px]">(ภาษาฝรั่งเศสยากกว่าภาษาอังกฤษ)</span></td></tr>
+  <tr><td class="th">เท่ากัน ↔</td><td class="fr">aussi + adj + que</td><td class="note">Tu es aussi grand que moi.<br><span class="thai text-[11.5px]">(คุณสูงเท่าฉัน)</span></td></tr>
+  <tr><td class="th">น้อยกว่า ➖</td><td class="fr">moins + adj + que</td><td class="note">Ce resto est moins cher que l'autre.<br><span class="thai text-[11.5px]">(ร้านนี้ถูกกว่าร้านอื่น)</span></td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🏆 Superlatif — ขั้นสูงสุด</p>
+  <table class="ltable"><thead><tr><th class="thai">ระดับ</th><th>Structure</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="th">สูงสุด ⬆️</td><td class="fr">le/la/les plus + adj (+ de)</td><td class="note">C'est la plus belle ville <strong>du monde</strong>.<br><span class="thai text-[11.5px]">(เมืองที่สวยที่สุดในโลก — de = "ใน")</span></td></tr>
+  <tr><td class="th">ต่ำสุด ⬇️</td><td class="fr">le/la/les moins + adj (+ de)</td><td class="note">C'est le moins cher <strong>du marché</strong>.<br><span class="thai text-[11.5px]">(ถูกที่สุดในตลาด)</span></td></tr>
+  </tbody></table>
+  <p class="thai text-[12.5px] text-gray-600 mt-2 px-1">💡 article (le/la/les) doit s'accorder avec le nom : le plus grand, la plus grande, les plus grands</p></div>
+
+  <div class="rule-box"><p class="sec-head">⚠️ Formes irrégulières (ต้องจำ! ไม่ใช้ plus/moins)</p>
+  <table class="ltable"><thead><tr><th>Adjectif/Adverbe</th><th class="thai">ความหมาย</th><th>Comparatif</th><th>Superlatif</th></tr></thead><tbody>
+  <tr><td class="fr">bon(ne)</td><td class="th">ดี (คุณศัพท์)</td><td class="fr">meilleur(e) que</td><td class="fr">le/la meilleur(e)</td></tr>
+  <tr><td class="fr">mauvais(e)</td><td class="th">แย่/ไม่ดี</td><td class="fr">pire que</td><td class="fr">le/la pire</td></tr>
+  <tr><td class="fr">bien</td><td class="th">ดี (กริยาวิเศษณ์)</td><td class="fr">mieux que</td><td class="fr">le mieux</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">📦 Comparatif de quantité — เปรียบเทียบจำนวน/ปริมาณ</p>
+  <table class="ltable"><thead><tr><th>Structure</th><th class="thai">ความหมาย</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">plus de + nom + que</td><td class="th">มากกว่า</td><td class="note">Il y a plus de voitures que de vélos.</td></tr>
+  <tr><td class="fr">moins de + nom + que</td><td class="th">น้อยกว่า</td><td class="note">J'ai moins d'argent que toi.</td></tr>
+  <tr><td class="fr">autant de + nom + que</td><td class="th">เท่ากัน</td><td class="note">Elle a autant de livres que moi.</td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ตัวอย่าง</p>
+  <p class="text-[13px]"><strong>Ce film est meilleur que le premier.</strong> <span class="thai text-[12.5px] text-green-800">หนังเรื่องนี้ดีกว่าภาคแรก (meilleur = irrégulier de bon)</span></p>
+  <p class="text-[13px] mt-1.5"><strong>C'est la meilleure boulangerie de Paris !</strong> <span class="thai text-[12.5px] text-green-800">นี่คือร้านขนมปังที่ดีที่สุดในปารีส!</span></p>
+  <p class="text-[13px] mt-1.5"><strong>Il parle mieux le français que moi.</strong> <span class="thai text-[12.5px] text-green-800">เขาพูดภาษาฝรั่งเศสได้ดีกว่าฉัน (mieux = irrégulier de bien)</span></p></div>
+</div>`,
+
+"6-4": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">บุพบทบอกสถานที่ช่วยให้บอกตำแหน่งของสิ่งต่างๆ ได้ จำเป็นมากทั้งในการเดินทาง การบอกทาง และการอธิบายสภาพแวดล้อม!</p><p class="text-[12px] text-amber-700 mt-1 italic">Les prépositions de lieu indiquent où se trouvent les personnes et les objets.</p></div>
+
+  <div><p class="sec-head">📍 บุพบทบอกตำแหน่ง — Prépositions de lieu</p>
+  <table class="ltable"><thead><tr><th>Préposition</th><th class="thai">ความหมาย</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">dans</td><td class="th">ใน (ข้างใน)</td><td class="note">Le chat est dans la boîte. (แมวอยู่ในกล่อง)</td></tr>
+  <tr><td class="fr">sur</td><td class="th">บน</td><td class="note">Le livre est sur la table. (หนังสืออยู่บนโต๊ะ)</td></tr>
+  <tr><td class="fr">sous</td><td class="th">ใต้</td><td class="note">Le chien est sous le lit. (สุนัขอยู่ใต้เตียง)</td></tr>
+  <tr><td class="fr">devant</td><td class="th">ด้านหน้า</td><td class="note">Je t'attends devant l'hôtel. (ฉันรอคุณหน้าโรงแรม)</td></tr>
+  <tr><td class="fr">derrière</td><td class="th">ด้านหลัง</td><td class="note">Le jardin est derrière la maison. (สวนอยู่หลังบ้าน)</td></tr>
+  <tr><td class="fr">entre</td><td class="th">ระหว่าง</td><td class="note">La poste est entre la banque et le café.</td></tr>
+  <tr><td class="fr">à côté de</td><td class="th">ข้างๆ / ติดกับ</td><td class="note">La pharmacie est à côté de la boulangerie.</td></tr>
+  <tr><td class="fr">en face de</td><td class="th">ตรงข้าม</td><td class="note">L'hôtel est en face de la gare. (โรงแรมอยู่ตรงข้ามสถานีรถไฟ)</td></tr>
+  <tr><td class="fr">près de</td><td class="th">ใกล้</td><td class="note">J'habite près du centre-ville. (ฉันอยู่ใกล้ใจกลางเมือง)</td></tr>
+  <tr><td class="fr">loin de</td><td class="th">ไกล</td><td class="note">C'est loin d'ici ? (ไกลจากที่นี่ไหม?)</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">🌍 À / EN / AU / AUX — ใช้กับเมืองและประเทศ</p>
+  <table class="ltable"><thead><tr><th>Préposition</th><th class="thai">ใช้กับ</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">à</td><td class="th">ชื่อเมือง (ทุกเมือง)</td><td class="note">à Paris, à Bangkok, à Tokyo, à New York</td></tr>
+  <tr><td class="fr">en</td><td class="th">ประเทศเพศหญิง หรือขึ้นต้นด้วยสระ</td><td class="note">en France, en Thaïlande, en Italie, en Espagne</td></tr>
+  <tr><td class="fr">au (= à + le)</td><td class="th">ประเทศเพศชาย</td><td class="note">au Japon, au Canada, au Mexique, au Maroc</td></tr>
+  <tr><td class="fr">aux (= à + les)</td><td class="th">ประเทศพหูพจน์</td><td class="note">aux États-Unis, aux Philippines</td></tr>
+  </tbody></table>
+  <p class="thai text-[12.5px] text-blue-900 mt-2">💡 ประเทศส่วนใหญ่ที่ลงท้ายด้วย -e เป็นเพศหญิง: la France, la Thaïlande, l'Italie…</p></div>
+
+  <div class="ex-box"><p class="sec-head">✅ บทสนทนา</p>
+  <p class="text-[13px]">— <strong>Excusez-moi, où est la pharmacie ?</strong><br><span class="thai text-[12.5px] text-green-800">ขอโทษ ร้านขายยาอยู่ที่ไหนครับ?</span></p>
+  <p class="text-[13px] mt-2">— <strong>Elle est en face du supermarché, à côté de la banque.</strong><br><span class="thai text-[12.5px] text-green-800">อยู่ตรงข้ามซูเปอร์มาร์เก็ต ข้างๆ ธนาคาร</span></p>
+  <p class="text-[13px] mt-2"><strong>J'habite en Thaïlande, à Bangkok, près du parc Lumphini.</strong><br><span class="thai text-[12.5px] text-green-800">ฉันอาศัยอยู่ในประเทศไทย ที่กรุงเทพ ใกล้ๆ สวนลุมพินี</span></p></div>
+</div>`,
+
+};
+
+// ============================================================
+// STATE
+// ============================================================
+const state = {
+    activeLessonId: null,
+    currentExercise: null,
+    expandedPhases: new Set([1]),
+    hasValidated: false,
+    lastRawResponse: null,
+};
+
+// ============================================================
+// COLOR MAP
+// ============================================================
+const COLORS = {
+    emerald: {
+        icon:   'bg-emerald-50 text-emerald-600',
+        badge:  'bg-emerald-100 text-emerald-700',
+        dot:    'bg-emerald-400',
+        btn:    'bg-emerald-500 hover:bg-emerald-600',
+        light:  'bg-emerald-50 border-emerald-200',
+        text:   'text-emerald-800',
+    },
+    blue: {
+        icon:   'bg-blue-50 text-blue-600',
+        badge:  'bg-blue-100 text-blue-700',
+        dot:    'bg-blue-400',
+        btn:    'bg-blue-500 hover:bg-blue-600',
+        light:  'bg-blue-50 border-blue-200',
+        text:   'text-blue-800',
+    },
+    amber: {
+        icon:   'bg-amber-50 text-amber-600',
+        badge:  'bg-amber-100 text-amber-700',
+        dot:    'bg-amber-400',
+        btn:    'bg-amber-500 hover:bg-amber-600',
+        light:  'bg-amber-50 border-amber-200',
+        text:   'text-amber-800',
+    },
+    violet: {
+        icon:   'bg-violet-50 text-violet-600',
+        badge:  'bg-violet-100 text-violet-700',
+        dot:    'bg-violet-400',
+        btn:    'bg-violet-500 hover:bg-violet-600',
+        light:  'bg-violet-50 border-violet-200',
+        text:   'text-violet-800',
+    },
+    rose: {
+        icon:   'bg-rose-50 text-rose-600',
+        badge:  'bg-rose-100 text-rose-700',
+        dot:    'bg-rose-400',
+        btn:    'bg-rose-500 hover:bg-rose-600',
+        light:  'bg-rose-50 border-rose-200',
+        text:   'text-rose-800',
+    },
+    teal: {
+        icon:   'bg-teal-50 text-teal-600',
+        badge:  'bg-teal-100 text-teal-700',
+        dot:    'bg-teal-400',
+        btn:    'bg-teal-500 hover:bg-teal-600',
+        light:  'bg-teal-50 border-teal-200',
+        text:   'text-teal-800',
+    },
+};
+
+// ============================================================
+// RENDER SIDEBAR
+// ============================================================
+function renderSidebar() {
+    const nav = document.getElementById('lessons-nav');
+    nav.innerHTML = '';
+
+    curriculum.forEach(phase => {
+        const c = COLORS[phase.color];
+        const isOpen = state.expandedPhases.has(phase.id);
+
+        const wrap = document.createElement('div');
+        wrap.className = 'mb-0.5';
+        wrap.innerHTML = `
+            <!-- Phase toggle -->
+            <button
+                onclick="togglePhase(${phase.id})"
+                class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-2xl hover:bg-gray-50 transition-colors group"
+            >
+                <div class="w-8 h-8 rounded-xl ${c.icon} flex items-center justify-center text-[17px] flex-shrink-0">${phase.icon}</div>
+                <div class="flex-1 text-left min-w-0">
+                    <div class="text-[12.5px] font-semibold text-[#1D1D1F] leading-tight">${phase.phase} · ${phase.title}</div>
+                    <div class="text-[11px] text-[#6E6E73] thai leading-tight">${phase.titleTh}</div>
+                </div>
+                <svg id="chevron-${phase.id}" class="chevron w-4 h-4 text-[#9CA3AF] flex-shrink-0 ${isOpen ? 'open' : ''}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+
+            <!-- Lesson list -->
+            <div id="phase-${phase.id}" class="phase-lessons ${isOpen ? 'open' : ''} pl-3 pr-1 space-y-0.5">
+                ${phase.lessons.map(lesson => `
+                    <button
+                        id="lesson-btn-${lesson.id}"
+                        onclick="selectLesson('${lesson.id}')"
+                        class="lesson-btn w-full flex items-start gap-2.5 px-3 py-2.5 rounded-xl text-left ${state.activeLessonId === lesson.id ? 'active' : ''}"
+                    >
+                        <div class="w-1.5 h-1.5 rounded-full ${c.dot} mt-1.5 flex-shrink-0"></div>
+                        <div class="min-w-0">
+                            <div class="lesson-title text-[12px] font-medium text-[#1D1D1F] leading-snug">${lesson.title}</div>
+                            <div class="text-[11px] text-[#6E6E73] thai leading-snug mt-0.5">${lesson.titleTh}</div>
+                        </div>
+                    </button>
+                `).join('')}
+            </div>
+        `;
+        nav.appendChild(wrap);
+    });
+}
+
+function togglePhase(id) {
+    const panel  = document.getElementById(`phase-${id}`);
+    const chev   = document.getElementById(`chevron-${id}`);
+    if (state.expandedPhases.has(id)) {
+        state.expandedPhases.delete(id);
+        panel.classList.remove('open');
+        chev.classList.remove('open');
+    } else {
+        state.expandedPhases.add(id);
+        panel.classList.add('open');
+        chev.classList.add('open');
+    }
+}
+
+// ============================================================
+// SELECT LESSON
+// ============================================================
+function selectLesson(lessonId) {
+    let lesson = null, phase = null;
+    for (const p of curriculum) {
+        const l = p.lessons.find(l => l.id === lessonId);
+        if (l) { lesson = l; phase = p; break; }
+    }
+    if (!lesson) return;
+
+    state.activeLessonId = lessonId;
+    state.currentExercise = null;
+    state.hasValidated = false;
+
+    // Sidebar highlight
+    document.querySelectorAll('.lesson-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`lesson-btn-${lessonId}`)?.classList.add('active');
+
+    // Show / hide screens
+    document.getElementById('welcome-screen').classList.add('hidden');
+    const lc = document.getElementById('lesson-content');
+    lc.classList.remove('hidden');
+
+    const c = COLORS[phase.color];
+
+    const lessonHtml = LESSONS_CONTENT[lessonId] || '';
+
+    lc.innerHTML = `
+        <div class="space-y-4 animate-in">
+
+            <!-- Header card -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+                <div class="flex items-start gap-4">
+                    <div class="w-14 h-14 ${c.icon} rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 shadow-sm">${phase.icon}</div>
+                    <div class="flex-1 min-w-0">
+                        <span class="inline-block text-[10.5px] font-bold uppercase tracking-widest ${c.badge} px-2.5 py-1 rounded-full mb-2">${phase.phase} — ${phase.title}</span>
+                        <h2 class="text-[19px] font-bold text-[#1D1D1F] leading-tight">${lesson.title}</h2>
+                        <p class="text-[#6E6E73] thai mt-1">${lesson.titleTh}</p>
+                    </div>
+                </div>
+            </div>
+
+            ${lessonHtml ? `
+            <!-- Lesson card -->
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                <button onclick="toggleLesson()" class="w-full flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <span class="text-lg">📖</span>
+                        <div class="text-left">
+                            <p class="font-bold text-[14px] text-[#1D1D1F]">Leçon complète</p>
+                            <p class="thai text-[12px] text-[#6E6E73]">บทเรียนฉบับสมบูรณ์ — คลิกเพื่อซ่อน/แสดง</p>
+                        </div>
+                    </div>
+                    <svg id="lesson-chevron" class="chevron open w-4 h-4 text-[#9CA3AF]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div id="lesson-body" class="lesson-body px-6 pb-6" style="max-height:9999px">
+                    ${lessonHtml}
+                </div>
+            </div>
+            ` : ''}
+
+            <!-- Exercise card -->
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden" id="exercise-card">
+                <div class="p-6" id="exercise-zone">
+                    <!-- Initial CTA -->
+                    <div class="text-center py-4">
+                        <div class="w-16 h-16 bg-[#F5F5F7] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-7 h-7 text-[#9CA3AF]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-[16px] text-[#1D1D1F] mb-1">Exercice IA</h3>
+                        <p class="text-[#6E6E73] text-sm thai mb-6">คลิกเพื่อให้ AI สร้างแบบฝึกหัดสำหรับบทเรียนนี้</p>
+                        <button
+                            onclick="generateExercise('${lessonId}')"
+                            class="btn-press inline-flex items-center gap-2 bg-[#0071E3] hover:bg-[#0077ED] text-white font-semibold px-6 py-3 rounded-2xl transition-colors text-[14px] shadow-sm"
+                        >
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>
+                            </svg>
+                            Générer un exercice avec l'IA
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    `;
+
+    closeSidebar();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// GENERATE EXERCISE
+// ============================================================
+async function generateExercise(lessonId) {
+    if (!GEMINI_API_KEY || GEMINI_API_KEY.trim() === '') {
+        showApiKeyError(lessonId);
+        return;
+    }
+
+    let lesson = null;
+    for (const p of curriculum) {
+        const l = p.lessons.find(l => l.id === lessonId);
+        if (l) { lesson = l; break; }
+    }
+    if (!lesson) return;
+
+    state.hasValidated = false;
+
+    // Loader
+    const zone = document.getElementById('exercise-zone');
+    zone.innerHTML = `
+        <div class="flex flex-col items-center justify-center py-12 animate-in">
+            <div class="w-10 h-10 rounded-full border-[3px] border-[#0071E3] border-t-transparent spinner mb-4"></div>
+            <p class="text-[#6E6E73] text-sm font-medium">L'IA réfléchit…</p>
+            <p class="text-[#6E6E73] text-xs thai mt-1">AI กำลังสร้างแบบฝึกหัด รอสักครู่…</p>
+        </div>
+    `;
+
+    // Vary focus and context each time to avoid repetitive exercises
+    const focusOptions = [
+        "un verbe conjugué (choisis une personne grammaticale variée : nous, vous, ils, elles — pas toujours je/il)",
+        "un article (défini, indéfini ou partitif selon ce que la leçon enseigne)",
+        "un adjectif avec son accord correct en genre et en nombre",
+        "une préposition ou locution prépositionnelle",
+        "un pronom (sujet, réfléchi, ou objet — selon la leçon)",
+        "une négation ou structure négative complète",
+        "un mot de vocabulaire précis et spécifique au thème",
+        "un auxiliaire (être ou avoir) dans un temps composé",
+        "une terminaison verbale (la fin du verbe uniquement, pas le verbe entier)"
+    ];
+    const scenarioOptions = [
+        "dans un contexte de la vie quotidienne à Bangkok ou en Thaïlande",
+        "dans un contexte de voyage ou de tourisme en France",
+        "dans une conversation entre amis ou en famille",
+        "dans une situation au restaurant, à l'hôtel ou dans un magasin",
+        "dans un contexte professionnel ou scolaire",
+        "dans une situation de transport ou de déplacement",
+        "avec un personnage thaïlandais qui apprend le français"
+    ];
+    const subjectOptions = [
+        "avec le sujet 'je'", "avec le sujet 'tu'", "avec le sujet 'il' ou 'elle'",
+        "avec le sujet 'nous'", "avec le sujet 'vous'", "avec le sujet 'ils' ou 'elles'",
+        "avec le sujet 'on'", "avec un nom propre comme sujet"
+    ];
+    const chosenFocus    = focusOptions[Math.floor(Math.random() * focusOptions.length)];
+    const chosenScenario = scenarioOptions[Math.floor(Math.random() * scenarioOptions.length)];
+    const chosenSubject  = subjectOptions[Math.floor(Math.random() * subjectOptions.length)];
+    const variationSeed  = Math.floor(Math.random() * 99999);
+
+    const prompt = `Tu es un professeur de français expert qui enseigne à une apprenante thaïlandaise (niveau A1–B1).
+
+Crée UN exercice "texte à trous" unique sur ce sujet : "${lesson.title}" — ${lesson.topic}.
+
+CONTRAINTES DE VARIATION #${variationSeed} — Pour cette génération précisément :
+• Ce qui est mis en blanc : ${chosenFocus}
+• Contexte de la phrase : ${chosenScenario}
+• Sujet grammatical : ${chosenSubject}
+
+Règles strictes :
+1. La phrase doit être ORIGINALE et DIFFÉRENTE des exemples les plus évidents ou répétitifs du sujet.
+2. La phrase est naturelle, correcte, et parfaitement illustre le concept ciblé.
+3. phrase_avant = tout ce qui précède le trou (chaîne vide "" si en tout début de phrase).
+4. phrase_apres = tout ce qui suit le trou (chaîne vide "" si en toute fin de phrase).
+5. consigne_th : instruction claire en thaïlandais, précise ce qu'on cherche (ex: "กรอกกริยา avoir ให้ถูกต้อง").
+6. explication_th : explication pédagogique en thaïlandais, chaleureuse, explique POURQUOI cette réponse et la règle grammaticale derrière.
+7. NE GÉNÈRE JAMAIS les 3 phrases les plus attendues ou communes pour ce sujet.
+
+Réponds UNIQUEMENT avec un objet JSON valide, sans texte avant ni après, sans backticks :
+{"consigne_th":"...","phrase_avant":"...","reponse_attendue":"...","phrase_apres":"...","explication_th":"..."}`;
+
+    try {
+        const res = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=${GEMINI_API_KEY}`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }],
+                    generationConfig: { temperature: 0.85, maxOutputTokens: 1024 }
+                })
+            }
+        );
+
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.error?.message || `Erreur HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        state.lastRawResponse = data;
+        document.getElementById('debug-btn').classList.add('visible');
+
+        let raw = data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+        if (!raw) throw new Error('Réponse vide de l\'IA.');
+
+        // Strip possible markdown fences
+        raw = raw.trim().replace(/^```[a-z]*\n?/i, '').replace(/\n?```$/i, '').trim();
+
+        const exercise = JSON.parse(raw);
+        state.currentExercise = exercise;
+        renderExercise(exercise, lessonId);
+
+    } catch (err) {
+        console.error(err);
+        showError(err.message, lessonId);
+    }
+}
+
+// ============================================================
+// RENDER EXERCISE
+// ============================================================
+function renderExercise(exercise, lessonId) {
+    const zone = document.getElementById('exercise-zone');
+    const inputWidth = Math.max(90, Math.min(220, (exercise.reponse_attendue.length + 3) * 12));
+
+    zone.innerHTML = `
+        <div class="animate-in space-y-5">
+
+            <!-- Consigne -->
+            <div class="bg-blue-50 border border-blue-100 rounded-2xl px-4 py-3.5 flex items-start gap-3">
+                <span class="text-[20px] mt-0.5 flex-shrink-0">💡</span>
+                <p class="text-blue-900 thai text-sm leading-relaxed font-medium">${exercise.consigne_th}</p>
+            </div>
+
+            <!-- Sentence with gap -->
+            <div>
+                <p class="text-[11px] font-bold uppercase tracking-widest text-[#9CA3AF] mb-2.5 px-1">Complétez la phrase :</p>
+                <div class="bg-[#F5F5F7] rounded-2xl px-5 py-4 flex flex-wrap items-center gap-x-2 gap-y-2 min-h-[70px]">
+                    ${exercise.phrase_avant
+                        ? `<span class="text-[17px] text-[#1D1D1F] leading-relaxed">${escapeHtml(exercise.phrase_avant)}</span>`
+                        : ''}
+                    <input
+                        id="answer-input"
+                        type="text"
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                        placeholder="..."
+                        style="width: ${inputWidth}px"
+                        class="answer-input border-2 border-[#0071E3] rounded-xl px-3 py-1.5 text-[16px] font-semibold text-[#1D1D1F] bg-white"
+                        onkeydown="if(event.key==='Enter') validateAnswer()"
+                    >
+                    ${exercise.phrase_apres
+                        ? `<span class="text-[17px] text-[#1D1D1F] leading-relaxed">${escapeHtml(exercise.phrase_apres)}</span>`
+                        : ''}
+                </div>
+            </div>
+
+            <!-- Validate -->
+            <button
+                id="validate-btn"
+                onclick="validateAnswer()"
+                class="btn-press w-full bg-[#0071E3] hover:bg-[#0077ED] text-white font-semibold py-3.5 rounded-2xl text-[14px] transition-colors shadow-sm"
+            >
+                Valider ma réponse ✓
+            </button>
+
+            <!-- Result (hidden) -->
+            <div id="result-zone" class="hidden"></div>
+
+            <!-- New exercise (hidden) -->
+            <div id="new-ex-zone" class="hidden">
+                <button
+                    onclick="generateExercise('${lessonId}')"
+                    class="btn-press w-full border-2 border-[#0071E3] text-[#0071E3] hover:bg-blue-50 font-semibold py-3 rounded-2xl text-[14px] transition-colors"
+                >
+                    🔄&nbsp; Nouvel exercice
+                </button>
+            </div>
+        </div>
+    `;
+
+    setTimeout(() => document.getElementById('answer-input')?.focus(), 120);
+}
+
+// ============================================================
+// VALIDATE
+// ============================================================
+function validateAnswer() {
+    if (state.hasValidated) return;
+
+    const input    = document.getElementById('answer-input');
+    const resultZ  = document.getElementById('result-zone');
+    const newExZ   = document.getElementById('new-ex-zone');
+    const valBtn   = document.getElementById('validate-btn');
+    const exercise = state.currentExercise;
+    if (!input || !exercise) return;
+
+    const userAnswer = input.value.trim();
+    if (!userAnswer) {
+        input.style.borderColor = '#EF4444';
+        input.placeholder = 'Écris ta réponse !';
+        setTimeout(() => { input.style.borderColor = '#0071E3'; input.placeholder = '...'; }, 1600);
+        return;
+    }
+
+    state.hasValidated = true;
+
+    const normalize = str =>
+        str.toLowerCase().trim()
+           .normalize('NFD').replace(/[̀-ͯ]/g, '')
+           .replace(/['']/g, "'");
+
+    const correct = normalize(userAnswer) === normalize(exercise.reponse_attendue);
+
+    input.disabled = true;
+
+    const fullSentence = escapeHtml((exercise.phrase_avant || '') + exercise.reponse_attendue + (exercise.phrase_apres || ''));
+    const fullWithHighlight =
+        escapeHtml(exercise.phrase_avant || '') +
+        `<span class="text-green-700 font-bold">${escapeHtml(exercise.reponse_attendue)}</span>` +
+        escapeHtml(exercise.phrase_apres || '');
+
+    if (correct) {
+        input.style.borderColor = '#22C55E';
+        input.style.background = '#F0FDF4';
+        input.style.color = '#15803D';
+        valBtn.className = 'w-full bg-green-500 text-white font-semibold py-3.5 rounded-2xl text-[14px] cursor-default';
+        valBtn.textContent = '🎉 Correct !';
+
+        resultZ.innerHTML = `
+            <div class="animate-in space-y-3">
+                <div class="bg-green-50 border border-green-200 rounded-2xl p-4">
+                    <div class="flex items-center gap-2.5 mb-2">
+                        <span class="text-2xl">🎉</span>
+                        <span class="font-bold text-green-800 text-[15px]">Excellent ! Bonne réponse !</span>
+                    </div>
+                    <p class="text-green-700 text-sm">La réponse : <strong class="text-green-900">${escapeHtml(exercise.reponse_attendue)}</strong></p>
+                </div>
+                <div class="bg-[#F5F5F7] rounded-2xl px-4 py-3.5">
+                    <p class="text-[10.5px] font-bold uppercase tracking-widest text-[#9CA3AF] mb-1.5">Phrase complète</p>
+                    <p class="text-[#1D1D1F] text-[15px] leading-relaxed">${fullSentence}</p>
+                </div>
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+                    <div class="flex items-start gap-2.5">
+                        <span class="text-xl mt-0.5 flex-shrink-0">📖</span>
+                        <div>
+                            <p class="font-bold text-amber-800 text-[13px] mb-1.5">คำอธิบาย</p>
+                            <p class="text-amber-900 thai text-[13.5px] leading-relaxed">${exercise.explication_th}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else {
+        input.style.borderColor = '#EF4444';
+        input.style.background = '#FEF2F2';
+        input.style.color = '#B91C1C';
+        valBtn.className = 'w-full bg-red-500 text-white font-semibold py-3.5 rounded-2xl text-[14px] cursor-default';
+        valBtn.textContent = '✗ Pas tout à fait…';
+
+        resultZ.innerHTML = `
+            <div class="animate-in space-y-3">
+                <div class="bg-red-50 border border-red-200 rounded-2xl p-4">
+                    <div class="flex items-center gap-2.5 mb-2">
+                        <span class="text-2xl">💪</span>
+                        <span class="font-bold text-red-800 text-[15px]">Presque ! Continue comme ça.</span>
+                    </div>
+                    <p class="text-red-600 text-sm mb-0.5">Ta réponse : <span class="line-through text-red-400">${escapeHtml(userAnswer)}</span></p>
+                    <p class="text-red-800 text-sm font-semibold">Bonne réponse : <strong>${escapeHtml(exercise.reponse_attendue)}</strong></p>
+                </div>
+                <div class="bg-[#F5F5F7] rounded-2xl px-4 py-3.5">
+                    <p class="text-[10.5px] font-bold uppercase tracking-widest text-[#9CA3AF] mb-1.5">Phrase correcte</p>
+                    <p class="text-[#1D1D1F] text-[15px] leading-relaxed">${fullWithHighlight}</p>
+                </div>
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+                    <div class="flex items-start gap-2.5">
+                        <span class="text-xl mt-0.5 flex-shrink-0">📖</span>
+                        <div>
+                            <p class="font-bold text-amber-800 text-[13px] mb-1.5">คำอธิบาย</p>
+                            <p class="text-amber-900 thai text-[13.5px] leading-relaxed">${exercise.explication_th}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    resultZ.classList.remove('hidden');
+    newExZ.classList.remove('hidden');
+
+    setTimeout(() => resultZ.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 120);
+}
+
+// ============================================================
+// TOGGLE LESSON
+// ============================================================
+function toggleLesson() {
+    const body = document.getElementById('lesson-body');
+    const chev = document.getElementById('lesson-chevron');
+    if (!body) return;
+    if (body.classList.contains('collapsed')) {
+        body.classList.remove('collapsed');
+        body.style.maxHeight = '9999px';
+        chev && chev.classList.add('open');
+    } else {
+        body.style.maxHeight = body.scrollHeight + 'px';
+        requestAnimationFrame(() => {
+            body.style.maxHeight = '0';
+            body.classList.add('collapsed');
+        });
+        chev && chev.classList.remove('open');
+    }
+}
+
+// ============================================================
+// DEBUG
+// ============================================================
+function showDebug() {
+    if (!state.lastRawResponse) return;
+    document.getElementById('debug-content').textContent = JSON.stringify(state.lastRawResponse, null, 2);
+    document.getElementById('debug-modal').classList.add('open');
+}
+function hideDebug() {
+    document.getElementById('debug-modal').classList.remove('open');
+}
+
+// ============================================================
+// ERRORS
+// ============================================================
+function showApiKeyError(lessonId) {
+    const zone = document.getElementById('exercise-zone');
+    zone.innerHTML = `
+        <div class="text-center py-8 animate-in">
+            <div class="text-5xl mb-4">🔑</div>
+            <h3 class="font-bold text-[#1D1D1F] mb-2 text-[16px]">Clé API manquante</h3>
+            <p class="text-[#6E6E73] text-sm mb-4">Ouvre le fichier HTML et remplis la variable :</p>
+            <div class="bg-[#F5F5F7] rounded-xl p-3 font-mono text-[12px] text-[#1D1D1F] text-left inline-block mb-4">
+                const GEMINI_API_KEY = <span class="text-[#0071E3]">"<em>ta-clé-ici</em>"</span>;
+            </div>
+            <p class="text-[11px] text-[#6E6E73] thai">ต้องใส่ GEMINI_API_KEY ก่อนนะ 🔑</p>
+        </div>
+    `;
+}
+
+function showError(message, lessonId) {
+    const zone = document.getElementById('exercise-zone');
+    zone.innerHTML = `
+        <div class="text-center py-8 animate-in">
+            <div class="text-5xl mb-4">⚠️</div>
+            <h3 class="font-bold text-[#1D1D1F] mb-2">Une erreur est survenue</h3>
+            <p class="text-[#6E6E73] text-sm mb-1 max-w-xs mx-auto">${escapeHtml(message)}</p>
+            <p class="text-[11px] text-[#6E6E73] thai mb-5">เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง</p>
+            <button onclick="generateExercise('${lessonId}')" class="btn-press bg-[#0071E3] hover:bg-[#0077ED] text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors">
+                Réessayer
+            </button>
+        </div>
+    `;
+}
+
+// ============================================================
+// MOBILE SIDEBAR
+// ============================================================
+function openSidebar() {
+    document.getElementById('sidebar').classList.remove('-translate-x-full');
+    const ov = document.getElementById('overlay');
+    ov.classList.remove('hidden');
+    requestAnimationFrame(() => ov.classList.remove('opacity-0'));
+}
+
+function closeSidebar() {
+    document.getElementById('sidebar').classList.add('-translate-x-full');
+    const ov = document.getElementById('overlay');
+    ov.classList.add('opacity-0');
+    setTimeout(() => ov.classList.add('hidden'), 250);
+}
+
+// ============================================================
+// UTIL
+// ============================================================
+function escapeHtml(str) {
+    if (!str) return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderSidebar();
+</script>
+
+<!-- ========== DEBUG BUTTON ========== -->
+<button id="debug-btn" onclick="showDebug()"
+    class="fixed bottom-4 right-4 z-40 w-9 h-9 bg-gray-800/80 hover:bg-gray-900 border border-gray-700 rounded-xl flex items-center justify-center shadow-lg backdrop-blur-sm"
+    title="Debug — réponse brute Gemini">
+    <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"/>
+    </svg>
+</button>
+
+<!-- ========== DEBUG MODAL ========== -->
+<div id="debug-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 items-center justify-center p-4" onclick="if(event.target===this)hideDebug()">
+    <div class="bg-gray-950 rounded-3xl w-full max-w-2xl max-h-[85vh] flex flex-col shadow-2xl border border-gray-800">
+        <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-800 flex-shrink-0">
+            <span class="font-mono text-[13px] font-bold text-green-400">🐛 Réponse brute Gemini</span>
+            <button onclick="hideDebug()" class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-800 text-gray-500 hover:text-white transition-colors text-lg leading-none">×</button>
+        </div>
+        <div class="flex-1 overflow-auto p-5">
+            <pre id="debug-content" class="text-green-300 font-mono text-[11.5px] leading-relaxed whitespace-pre-wrap break-words"></pre>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
