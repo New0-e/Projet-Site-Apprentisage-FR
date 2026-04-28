@@ -1602,7 +1602,50 @@ async function generateExercise(lessonId) {
     const chosenSubject  = subjectOptions[Math.floor(Math.random() * subjectOptions.length)];
     const variationSeed  = Math.floor(Math.random() * 99999);
 
-    const prompt = `Tu es un professeur de français expert qui enseigne à une apprenante thaïlandaise (niveau A1–B1).
+    // Prompt spécialisé pour la leçon Les Nombres
+    const nombresFocusOptions = [
+        { focus: "écrire en lettres un nombre entre 0 et 20 (ex: 15 → quinze)", hint: "nombre entre 0 et 20" },
+        { focus: "écrire en lettres un nombre entre 21 et 69 (ex: 43 → quarante-trois)", hint: "nombre entre 21 et 69" },
+        { focus: "écrire en lettres un nombre entre 70 et 79 (soixante-dix à soixante-dix-neuf)", hint: "nombre entre 70 et 79" },
+        { focus: "écrire en lettres un nombre entre 80 et 89 (quatre-vingts / quatre-vingt-un…)", hint: "nombre entre 80 et 89" },
+        { focus: "écrire en lettres un nombre entre 90 et 99 (quatre-vingt-dix à quatre-vingt-dix-neuf)", hint: "nombre entre 90 et 99" },
+        { focus: "écrire en lettres un nombre entre 100 et 999 (cent, deux cents, trois cent cinquante…)", hint: "nombre entre 100 et 999" },
+        { focus: "écrire en lettres un nombre entre 21 et 69 avec la règle du trait d'union et de 'et' (21=vingt et un, 22=vingt-deux)", hint: "règle trait d'union et 'et'" },
+        { focus: "écrire en chiffres un nombre donné en lettres (ex: quatre-vingt-quinze → 95)", hint: "lettres → chiffres" },
+        { focus: "compléter une date ou une heure avec le bon nombre en lettres (ex: Il est ___ heures)", hint: "date ou heure" },
+        { focus: "écrire en lettres un nombre dans une phrase de la vie quotidienne (prix, âge, quantité)", hint: "contexte quotidien" }
+    ];
+    const nombresFocus = nombresFocusOptions[variationSeed % nombresFocusOptions.length];
+
+    const isNombresLesson = lessonId === '1-4';
+
+    const prompt = isNombresLesson
+        ? `Tu es un professeur de français expert qui enseigne à une apprenante thaïlandaise (niveau A1–B1).
+
+Crée UN exercice "texte à trous" sur l'écriture des nombres en français.
+
+CONTRAINTE #${variationSeed} — L'exercice porte UNIQUEMENT sur : ${nombresFocus.focus}
+
+La phrase doit contenir UN trou pour UN nombre précis (${nombresFocus.hint}).
+Le trou peut être : écrire le nombre en lettres, ou écrire le nombre en chiffres selon la consigne.
+
+Exemple de format attendu :
+- phrase_avant = "J'ai "
+- reponse_attendue = "vingt-trois"
+- phrase_apres = " ans."
+→ Résultat : "J'ai ___ ans." (réponse : vingt-trois)
+
+Règles strictes :
+1. La phrase est NATURELLE et utilise un nombre PRÉCIS et VARIÉ (évite toujours 1, 2, 10, 100).
+2. phrase_avant = tout ce qui précède le trou.
+3. phrase_apres = tout ce qui suit le trou.
+4. consigne_th : dis en thaïlandais quel nombre chercher et s'il faut écrire en lettres ou en chiffres.
+5. explication_th : explique en thaïlandais la règle d'écriture de CE nombre précis (ex: pourquoi 80 = quatre-vingts avec un s mais 81 = quatre-vingt-un sans s).
+6. NE GÉNÈRE JAMAIS : un, deux, dix, cent, mille (trop simples). Choisis des nombres qui illustrent les vraies difficultés françaises.
+
+Réponds UNIQUEMENT avec un objet JSON valide, sans texte avant ni après, sans backticks :
+{"consigne_th":"...","phrase_avant":"...","reponse_attendue":"...","phrase_apres":"...","explication_th":"..."}`
+        : `Tu es un professeur de français expert qui enseigne à une apprenante thaïlandaise (niveau A1–B1).
 
 Crée UN exercice "texte à trous" unique sur ce sujet : "${lesson.title}" — ${lesson.topic}.
 
