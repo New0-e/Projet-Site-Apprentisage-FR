@@ -73,6 +73,109 @@
         #debug-modal.open { display:flex; }
         #debug-btn { opacity:0; pointer-events:none; transition:opacity .2s; }
         #debug-btn.visible { opacity:1; pointer-events:auto; }
+
+        /* ===== DARK MODE ===== */
+        html { transition: background 0.2s; }
+        body { transition: background 0.2s, color 0.2s; }
+
+        .dark body { background: #1C1C1E; color: #F5F5F7; }
+
+        /* Sidebar */
+        .dark #sidebar { background: rgba(28,28,30,0.97); border-color: rgba(255,255,255,0.07) !important; }
+        .dark .lesson-btn:hover { background: rgba(255,255,255,0.06); }
+        .dark .lesson-btn.active { background: rgba(0,113,227,0.22); }
+        .dark .lesson-btn .lesson-title,
+        .dark #lessons-nav [class*="font-semibold"] { color: #E5E5EA !important; }
+        .dark #lessons-nav [class*="text-\[\#6E6E73\]"] { color: #636366 !important; }
+        .dark #lessons-nav [class*="text-\[\#1D1D1F\]"] { color: #E5E5EA !important; }
+        .dark #lessons-nav button:hover [class*="text-\[\#1D1D1F\]"] { color: #F5F5F7 !important; }
+        .dark #sidebar [class*="border-gray-100"] { border-color: rgba(255,255,255,0.07) !important; }
+        .dark #sidebar p { color: #636366; }
+
+        /* Mobile header */
+        .dark header { background: rgba(28,28,30,0.94) !important; border-color: rgba(255,255,255,0.07) !important; }
+        .dark header span { color: #F5F5F7; }
+        .dark header svg { color: #A1A1AA !important; }
+
+        /* Main area */
+        .dark .lg\:ml-72 { background: #1C1C1E; }
+
+        /* Welcome screen cards */
+        .dark .bg-white { background: #2C2C2E !important; }
+        .dark [class*="border-gray-100"] { border-color: rgba(255,255,255,0.08) !important; }
+        .dark [class*="text-\[\#1D1D1F\]"] { color: #F5F5F7 !important; }
+        .dark [class*="text-\[\#6E6E73\]"] { color: #98989E !important; }
+
+        /* Scrollbar */
+        .dark ::-webkit-scrollbar-thumb { background: #48484A; }
+
+        /* Tables */
+        .dark .ltable th { background: #2C2C2E; color: #636366; }
+        .dark .ltable td { border-color: rgba(255,255,255,0.07); }
+        .dark .ltable .fr { color: #F5F5F7; }
+        .dark .ltable .th { color: #A1A1AA; }
+        .dark .ltable .note { color: #636366; }
+
+        /* Content boxes */
+        .dark .rule-box { background: #0D1F2D; border-color: #1E3A5F; }
+        .dark .rule-box p, .dark .rule-box td, .dark .rule-box th { color: #93C5FD !important; }
+        .dark .rule-box .fr { color: #BAE6FD !important; }
+        .dark .rule-box .note { color: #60A5FA !important; }
+        .dark .rule-box strong { color: #BAE6FD !important; }
+
+        .dark .tip-box { background: #1F1500; border-color: #713F12; }
+        .dark .tip-box p, .dark .tip-box td { color: #FDE68A !important; }
+        .dark .tip-box strong { color: #FCD34D !important; }
+        .dark .tip-box .sec-head { color: #D97706 !important; }
+
+        .dark .ex-box { background: #0A1F12; border-color: #14532D; }
+        .dark .ex-box p, .dark .ex-box span, .dark .ex-box td { color: #A7F3D0 !important; }
+        .dark .ex-box .sec-head { color: #34D399 !important; }
+        .dark .ex-box strong { color: #6EE7B7 !important; }
+
+        .dark .sec-head { color: #636366 !important; }
+
+        /* Inline letter tiles (lesson 1-1) */
+        .dark [style*="background:#F0F4FF"] { background: #0D1F3A !important; }
+        .dark [style*="background:#FFF3F0"] { background: #2A0D0D !important; }
+        .dark [style*="background:#FFF0F5"] { background: #2A0D20 !important; }
+        .dark [style*="background:#F0FFF4"] { background: #0A1F12 !important; }
+        .dark [style*="color:#1D1D1F"] { color: #E5E5EA !important; }
+        .dark [style*="color:#4B5563"] { color: #98989E !important; }
+        .dark [style*="color:#DC2626"] { color: #FCA5A5 !important; }
+        .dark [style*="color:#BE185D"] { color: #F9A8D4 !important; }
+        .dark [style*="color:#15803D"] { color: #86EFAC !important; }
+
+        /* Misc text colors in lessons */
+        .dark .text-gray-700 { color: #D1D1D6 !important; }
+        .dark .text-gray-400 { color: #636366 !important; }
+        .dark .text-blue-900 { color: #93C5FD !important; }
+        .dark .text-amber-900 { color: #FDE68A !important; }
+        .dark .text-amber-700 { color: #FCD34D !important; }
+        .dark .text-green-800 { color: #6EE7B7 !important; }
+        .dark .text-green-900 { color: #A7F3D0 !important; }
+
+        /* Answer input */
+        .dark .answer-input { background: #2C2C2E !important; border-color: #48484A !important; color: #F5F5F7 !important; }
+        .dark .answer-input::placeholder { color: #636366; }
+
+        /* Exercise result boxes */
+        .dark .bg-green-50  { background: #0A1F12 !important; }
+        .dark .bg-red-50    { background: #2A0D0D !important; }
+        .dark .bg-amber-50  { background: #1F1500 !important; }
+        .dark .bg-\[\#F5F5F7\] { background: #2C2C2E !important; }
+        .dark .border-green-200 { border-color: #14532D !important; }
+        .dark .border-red-200   { border-color: #7F1D1D !important; }
+        .dark .border-amber-200 { border-color: #713F12 !important; }
+        .dark .text-green-700, .dark .text-green-800 { color: #6EE7B7 !important; }
+        .dark .text-red-800     { color: #FCA5A5 !important; }
+        .dark .text-red-600     { color: #FCA5A5 !important; }
+        .dark .text-red-400     { color: #F87171 !important; }
+        .dark .text-amber-800   { color: #FDE68A !important; }
+        .dark .text-amber-700   { color: #FCD34D !important; }
+
+        /* Dark mode toggle button */
+        #dark-toggle { transition: background 0.2s; }
     </style>
 </head>
 <body class="min-h-screen">
@@ -98,8 +201,11 @@
     <nav id="lessons-nav" class="flex-1 overflow-y-auto p-3 space-y-0.5"></nav>
 
     <!-- Footer -->
-    <div class="p-4 border-t border-gray-100">
-        <p class="text-[11px] text-[#6E6E73] text-center thai leading-relaxed">สร้างด้วยความรัก ❤️ สำหรับคุณ</p>
+    <div class="p-4 border-t border-gray-100 flex items-center justify-between">
+        <p class="text-[11px] text-[#6E6E73] thai leading-relaxed">สร้างด้วยความรัก ❤️</p>
+        <button id="dark-toggle" onclick="toggleDark()" class="w-8 h-8 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors" title="Mode sombre">
+            <span id="dark-icon" class="text-[16px] select-none">🌙</span>
+        </button>
     </div>
 </aside>
 
@@ -113,10 +219,13 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
             </svg>
         </button>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 flex-1">
             <img src="logo.svg" alt="Le Français" class="w-8 h-8 rounded-xl shadow-sm select-none"/>
             <span class="font-semibold text-[15px]">Le Français</span>
         </div>
+        <button onclick="toggleDark()" class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-gray-100 transition-colors" title="Mode sombre">
+            <span id="dark-icon-mobile" class="text-[17px] select-none">🌙</span>
+        </button>
     </header>
 
     <!-- Content -->
@@ -1324,7 +1433,7 @@ const LESSONS_CONTENT = {
 const state = {
     activeLessonId: null,
     currentExercise: null,
-    expandedPhases: new Set([1]),
+    expandedPhases: new Set([1,2,3,4,5,6]),
     hasValidated: false,
     lastRawResponse: null,
 };
@@ -1974,6 +2083,34 @@ function escapeHtml(str) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
 }
+
+// ============================================================
+// DARK MODE
+// ============================================================
+function toggleDark() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    updateDarkIcons(isDark);
+}
+
+function updateDarkIcons(isDark) {
+    const icon = isDark ? '☀️' : '🌙';
+    const bg   = isDark ? 'bg-gray-700' : 'bg-gray-100';
+    const bgOld= isDark ? 'bg-gray-100' : 'bg-gray-700';
+    document.getElementById('dark-icon')?.replaceChildren(document.createTextNode(icon));
+    document.getElementById('dark-icon-mobile')?.replaceChildren(document.createTextNode(icon));
+    const btn = document.getElementById('dark-toggle');
+    if (btn) { btn.classList.remove(bgOld); btn.classList.add(bg); }
+}
+
+(function initTheme() {
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+        updateDarkIcons(true);
+    }
+})();
 
 // ============================================================
 // INIT
