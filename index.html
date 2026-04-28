@@ -1677,38 +1677,226 @@ async function generateExercise(lessonId) {
         </div>
     `;
 
-    // Vary focus and context each time to avoid repetitive exercises
-    const focusOptions = [
-        "un verbe conjugué (choisis une personne grammaticale variée : nous, vous, ils, elles — pas toujours je/il)",
-        "un article (défini, indéfini ou partitif selon ce que la leçon enseigne)",
-        "un adjectif avec son accord correct en genre et en nombre",
-        "une préposition ou locution prépositionnelle",
-        "un pronom (sujet, réfléchi, ou objet — selon la leçon)",
-        "une négation ou structure négative complète",
-        "un mot de vocabulaire précis et spécifique au thème",
-        "un auxiliaire (être ou avoir) dans un temps composé",
-        "une terminaison verbale (la fin du verbe uniquement, pas le verbe entier)"
-    ];
-    const scenarioOptions = [
-        "dans un contexte de la vie quotidienne à Bangkok ou en Thaïlande",
-        "dans un contexte de voyage ou de tourisme en France",
-        "dans une conversation entre amis ou en famille",
-        "dans une situation au restaurant, à l'hôtel ou dans un magasin",
-        "dans un contexte professionnel ou scolaire",
-        "dans une situation de transport ou de déplacement",
-        "avec un personnage thaïlandais qui apprend le français"
-    ];
-    const subjectOptions = [
-        "avec le sujet 'je'", "avec le sujet 'tu'", "avec le sujet 'il' ou 'elle'",
-        "avec le sujet 'nous'", "avec le sujet 'vous'", "avec le sujet 'ils' ou 'elles'",
-        "avec le sujet 'on'", "avec un nom propre comme sujet"
-    ];
-    const chosenFocus    = focusOptions[Math.floor(Math.random() * focusOptions.length)];
-    const chosenScenario = scenarioOptions[Math.floor(Math.random() * scenarioOptions.length)];
-    const chosenSubject  = subjectOptions[Math.floor(Math.random() * subjectOptions.length)];
-    const variationSeed  = Math.floor(Math.random() * 99999);
+    const variationSeed = Math.floor(Math.random() * 99999);
 
-    // Prompt spécialisé pour la leçon Les Nombres
+    // ── Focuses spécifiques à chaque leçon (basés sur le contenu réel vu) ──
+    const LESSON_FOCUSES = {
+        "1-1": [
+            "compléter un mot avec la bonne lettre accentuée : é, è, ê, à, â, ç (ex: caf_, p_re, fran_ais)",
+            "compléter un mot contenant le son U [y] vu en cours : tu, lune, rue, sur, bu",
+            "compléter un mot avec une voyelle nasale AN/EN : France, enfant, blanc, manger",
+            "compléter un mot avec une voyelle nasale ON : bonjour, pont, maison, chanson",
+            "compléter un mot avec une voyelle nasale IN/AIN : vin, pain, matin, train",
+            "compléter un mot avec EU [ø] : feu, peur, heure, bleu, cœur",
+        ],
+        "1-6": [
+            "appliquer l'élision de 'le/la' → 'l'' devant un mot commençant par une voyelle ou H muet (l'ami, l'école, l'hôtel)",
+            "appliquer l'élision de 'je' → 'j'' devant une voyelle (j'aime, j'ai, j'arrive)",
+            "appliquer l'élision de 'de' → 'd'' ou 'ne' → 'n'' devant une voyelle",
+            "appliquer une liaison obligatoire (les_enfants, vous_avez, ils_ont, mon_ami, un_ami)",
+            "compléter avec la combinaison de voyelles correcte : eau/au [o], ou [u], oi [wa], ai [ɛ], eu [œ]",
+            "appliquer l'élision de 'ce' → 'c'' ou 'que' → 'qu'' devant une voyelle (c'est, qu'il)",
+        ],
+        "1-2": [
+            "compléter une formule de salutation selon le contexte (Bonjour, Bonsoir, Salut, Au revoir, À bientôt, Enchanté(e))",
+            "compléter une phrase de présentation avec Je m'appelle, J'ai … ans, Je suis de, J'habite à",
+            "choisir entre Bonjour et Bonsoir selon l'heure indiquée dans la phrase",
+            "compléter une formule d'au revoir (Au revoir / À bientôt / À tout à l'heure) selon la situation",
+            "compléter un échange de présentation : Comment vous appelez-vous ? / Je m'appelle…",
+        ],
+        "1-3": [
+            "choisir entre 'tu' et 'vous' dans une phrase selon la relation décrite (ami, professeur, patron, inconnu, enfant)",
+            "conjuguer correctement le verbe avec 'tu' ou 'vous' selon le contexte social décrit",
+            "compléter une question de politesse en choisissant la bonne forme (Tu t'appelles… / Comment vous appelez-vous ?)",
+            "choisir 'tu' ou 'vous' dans un dialogue dont le contexte social est précisé",
+        ],
+        "1-5": [
+            "choisir le pronom sujet correct (je/tu/il/elle/on/nous/vous/ils/elles) pour remplacer un groupe nominal donné",
+            "choisir entre 'ils' et 'elles' selon la composition du groupe décrit (tout féminin → elles, sinon → ils)",
+            "choisir entre 'on' (informel) et 'nous' (formel) dans une phrase de la vie quotidienne",
+            "compléter avec le bon pronom sujet en appliquant l'élision : J' devant voyelle",
+            "choisir entre 'il' et 'elle' pour remplacer un nom dont le genre est donné",
+        ],
+        "2-1": [
+            "compléter avec l'article défini correct : le, la, l' ou les selon le genre et nombre du nom",
+            "compléter avec l'article indéfini correct : un, une ou des selon le genre et nombre du nom",
+            "choisir entre l'article défini (le/la/les) et l'article indéfini (un/une/des) selon le contexte",
+            "appliquer l'élision de l'article défini : l' devant un nom commençant par une voyelle ou H muet",
+            "identifier le genre d'un nom (masculin/féminin) et choisir le bon article",
+        ],
+        "2-5": [
+            "compléter avec l'article partitif correct : du, de la, de l' ou des pour une quantité non définie",
+            "transformer la phrase en négatif : changer du/de la/de l'/des en 'de' ou 'd'' après ne…pas",
+            "choisir entre l'article partitif (du/de la) et l'article défini (le/la) selon le contexte",
+            "choisir entre l'article partitif (du/de la) et l'article indéfini (un/une) selon le contexte",
+            "compléter une phrase sur la nourriture ou les boissons avec le bon article partitif",
+        ],
+        "2-2": [
+            "conjuguer 'être' au présent avec le bon pronom : suis/es/est/sommes/êtes/sont",
+            "conjuguer 'avoir' au présent avec le bon pronom : ai/as/a/avons/avez/ont",
+            "conjuguer 'aller' au présent avec le bon pronom : vais/vas/va/allons/allez/vont",
+            "choisir entre 'être' et 'avoir' conjugué selon le sens de la phrase",
+            "compléter une expression avec avoir : avoir faim, avoir soif, avoir peur, avoir besoin de, avoir … ans",
+            "compléter une phrase avec 'aller' + lieu ou 'aller' + infinitif (futur proche)",
+        ],
+        "3-1": [
+            "conjuguer un verbe régulier en -ER au présent : parler, manger, aimer, habiter, travailler, arriver",
+            "conjuguer un verbe régulier en -IR au présent : finir, choisir, réussir (avec terminaison -is/-it/-issons/-issez/-issent)",
+            "conjuguer un verbe régulier en -RE au présent : vendre, attendre, répondre (avec terminaison -s/-/-ons/-ez/-ent)",
+            "compléter la terminaison correcte d'un verbe en -ER pour une personne donnée (ex: nous mang___)",
+            "conjuguer un verbe en -ER avec particularité orthographique : manger→mangeons, commencer→commençons",
+        ],
+        "3-6": [
+            "conjuguer 'faire' au présent : fais/fais/fait/faisons/faites/font",
+            "conjuguer 'prendre' au présent : prends/prends/prend/prenons/prenez/prennent",
+            "conjuguer 'venir' au présent : viens/viens/vient/venons/venez/viennent",
+            "conjuguer 'apprendre' ou 'comprendre' (dérivés de prendre) au présent",
+            "choisir entre 'savoir' (fait + infinitif) et 'connaître' (personne/lieu) selon le contexte",
+            "utiliser 'venir de + infinitif' pour exprimer une action qui vient de se passer (Il vient de partir)",
+        ],
+        "3-3": [
+            "compléter un verbe pronominal avec le bon pronom réfléchi : me/te/se/nous/vous/se",
+            "conjuguer un verbe pronominal de routine : se lever, se réveiller, se laver, s'habiller, se coucher",
+            "appliquer l'élision du pronom réfléchi : me→m', se→s', te→t' devant voyelle (je m'appelle, il s'habille)",
+            "compléter une phrase de routine quotidienne avec le bon verbe pronominal parmi ceux vus en cours",
+            "placer correctement le pronom réfléchi avant le verbe conjugué dans la phrase",
+        ],
+        "4-2": [
+            "conjuguer 'vouloir' au présent (veux/veux/veut/voulons/voulez/veulent) suivi d'un infinitif",
+            "conjuguer 'pouvoir' au présent (peux/peux/peut/pouvons/pouvez/peuvent) suivi d'un infinitif",
+            "conjuguer 'devoir' au présent (dois/dois/doit/devons/devez/doivent) suivi d'un infinitif",
+            "choisir le bon verbe modal parmi vouloir/pouvoir/devoir selon le sens de la phrase",
+            "construire correctement la structure : verbe modal conjugué + verbe à l'infinitif",
+        ],
+        "3-2": [
+            "entourer le verbe avec 'ne…pas' pour former la négation (je mange → je ne mange pas)",
+            "choisir la bonne structure négative : ne…pas / ne…jamais / ne…plus / ne…rien / ne…personne",
+            "appliquer l'élision de 'ne' → 'n'' devant une voyelle (il n'aime pas, je n'ai pas)",
+            "transformer une phrase affirmative en phrase négative avec ne…pas",
+            "compléter avec le bon mot de négation selon le sens : jamais (never), plus (no longer), rien (nothing), personne (nobody)",
+        ],
+        "5-1": [
+            "choisir l'auxiliaire correct (avoir ou être) pour former le passé composé du verbe donné",
+            "former le participe passé d'un verbe régulier en -ER (mangé, parlé) ou -IR (fini, choisi)",
+            "accorder le participe passé avec le sujet quand l'auxiliaire est être (il est allé / elle est allée / ils sont allés)",
+            "conjuguer l'auxiliaire avoir au passé composé : j'ai/tu as/il a/nous avons/vous avez/ils ont",
+            "conjuguer l'auxiliaire être au passé composé avec un verbe de mouvement (aller, venir, partir, arriver, entrer, sortir)",
+            "former le participe passé d'un verbe irrégulier vu en cours : faire→fait, prendre→pris, être→été, avoir→eu",
+        ],
+        "5-2": [
+            "conjuguer un verbe à l'imparfait à partir de son radical (nous du présent) : aimer→aimais, finir→finissais",
+            "conjuguer 'être' à l'imparfait : j'étais/tu étais/il était/nous étions/vous étiez/ils étaient",
+            "conjuguer 'avoir' à l'imparfait : j'avais/tu avais/il avait/nous avions/vous aviez/ils avaient",
+            "choisir entre passé composé (action ponctuelle terminée) et imparfait (habitude/description/état passé)",
+            "compléter une description du passé avec l'imparfait : Il faisait beau, Elle était…, Nous habitions…",
+        ],
+        "5-3": [
+            "former le futur proche : aller conjugué au présent + infinitif (je vais manger, tu vas partir…)",
+            "conjuguer un verbe régulier au futur simple : infinitif + terminaison (-ai/-as/-a/-ons/-ez/-ont)",
+            "conjuguer un verbe irrégulier au futur simple vu en cours : aller→irai, être→serai, avoir→aurai, faire→ferai",
+            "choisir entre futur proche (action imminente/planifiée) et futur simple (événement futur certain)",
+            "compléter une phrase avec le futur proche pour parler d'un projet ou intention immédiate",
+        ],
+        "6-1": [
+            "compléter une demande polie avec 'Je voudrais' (conditionnel de vouloir) au lieu du présent",
+            "conjuguer 'pouvoir' au conditionnel pour une demande polie : je pourrais/tu pourrais/pourriez-vous",
+            "formuler une demande polie avec 'Pourriez-vous…?' ou 'Pourrait-on…?' vu en cours",
+            "choisir entre le présent (direct/impoli) et le conditionnel (poli) selon la situation",
+            "utiliser 'il faudrait' ou 'ce serait' au conditionnel dans une phrase de politesse",
+        ],
+        "2-3": [
+            "accorder un adjectif au féminin : petit→petite, grand→grande, content→contente, beau→belle",
+            "accorder un adjectif au pluriel : petit→petits, grande→grandes, beau→beaux, belle→belles",
+            "accorder un adjectif en genre ET en nombre avec le nom qu'il qualifie dans la phrase",
+            "choisir la forme correcte d'un adjectif irrégulier vu en cours : beau/belle, vieux/vieille, nouveau/nouvelle",
+            "placer correctement l'adjectif avant ou après le nom (grand, petit, beau, vieux = avant ; couleurs = après)",
+        ],
+        "3-4": [
+            "choisir entre mon/ma/mes selon le genre et le nombre du nom qui suit",
+            "choisir entre ton/ta/tes selon le genre et le nombre du nom qui suit",
+            "choisir entre son/sa/ses selon le genre et le nombre du nom qui suit",
+            "choisir entre notre/nos, votre/vos, leur/leurs selon le possesseur et le nombre",
+            "appliquer la règle d'exception : mon/ton/son devant nom féminin commençant par une voyelle (mon amie, ton école)",
+        ],
+        "5-5": [
+            "former le comparatif de supériorité avec plus + adjectif + que",
+            "former le comparatif d'égalité avec aussi + adjectif + que",
+            "former le comparatif d'infériorité avec moins + adjectif + que",
+            "former le superlatif avec le/la/les plus + adjectif ou le/la/les moins + adjectif",
+            "utiliser la forme comparative irrégulière : bon→meilleur, bien→mieux, mauvais→pire",
+        ],
+        "4-1": [
+            "compléter une question avec le bon mot interrogatif vu en cours : qui/que/quoi/où/quand/comment/pourquoi/combien",
+            "former une question avec 'est-ce que' (Est-ce que tu parles français ?)",
+            "choisir entre 'Qui' (personne) et 'Que/Quoi' (chose) pour compléter une question",
+            "choisir entre 'Où' (lieu), 'Quand' (temps) ou 'Comment' (manière) selon ce que la question cherche",
+            "former une question par inversion sujet-verbe (Parlez-vous… ? Avez-vous… ? Êtes-vous… ?)",
+        ],
+        "5-4": [
+            "remplacer un COD par le pronom correct : le (masc. sg.), la (fém. sg.), les (pluriel) placé avant le verbe",
+            "remplacer un COI par le pronom correct : lui (sg. personne) ou leur (pl. personnes) placé avant le verbe",
+            "choisir entre le pronom COD (le/la/les) et COI (lui/leur) selon la construction du verbe",
+            "placer correctement le pronom objet avant le verbe conjugué dans la phrase",
+            "appliquer l'élision du pronom : le/la → l' devant voyelle (Je l'aime, Il l'achète)",
+        ],
+        "6-4": [
+            "compléter avec la bonne préposition de lieu parmi celles vues : dans/sur/sous/devant/derrière/entre/à côté de",
+            "choisir entre 'en face de', 'près de', 'loin de', 'à côté de' selon la description spatiale",
+            "utiliser 'à' pour une ville (à Paris, à Bangkok) et 'en/au/aux' pour un pays (en France, au Japon, aux États-Unis)",
+            "choisir entre 'au' (pays masc.), 'en' (pays fém.), 'aux' (pays pluriel) pour un pays donné",
+            "décrire la position d'un objet ou lieu avec les prépositions de lieu vues en cours",
+        ],
+        "2-4": [
+            "nommer la couleur en français (rouge/bleu/vert/jaune/noir/blanc/rose/orange/violet/gris) et l'accorder avec le nom",
+            "nommer un vêtement en français parmi ceux vus : chemise/robe/pantalon/jupe/chaussures/veste/pull/chapeau",
+            "nommer une partie du corps en français parmi celles vues : tête/main/jambe/pied/bras/œil/oreille/nez/bouche",
+            "accorder la couleur avec le nom qu'elle qualifie (une robe rouge, des chaussures noires, un pull blanc)",
+            "former une phrase de description avec un vêtement + couleur ou une partie du corps",
+        ],
+        "3-5": [
+            "nommer un membre de la famille vu en cours : père/mère/frère/sœur/grand-père/grand-mère/oncle/tante/cousin(e)",
+            "nommer une pièce de la maison vue en cours : salon/cuisine/chambre/salle de bain/couloir/jardin/balcon",
+            "nommer un aliment ou une boisson vu en cours : pain/fromage/vin/eau/café/poulet/légumes/fruits/beurre",
+            "utiliser un aliment avec l'article partitif approprié vu en cours (du pain, de la viande, de l'eau, des légumes)",
+            "décrire sa famille en utilisant adjectif possessif + membre de la famille (mon père, ma mère, mes frères)",
+        ],
+        "4-3": [
+            "dire l'heure en français : Il est … heures / Il est midi / Il est … heures et demie / et quart / moins le quart",
+            "nommer un jour de la semaine : lundi/mardi/mercredi/jeudi/vendredi/samedi/dimanche",
+            "nommer un mois de l'année : janvier/février/mars/avril/mai/juin/juillet/août/septembre/octobre/novembre/décembre",
+            "nommer une saison avec son article : le printemps / l'été / l'automne / l'hiver",
+            "utiliser une expression de temps vue en cours : le matin / le soir / demain / hier / la semaine prochaine / aujourd'hui",
+        ],
+        "4-5": [
+            "exprimer une émotion avec être + adjectif vu en cours : heureux/heureuse / triste / fâché(e) / fatigué(e) / content(e)",
+            "exprimer une émotion avec avoir + nom vu en cours : avoir peur / avoir honte / avoir envie de / avoir besoin de",
+            "compléter une expression météo vue en cours : Il fait beau/chaud/froid / Il pleut / Il neige / Il y a du soleil/vent",
+            "choisir le bon adjectif d'émotion avec son accord masculin/féminin (il est heureux / elle est heureuse)",
+            "compléter une phrase avec 'avoir mal à' + partie du corps vue en cours (j'ai mal à la tête, au dos, aux pieds)",
+        ],
+        "4-4": [
+            "nommer un moyen de transport vu en cours : le bus / le métro / le train / l'avion / le vélo / la voiture / le taxi",
+            "donner une direction vue en cours : Tournez à gauche / à droite / Allez tout droit / Prenez la rue…",
+            "utiliser 'prendre' avec un transport (prendre le bus, prendre le métro, prendre l'avion)",
+            "compléter une demande de direction : Excusez-moi, où est… ? / Comment aller à… ? / Pour aller à… ?",
+            "compléter une indication de position : c'est à droite / à gauche / en face / au bout de la rue / à côté de",
+        ],
+        "6-2": [
+            "utiliser une formule de commande au restaurant vue en cours : Je voudrais… / Je prends… / L'addition s'il vous plaît",
+            "utiliser une formule pour demander un prix vue en cours : C'est combien ? / Ça coûte combien ?",
+            "compléter un dialogue dans un magasin : Avez-vous… ? / Je cherche… / Vous avez… en quelle taille ?",
+            "utiliser une formule de politesse commerciale vue en cours : Bonjour, je voudrais… / Merci, au revoir",
+            "compléter une commande au restaurant avec les formules vues en cours (Avez-vous… ? / Je prends…)",
+        ],
+        "6-3": [
+            "compléter une formule de politesse à table vue en cours : Bon appétit ! / C'est délicieux / Je vous en prie",
+            "choisir la bonne réaction culturelle française dans une situation sociale décrite (bise, table, entrée dans un lieu)",
+            "compléter une phrase sur une coutume française vue en cours (la bise, l'ordre des plats, le pain sur la table)",
+            "utiliser 'Bon appétit' ou une autre expression de table dans le bon contexte décrit",
+        ],
+    };
+
+    // Nombres : prompt spécialisé
     const nombresFocusOptions = [
         { focus: "écrire en lettres un nombre entre 0 et 20 (ex: 15 → quinze)", hint: "nombre entre 0 et 20" },
         { focus: "écrire en lettres un nombre entre 21 et 69 (ex: 43 → quarante-trois)", hint: "nombre entre 21 et 69" },
@@ -1723,6 +1911,12 @@ async function generateExercise(lessonId) {
     ];
     const nombresFocus = nombresFocusOptions[variationSeed % nombresFocusOptions.length];
 
+    // Sélection du focus : spécifique à la leçon si disponible, sinon générique
+    const lessonFocuses = LESSON_FOCUSES[lessonId];
+    const chosenFocus = lessonFocuses
+        ? lessonFocuses[variationSeed % lessonFocuses.length]
+        : ["un verbe conjugué", "un article", "un adjectif accordé", "une préposition", "un pronom"][variationSeed % 5];
+
     const isNombresLesson = lessonId === '1-4';
 
     const prompt = isNombresLesson
@@ -1735,39 +1929,30 @@ CONTRAINTE #${variationSeed} — L'exercice porte UNIQUEMENT sur : ${nombresFocu
 La phrase doit contenir UN trou pour UN nombre précis (${nombresFocus.hint}).
 Le trou peut être : écrire le nombre en lettres, ou écrire le nombre en chiffres selon la consigne.
 
-Exemple de format attendu :
-- phrase_avant = "J'ai "
-- reponse_attendue = "vingt-trois"
-- phrase_apres = " ans."
-→ Résultat : "J'ai ___ ans." (réponse : vingt-trois)
-
 Règles strictes :
-1. La phrase est NATURELLE et utilise un nombre PRÉCIS et VARIÉ (évite toujours 1, 2, 10, 100).
+1. La phrase est NATURELLE et utilise un nombre PRÉCIS et VARIÉ.
 2. phrase_avant = tout ce qui précède le trou.
 3. phrase_apres = tout ce qui suit le trou.
 4. consigne_th : dis en thaïlandais quel nombre chercher et s'il faut écrire en lettres ou en chiffres.
-5. explication_th : explique en thaïlandais la règle d'écriture de CE nombre précis (ex: pourquoi 80 = quatre-vingts avec un s mais 81 = quatre-vingt-un sans s).
-6. Tu peux utiliser n'importe quel nombre de 0 à 1000, y compris les simples — l'important est d'illustrer une règle d'écriture précise.
+5. explication_th : explique en thaïlandais la règle d'écriture de CE nombre précis.
+6. Tu peux utiliser n'importe quel nombre de 0 à 1000.
 
 Réponds UNIQUEMENT avec un objet JSON valide, sans texte avant ni après, sans backticks :
 {"consigne_th":"...","phrase_avant":"...","reponse_attendue":"...","phrase_apres":"...","explication_th":"..."}`
         : `Tu es un professeur de français expert qui enseigne à une apprenante thaïlandaise (niveau A1–B1).
 
-Crée UN exercice "texte à trous" unique sur ce sujet : "${lesson.title}" — ${lesson.topic}.
+Crée UN exercice "texte à trous" qui teste EXACTEMENT ce point de la leçon "${lesson.title}" :
+→ ${chosenFocus}
 
-CONTRAINTES DE VARIATION #${variationSeed} — Pour cette génération précisément :
-• Ce qui est mis en blanc : ${chosenFocus}
-• Contexte de la phrase : ${chosenScenario}
-• Sujet grammatical : ${chosenSubject}
+L'exercice doit vérifier que l'apprenante a bien compris CE point précis, pas autre chose.
+Variation #${variationSeed} — sois original, évite les phrases trop connues ou répétitives.
 
 Règles strictes :
-1. La phrase doit être ORIGINALE et DIFFÉRENTE des exemples les plus évidents ou répétitifs du sujet.
-2. La phrase est naturelle, correcte, et parfaitement illustre le concept ciblé.
-3. phrase_avant = tout ce qui précède le trou (chaîne vide "" si en tout début de phrase).
-4. phrase_apres = tout ce qui suit le trou (chaîne vide "" si en toute fin de phrase).
-5. consigne_th : instruction claire en thaïlandais, précise ce qu'on cherche (ex: "กรอกกริยา avoir ให้ถูกต้อง").
-6. explication_th : explication pédagogique en thaïlandais, chaleureuse, explique POURQUOI cette réponse et la règle grammaticale derrière.
-7. NE GÉNÈRE JAMAIS les 3 phrases les plus attendues ou communes pour ce sujet.
+1. La phrase est naturelle, correcte en français, et illustre parfaitement le point ciblé.
+2. phrase_avant = tout ce qui précède le trou (chaîne vide "" si le trou est en début de phrase).
+3. phrase_apres = tout ce qui suit le trou (chaîne vide "" si le trou est en fin de phrase).
+4. consigne_th : instruction claire en thaïlandais, dis exactement ce qu'on cherche à compléter.
+5. explication_th : explication pédagogique en thaïlandais — explique POURQUOI c'est cette réponse et la règle derrière.
 
 Réponds UNIQUEMENT avec un objet JSON valide, sans texte avant ni après, sans backticks :
 {"consigne_th":"...","phrase_avant":"...","reponse_attendue":"...","phrase_apres":"...","explication_th":"..."}`;
