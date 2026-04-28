@@ -86,7 +86,7 @@
     <!-- Logo -->
     <div class="p-5 border-b border-gray-100">
         <div class="flex items-center gap-3">
-            <div class="w-11 h-11 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-xl shadow-md select-none">🇫🇷</div>
+            <img src="logo.svg" alt="Le Français" class="w-11 h-11 rounded-2xl shadow-md select-none flex-shrink-0"/>
             <div>
                 <h1 class="font-bold text-[15px] text-[#1D1D1F] tracking-tight">Le Français</h1>
                 <p class="text-[12px] text-[#6E6E73] thai">เรียนภาษาฝรั่งเศส</p>
@@ -114,7 +114,7 @@
             </svg>
         </button>
         <div class="flex items-center gap-2">
-            <span class="text-lg">🇫🇷</span>
+            <img src="logo.svg" alt="Le Français" class="w-8 h-8 rounded-xl shadow-sm select-none"/>
             <span class="font-semibold text-[15px]">Le Français</span>
         </div>
     </header>
@@ -125,7 +125,7 @@
 
             <!-- Welcome Screen -->
             <div id="welcome-screen" class="flex flex-col items-center justify-center min-h-[70vh] text-center animate-in">
-                <div class="text-7xl mb-6 select-none">🇫🇷</div>
+                <img src="logo.svg" alt="Le Français" class="w-28 h-28 mb-6 rounded-3xl shadow-xl select-none"/>
                 <h2 class="text-3xl font-bold text-[#1D1D1F] mb-2 tracking-tight">Bienvenue !</h2>
                 <p class="text-[#6E6E73] thai text-xl mb-1">ยินดีต้อนรับ</p>
                 <p class="text-[#6E6E73] text-sm mb-10">เลือกบทเรียนจากเมนูด้านซ้ายเพื่อเริ่มต้น ☜</p>
@@ -1641,7 +1641,7 @@ Règles strictes :
 3. phrase_apres = tout ce qui suit le trou.
 4. consigne_th : dis en thaïlandais quel nombre chercher et s'il faut écrire en lettres ou en chiffres.
 5. explication_th : explique en thaïlandais la règle d'écriture de CE nombre précis (ex: pourquoi 80 = quatre-vingts avec un s mais 81 = quatre-vingt-un sans s).
-6. NE GÉNÈRE JAMAIS : un, deux, dix, cent, mille (trop simples). Choisis des nombres qui illustrent les vraies difficultés françaises.
+6. Tu peux utiliser n'importe quel nombre de 0 à 1000, y compris les simples — l'important est d'illustrer une règle d'écriture précise.
 
 Réponds UNIQUEMENT avec un objet JSON valide, sans texte avant ni après, sans backticks :
 {"consigne_th":"...","phrase_avant":"...","reponse_attendue":"...","phrase_apres":"...","explication_th":"..."}`

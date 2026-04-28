@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#4F46E5"/>
+    </linearGradient>
+    <linearGradient id="flag-blue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#002395"/>
+      <stop offset="100%" stop-color="#0052CC"/>
+    </linearGradient>
+    <clipPath id="rounded">
+      <rect width="200" height="200" rx="44" ry="44"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="200" height="200" rx="44" ry="44" fill="url(#bg)"/>
+
+  <!-- French flag stripes (subtle, top area) -->
+  <g clip-path="url(#rounded)" opacity="0.18">
+    <rect x="0"   y="0" width="66"  height="200" fill="#002395"/>
+    <rect x="66"  y="0" width="68"  height="200" fill="#ffffff"/>
+    <rect x="134" y="0" width="66"  height="200" fill="#ED2939"/>
+  </g>
+
+  <!-- White card -->
+  <rect x="28" y="52" width="144" height="96" rx="18" fill="white" opacity="0.97"/>
+
+  <!-- "LF" monogram -->
+  <!-- L -->
+  <text x="52" y="122" font-family="Georgia, 'Times New Roman', serif" font-size="62" font-weight="700" fill="url(#bg)" letter-spacing="-2">L</text>
+  <!-- F -->
+  <text x="108" y="122" font-family="Georgia, 'Times New Roman', serif" font-size="62" font-weight="700" fill="#ED2939" letter-spacing="-2">F</text>
+
+  <!-- Thin accent line under letters -->
+  <rect x="44" y="131" width="112" height="3" rx="2" fill="url(#bg)" opacity="0.35"/>
+
+  <!-- Tagline dots (decorative) -->
+  <circle cx="82" cy="170" r="4" fill="white" opacity="0.5"/>
+  <circle cx="100" cy="170" r="4" fill="white" opacity="0.8"/>
+  <circle cx="118" cy="170" r="4" fill="white" opacity="0.5"/>
+</svg>
