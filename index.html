@@ -174,6 +174,14 @@
         .dark .text-amber-800   { color: #FDE68A !important; }
         .dark .text-amber-700   { color: #FCD34D !important; }
 
+        /* QCM buttons */
+        .dark .qcm-btn { background: #2C2C2E !important; border-color: #48484A !important; }
+        .dark .qcm-btn:hover:not(:disabled) { border-color: #0071E3 !important; }
+        .dark .qcm-btn span.text-\[\#1D1D1F\] { color: #F5F5F7 !important; }
+        .dark .qcm-letter { background: #3A3A3C !important; color: #A1A1AA !important; }
+        .dark .qcm-btn.bg-green-50 { background: #0A1F12 !important; border-color: #14532D !important; }
+        .dark .qcm-btn.bg-red-50   { background: #2A0D0D !important; border-color: #7F1D1D !important; }
+
         /* Dark mode toggle button */
         #dark-toggle { transition: background 0.2s; }
     </style>
@@ -1781,7 +1789,7 @@ async function generateExercise(lessonId) {
             "accorder le participe passé avec le sujet quand l'auxiliaire est être (il est allé / elle est allée / ils sont allés)",
             "conjuguer l'auxiliaire avoir au passé composé : j'ai/tu as/il a/nous avons/vous avez/ils ont",
             "conjuguer l'auxiliaire être au passé composé avec un verbe de mouvement (aller, venir, partir, arriver, entrer, sortir)",
-            "former le participe passé d'un verbe irrégulier vu en cours : faire→fait, prendre→pris, être→été, avoir→eu",
+            "former le participe passé d'un verbe irrégulier vu en cours : faire→fait, prendre→pris, voir→vu, dire→dit, écrire→écrit, lire→lu",
         ],
         "5-2": [
             "conjuguer un verbe à l'imparfait à partir de son radical (nous du présent) : aimer→aimais, finir→finissais",
@@ -1848,7 +1856,7 @@ async function generateExercise(lessonId) {
         ],
         "2-4": [
             "nommer la couleur en français (rouge/bleu/vert/jaune/noir/blanc/rose/orange/violet/gris) et l'accorder avec le nom",
-            "nommer un vêtement en français parmi ceux vus : chemise/robe/pantalon/jupe/chaussures/veste/pull/chapeau",
+            "nommer un vêtement en français parmi ceux vus : chemise/robe/pantalon/jupe/chaussures/veste/manteau/chapeau/chaussettes/sac",
             "nommer une partie du corps en français parmi celles vues : tête/main/jambe/pied/bras/œil/oreille/nez/bouche",
             "accorder la couleur avec le nom qu'elle qualifie (une robe rouge, des chaussures noires, un pull blanc)",
             "former une phrase de description avec un vêtement + couleur ou une partie du corps",
@@ -1856,7 +1864,7 @@ async function generateExercise(lessonId) {
         "3-5": [
             "nommer un membre de la famille vu en cours : père/mère/frère/sœur/grand-père/grand-mère/oncle/tante/cousin(e)",
             "nommer une pièce de la maison vue en cours : salon/cuisine/chambre/salle de bain/couloir/jardin/balcon",
-            "nommer un aliment ou une boisson vu en cours : pain/fromage/vin/eau/café/poulet/légumes/fruits/beurre",
+            "nommer un aliment ou une boisson vu en cours : pain/fromage/vin/eau/café/poulet/poisson/œufs/légumes/fruits/jus d'orange",
             "utiliser un aliment avec l'article partitif approprié vu en cours (du pain, de la viande, de l'eau, des légumes)",
             "décrire sa famille en utilisant adjectif possessif + membre de la famille (mon père, ma mère, mes frères)",
         ],
@@ -1884,7 +1892,7 @@ async function generateExercise(lessonId) {
         "6-2": [
             "utiliser une formule de commande au restaurant vue en cours : Je voudrais… / Je prends… / L'addition s'il vous plaît",
             "utiliser une formule pour demander un prix vue en cours : C'est combien ? / Ça coûte combien ?",
-            "compléter un dialogue dans un magasin : Avez-vous… ? / Je cherche… / Vous avez… en quelle taille ?",
+            "choisir la bonne phrase pour un dialogue dans un magasin parmi celles vues : Avez-vous… ? / Je vais prendre ça. / C'est combien ? / Par carte, s'il vous plaît.",
             "utiliser une formule de politesse commerciale vue en cours : Bonjour, je voudrais… / Merci, au revoir",
             "compléter une commande au restaurant avec les formules vues en cours (Avez-vous… ? / Je prends…)",
         ],
@@ -1895,6 +1903,19 @@ async function generateExercise(lessonId) {
             "utiliser 'Bon appétit' ou une autre expression de table dans le bon contexte décrit",
         ],
     };
+
+    // ── Type d'exercice par leçon ──
+    const LESSON_EXERCISE_TYPES = {
+        "1-2": "qcm",  // Salutations : choisir la formule selon le contexte
+        "1-3": "qcm",  // Tu/Vous : choisir la bonne forme sociale
+        "1-5": "qcm",  // Pronoms sujets : choisir le bon pronom
+        "2-4": "qcm",  // Couleurs/Vêtements/Corps : vocabulaire
+        "3-5": "qcm",  // Famille/Maison/Nourriture : vocabulaire
+        "4-4": "qcm",  // Transports/Directions : choisir transport ou direction
+        "6-2": "qcm",  // Restaurant/Courses : choisir la bonne formule
+        "6-3": "qcm",  // Culture : réaction culturelle française
+    };
+    const exerciseType = LESSON_EXERCISE_TYPES[lessonId] || 'fill_blank';
 
     // Nombres : prompt spécialisé
     const nombresFocusOptions = [
@@ -1939,6 +1960,23 @@ Règles strictes :
 
 Réponds UNIQUEMENT avec un objet JSON valide, sans texte avant ni après, sans backticks :
 {"consigne_th":"...","phrase_avant":"...","reponse_attendue":"...","phrase_apres":"...","explication_th":"..."}`
+        : exerciseType === 'qcm'
+        ? `Tu es un professeur de français expert qui enseigne à une apprenante thaïlandaise (niveau A1–B1).
+
+Crée UN exercice QCM (4 choix) qui teste EXACTEMENT ce point de la leçon "${lesson.title}" :
+→ ${chosenFocus}
+
+Variation #${variationSeed} — sois original, utilise des scénarios de vie quotidienne variés.
+
+Règles strictes :
+1. question : une phrase ou situation courte et claire en français qui pose le problème.
+2. options : exactement 4 réponses courtes en français. Une seule est correcte, les 3 autres sont des distracteurs plausibles qui reprennent des erreurs courantes sur CE point précis.
+3. correct_index : l'index (0 à 3) de la bonne réponse dans le tableau options.
+4. consigne_th : instruction en thaïlandais — explique ce qu'on demande de choisir.
+5. explication_th : explication pédagogique en thaïlandais — pourquoi CETTE option est correcte et la règle derrière.
+
+Réponds UNIQUEMENT avec un objet JSON valide, sans texte avant ni après, sans backticks :
+{"type":"qcm","consigne_th":"...","question":"...","options":["...","...","...","..."],"correct_index":0,"explication_th":"..."}`
         : `Tu es un professeur de français expert qui enseigne à une apprenante thaïlandaise (niveau A1–B1).
 
 Crée UN exercice "texte à trous" qui teste EXACTEMENT ce point de la leçon "${lesson.title}" :
@@ -1996,6 +2034,7 @@ Réponds UNIQUEMENT avec un objet JSON valide, sans texte avant ni après, sans 
 // RENDER EXERCISE
 // ============================================================
 function renderExercise(exercise, lessonId) {
+    if (exercise.type === 'qcm') { renderQcmExercise(exercise, lessonId); return; }
     const zone = document.getElementById('exercise-zone');
     const inputWidth = Math.max(90, Math.min(220, (exercise.reponse_attendue.length + 3) * 12));
 
@@ -2165,6 +2204,132 @@ function validateAnswer() {
     resultZ.classList.remove('hidden');
     newExZ.classList.remove('hidden');
 
+    setTimeout(() => resultZ.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 120);
+}
+
+// ============================================================
+// QCM RENDER & VALIDATE
+// ============================================================
+function renderQcmExercise(exercise, lessonId) {
+    const zone = document.getElementById('exercise-zone');
+    const letters = ['A', 'B', 'C', 'D'];
+    zone.innerHTML = `
+        <div class="animate-in space-y-5">
+
+            <!-- Consigne -->
+            <div class="bg-blue-50 border border-blue-100 rounded-2xl px-4 py-3.5 flex items-start gap-3">
+                <span class="text-[20px] mt-0.5 flex-shrink-0">💡</span>
+                <p class="text-blue-900 thai text-sm leading-relaxed font-medium">${exercise.consigne_th}</p>
+            </div>
+
+            <!-- Question -->
+            <div class="bg-[#F5F5F7] rounded-2xl px-5 py-4">
+                <p class="text-[11px] font-bold uppercase tracking-widest text-[#9CA3AF] mb-2.5">Question :</p>
+                <p class="text-[17px] text-[#1D1D1F] leading-relaxed font-semibold">${escapeHtml(exercise.question)}</p>
+            </div>
+
+            <!-- Options -->
+            <div class="space-y-2.5">
+                <p class="text-[11px] font-bold uppercase tracking-widest text-[#9CA3AF] px-1">Choisissez la bonne réponse :</p>
+                ${exercise.options.map((opt, i) => `
+                    <button
+                        id="qcm-opt-${i}"
+                        onclick="selectQcmOption(${i})"
+                        class="btn-press qcm-btn w-full text-left bg-white border-2 border-gray-200 hover:border-[#0071E3] rounded-2xl px-5 py-3.5 transition-colors flex items-center gap-3"
+                    >
+                        <span class="qcm-letter w-7 h-7 rounded-full bg-[#F5F5F7] flex items-center justify-center text-[12px] font-bold text-[#6E6E73] flex-shrink-0 transition-colors">${letters[i]}</span>
+                        <span class="text-[15px] text-[#1D1D1F] font-medium leading-snug">${escapeHtml(opt)}</span>
+                    </button>
+                `).join('')}
+            </div>
+
+            <!-- Result (hidden) -->
+            <div id="result-zone" class="hidden"></div>
+
+            <!-- New exercise (hidden) -->
+            <div id="new-ex-zone" class="hidden">
+                <button
+                    onclick="generateExercise('${lessonId}')"
+                    class="btn-press w-full border-2 border-[#0071E3] text-[#0071E3] hover:bg-blue-50 font-semibold py-3 rounded-2xl text-[14px] transition-colors"
+                >
+                    🔄&nbsp; Nouvel exercice
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+function selectQcmOption(chosenIndex) {
+    if (state.hasValidated) return;
+    state.hasValidated = true;
+
+    const exercise = state.currentExercise;
+    const correct  = chosenIndex === exercise.correct_index;
+    const resultZ  = document.getElementById('result-zone');
+    const newExZ   = document.getElementById('new-ex-zone');
+
+    // Style each option button
+    exercise.options.forEach((_, i) => {
+        const btn    = document.getElementById(`qcm-opt-${i}`);
+        const letter = btn?.querySelector('.qcm-letter');
+        if (!btn) return;
+        btn.disabled = true;
+        btn.classList.remove('hover:border-[#0071E3]', 'btn-press');
+        if (i === exercise.correct_index) {
+            btn.classList.replace('border-gray-200', 'border-green-400');
+            btn.classList.add('bg-green-50');
+            if (letter) { letter.classList.remove('bg-[#F5F5F7]', 'text-[#6E6E73]'); letter.classList.add('bg-green-500', 'text-white'); }
+        } else if (i === chosenIndex) {
+            btn.classList.replace('border-gray-200', 'border-red-400');
+            btn.classList.add('bg-red-50');
+            if (letter) { letter.classList.remove('bg-[#F5F5F7]', 'text-[#6E6E73]'); letter.classList.add('bg-red-400', 'text-white'); }
+        }
+    });
+
+    const correctText  = escapeHtml(exercise.options[exercise.correct_index]);
+    const chosenText   = escapeHtml(exercise.options[chosenIndex]);
+
+    resultZ.innerHTML = correct
+        ? `<div class="animate-in space-y-3">
+                <div class="bg-green-50 border border-green-200 rounded-2xl p-4">
+                    <div class="flex items-center gap-2.5 mb-2">
+                        <span class="text-2xl">🎉</span>
+                        <span class="font-bold text-green-800 text-[15px]">Excellent ! Bonne réponse !</span>
+                    </div>
+                    <p class="text-green-700 text-sm">La bonne réponse : <strong class="text-green-900">${correctText}</strong></p>
+                </div>
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+                    <div class="flex items-start gap-2.5">
+                        <span class="text-xl mt-0.5 flex-shrink-0">📖</span>
+                        <div>
+                            <p class="font-bold text-amber-800 text-[13px] mb-1.5">คำอธิบาย</p>
+                            <p class="text-amber-900 thai text-[13.5px] leading-relaxed">${exercise.explication_th}</p>
+                        </div>
+                    </div>
+                </div>
+           </div>`
+        : `<div class="animate-in space-y-3">
+                <div class="bg-red-50 border border-red-200 rounded-2xl p-4">
+                    <div class="flex items-center gap-2.5 mb-2">
+                        <span class="text-2xl">💪</span>
+                        <span class="font-bold text-red-800 text-[15px]">Presque ! Continue comme ça.</span>
+                    </div>
+                    <p class="text-red-600 text-sm mb-0.5">Ta réponse : <span class="line-through text-red-400">${chosenText}</span></p>
+                    <p class="text-red-800 text-sm font-semibold">Bonne réponse : <strong>${correctText}</strong></p>
+                </div>
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+                    <div class="flex items-start gap-2.5">
+                        <span class="text-xl mt-0.5 flex-shrink-0">📖</span>
+                        <div>
+                            <p class="font-bold text-amber-800 text-[13px] mb-1.5">คำอธิบาย</p>
+                            <p class="text-amber-900 thai text-[13.5px] leading-relaxed">${exercise.explication_th}</p>
+                        </div>
+                    </div>
+                </div>
+           </div>`;
+
+    resultZ.classList.remove('hidden');
+    newExZ.classList.remove('hidden');
     setTimeout(() => resultZ.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 120);
 }
 
