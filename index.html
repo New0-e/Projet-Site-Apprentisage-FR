@@ -1954,12 +1954,14 @@ Règles strictes :
 1. La phrase est NATURELLE et utilise un nombre PRÉCIS et VARIÉ.
 2. phrase_avant = tout ce qui précède le trou.
 3. phrase_apres = tout ce qui suit le trou.
-4. consigne_th : dis en thaïlandais quel nombre chercher et s'il faut écrire en lettres ou en chiffres.
-5. explication_th : explique en thaïlandais la règle d'écriture de CE nombre précis.
-6. Tu peux utiliser n'importe quel nombre de 0 à 1000.
+4. reponse_attendue = la réponse principale (forme canonique).
+5. reponses_acceptees = tableau de TOUTES les formes correctes acceptables (ex: variantes orthographiques, avec/sans trait d'union, chiffres ET lettres si les deux sont valides). Doit contenir au minimum reponse_attendue.
+6. consigne_th : dis en thaïlandais quel nombre chercher et s'il faut écrire en lettres ou en chiffres.
+7. explication_th : explique en thaïlandais la règle d'écriture de CE nombre précis.
+8. Tu peux utiliser n'importe quel nombre de 0 à 1000.
 
 Réponds UNIQUEMENT avec un objet JSON valide, sans texte avant ni après, sans backticks :
-{"consigne_th":"...","phrase_avant":"...","reponse_attendue":"...","phrase_apres":"...","explication_th":"..."}`
+{"consigne_th":"...","phrase_avant":"...","reponse_attendue":"...","reponses_acceptees":["...","..."],"phrase_apres":"...","explication_th":"..."}`
         : exerciseType === 'qcm'
         ? `Tu es un professeur de français expert qui enseigne à une apprenante thaïlandaise (niveau A1–B1).
 
@@ -1989,11 +1991,13 @@ Règles strictes :
 1. La phrase est naturelle, correcte en français, et illustre parfaitement le point ciblé.
 2. phrase_avant = tout ce qui précède le trou (chaîne vide "" si le trou est en début de phrase).
 3. phrase_apres = tout ce qui suit le trou (chaîne vide "" si le trou est en fin de phrase).
-4. consigne_th : instruction claire en thaïlandais, dis exactement ce qu'on cherche à compléter.
-5. explication_th : explication pédagogique en thaïlandais — explique POURQUOI c'est cette réponse et la règle derrière.
+4. reponse_attendue = la réponse principale (forme canonique, celle qu'on affiche en correction).
+5. reponses_acceptees = tableau de TOUTES les formes correctes acceptables pour ce trou (ex: "du" ET "de l'" si les deux conviennent, formes masculin/féminin si les deux sont possibles, contractions équivalentes…). Doit contenir au minimum reponse_attendue.
+6. consigne_th : instruction claire en thaïlandais, dis exactement ce qu'on cherche à compléter.
+7. explication_th : explication pédagogique en thaïlandais — explique POURQUOI c'est cette réponse et la règle derrière.
 
 Réponds UNIQUEMENT avec un objet JSON valide, sans texte avant ni après, sans backticks :
-{"consigne_th":"...","phrase_avant":"...","reponse_attendue":"...","phrase_apres":"...","explication_th":"..."}`;
+{"consigne_th":"...","phrase_avant":"...","reponse_attendue":"...","reponses_acceptees":["...","..."],"phrase_apres":"...","explication_th":"..."}`;
 
     try {
         const res = await fetch('/api/generate', {
@@ -2126,15 +2130,28 @@ function validateAnswer() {
            .normalize('NFD').replace(/[̀-ͯ]/g, '')
            .replace(/['']/g, "'");
 
-    const correct = normalize(userAnswer) === normalize(exercise.reponse_attendue);
+    const accepted = (exercise.reponses_acceptees && exercise.reponses_acceptees.length)
+        ? exercise.reponses_acceptees
+        : [exercise.reponse_attendue];
+    const correct = accepted.some(r => normalize(userAnswer) === normalize(r));
+    const mainAnswer = exercise.reponse_attendue;
 
     input.disabled = true;
 
-    const fullSentence = escapeHtml((exercise.phrase_avant || '') + exercise.reponse_attendue + (exercise.phrase_apres || ''));
+    const fullSentence = escapeHtml((exercise.phrase_avant || '') + mainAnswer + (exercise.phrase_apres || ''));
     const fullWithHighlight =
         escapeHtml(exercise.phrase_avant || '') +
-        `<span class="text-green-700 font-bold">${escapeHtml(exercise.reponse_attendue)}</span>` +
+        `<span class="text-green-700 font-bold">${escapeHtml(mainAnswer)}</span>` +
         escapeHtml(exercise.phrase_apres || '');
+
+    const altAnswers = accepted.filter(r => normalize(r) !== normalize(mainAnswer));
+    const altHtml = altAnswers.length
+        ? `<p class="text-green-600 text-sm mt-1">Aussi accepté : ${altAnswers.map(r => `<strong>${escapeHtml(r)}</strong>`).join(', ')}</p>`
+        : '';
+
+    const wrongAltHtml = accepted.length > 1
+        ? `<p class="text-red-700 text-sm mt-1">Réponses acceptées : ${accepted.map(r => `<strong>${escapeHtml(r)}</strong>`).join(', ')}</p>`
+        : `<p class="text-red-800 text-sm font-semibold mt-1">Bonne réponse : <strong>${escapeHtml(mainAnswer)}</strong></p>`;
 
     if (correct) {
         input.style.borderColor = '#22C55E';
@@ -2150,7 +2167,8 @@ function validateAnswer() {
                         <span class="text-2xl">🎉</span>
                         <span class="font-bold text-green-800 text-[15px]">Excellent ! Bonne réponse !</span>
                     </div>
-                    <p class="text-green-700 text-sm">La réponse : <strong class="text-green-900">${escapeHtml(exercise.reponse_attendue)}</strong></p>
+                    <p class="text-green-700 text-sm">La réponse : <strong class="text-green-900">${escapeHtml(mainAnswer)}</strong></p>
+                    ${altHtml}
                 </div>
                 <div class="bg-[#F5F5F7] rounded-2xl px-4 py-3.5">
                     <p class="text-[10.5px] font-bold uppercase tracking-widest text-[#9CA3AF] mb-1.5">Phrase complète</p>
@@ -2182,7 +2200,7 @@ function validateAnswer() {
                         <span class="font-bold text-red-800 text-[15px]">Presque ! Continue comme ça.</span>
                     </div>
                     <p class="text-red-600 text-sm mb-0.5">Ta réponse : <span class="line-through text-red-400">${escapeHtml(userAnswer)}</span></p>
-                    <p class="text-red-800 text-sm font-semibold">Bonne réponse : <strong>${escapeHtml(exercise.reponse_attendue)}</strong></p>
+                    ${wrongAltHtml}
                 </div>
                 <div class="bg-[#F5F5F7] rounded-2xl px-4 py-3.5">
                     <p class="text-[10.5px] font-bold uppercase tracking-widest text-[#9CA3AF] mb-1.5">Phrase correcte</p>
