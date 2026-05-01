@@ -249,8 +249,8 @@
                 <div class="grid grid-cols-3 gap-4 w-full max-w-xs">
                     <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col items-center">
                         <div class="text-2xl mb-1.5">📚</div>
-                        <div class="text-[12px] font-semibold text-[#1D1D1F]">31 บทเรียน</div>
-                        <div class="text-[10px] text-[#6E6E73] thai">6 phases</div>
+                        <div class="text-[12px] font-semibold text-[#1D1D1F]">38 บทเรียน</div>
+                        <div class="text-[10px] text-[#6E6E73] thai">7 phases</div>
                     </div>
                     <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col items-center">
                         <div class="text-2xl mb-1.5">✨</div>
@@ -297,6 +297,8 @@ const curriculum = [
               topic: "the eight French subject pronouns: Je, Tu, Il, Elle, On, Nous, Vous, Ils, Elles — their meaning and how to choose the right one" },
             { id: "1-4", title: "Les Nombres (0 – 1000)", titleTh: "ตัวเลข (0–1000)",
               topic: "French numbers: 0–20 (irregular), 21–69, then the tricky 70 (soixante-dix), 80 (quatre-vingts), 90 (quatre-vingt-dix), up to 1000" },
+            { id: "1-7", title: "Phrases de Survie", titleTh: "ประโยคอยู่รอด",
+              topic: "essential survival phrases for a beginner in France: Je ne comprends pas, Pouvez-vous répéter, emergency numbers (15/17/18/112), asking for help, pharmacy basics" },
         ]
     },
     {
@@ -372,8 +374,22 @@ const curriculum = [
               topic: "dialogues for shopping at a French market or store, and ordering food at a restaurant (Je voudrais..., L'addition s'il vous plaît, Avez-vous...?, C'est combien?) with polite formulas" },
             { id: "6-3", title: "La Bise, les Repas et le Savoir-vivre", titleTh: "วัฒนธรรมฝรั่งเศส",
               topic: "French cultural etiquette: la bise (cheek-kiss greeting — when and how), table manners (Bon appétit, waiting to eat, cheese course), and general social savoir-vivre customs" },
+            { id: "7-1", title: "Les Métiers et les Loisirs", titleTh: "อาชีพและงานอดิเรก",
+              topic: "French professions vocabulary and how to say what you do for a living (Qu'est-ce que vous faites dans la vie?), plus common leisure activities with faire du/de la" },
         ]
     }
+,
+{
+    id: 7, phase: "Phase 7", title: "La France Profonde", titleTh: "วัฒนธรรมเชิงลึก", icon: "🥖", color: "orange",
+    lessons: [
+        { id: "8-1", title: "La Gastronomie Française", titleTh: "อาหารและไวน์ฝรั่งเศส",
+          topic: "French gastronomy: typical dishes (steak-frites, crêpes, bouillabaisse, ratatouille), famous cheeses (camembert, brie, roquefort), wine culture, meal structure in France (petit-déjeuner, déjeuner, goûter, dîner)" },
+        { id: "8-2", title: "Les Fêtes et Jours Fériés", titleTh: "วันหยุดและเทศกาลฝรั่งเศส",
+          topic: "French national holidays and celebrations: 14 juillet (Bastille Day), Noël, Pâques, Toussaint, Mardi Gras, Épiphanie — with cultural context and typical expressions" },
+        { id: "8-3", title: "La France : Géographie et Identité", titleTh: "ฝรั่งเศส: ภูมิศาสตร์และอัตลักษณ์",
+          topic: "French geography (Paris and major cities: Lyon, Marseille, Bordeaux, Nice), famous landmarks (Tour Eiffel, Château de Versailles, Pont du Gard), French motto Liberté-Égalité-Fraternité, and the concept of laïcité" },
+    ]
+}
 ];
 
 // ============================================================
@@ -486,6 +502,16 @@ const LESSONS_CONTENT = {
   <p class="text-[13px]">— <strong>Bonjour ! Comment vous appelez-vous ?</strong><br><span class="thai text-[12.5px] text-green-800">สวัสดี! คุณชื่ออะไร?</span></p>
   <p class="text-[13px] mt-2">— <strong>Je m'appelle Nong. Et vous ?</strong><br><span class="thai text-[12.5px] text-green-800">ฉันชื่อน้อง แล้วคุณล่ะ?</span></p>
   <p class="text-[13px] mt-2">— <strong>Je m'appelle Pierre. Enchanté !</strong><br><span class="thai text-[12.5px] text-green-800">ฉันชื่อปิแอร์ ยินดีที่ได้รู้จัก!</span></p></div>
+
+  <div class="rule-box"><p class="sec-head">🆘 Phrases de communication essentielles</p>
+  <table class="ltable"><thead><tr><th>Phrase</th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td class="fr">Je ne comprends pas.</td><td class="th">ฉันไม่เข้าใจ</td></tr>
+  <tr><td class="fr">Pardon ? / Vous pouvez répéter ?</td><td class="th">อะไรนะ? / ช่วยพูดซ้ำได้ไหม?</td></tr>
+  <tr><td class="fr">Plus lentement, s'il vous plaît.</td><td class="th">ช้าๆ หน่อยได้ไหม?</td></tr>
+  <tr><td class="fr">Parlez-vous anglais / thaï ?</td><td class="th">คุณพูดภาษาอังกฤษ/ไทยได้ไหม?</td></tr>
+  <tr><td class="fr">Je ne parle pas bien français.</td><td class="th">ฉันพูดภาษาฝรั่งเศสไม่เก่ง</td></tr>
+  <tr><td class="fr">Comment dit-on … en français ?</td><td class="th">… ภาษาฝรั่งเศสพูดว่าอะไร?</td></tr>
+  </tbody></table></div>
 </div>`,
 
 "1-3": `
@@ -549,6 +575,20 @@ const LESSONS_CONTENT = {
   <tr><td class="fr">101</td><td>cent un</td><td class="fr">1 000</td><td>mille</td></tr>
   <tr><td class="fr">500</td><td>cinq cents</td><td class="fr">2 000</td><td>deux mille</td></tr>
   </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">🔢 Nombres ordinaux — เลขลำดับ (1er, 2ème…)</p>
+  <p class="thai text-[12.5px] text-blue-900 mb-2">ใช้สำหรับ: ชั้น (อาคาร) · วันที่ · ลำดับ · ฤดูกาล</p>
+  <table class="ltable"><thead><tr><th>#</th><th>Ordinal</th><th class="thai">ความหมาย</th><th class="thai">ตัวอย่าง</th></tr></thead><tbody>
+  <tr><td>1</td><td class="fr">premier / première</td><td class="th">ที่หนึ่ง (1er/1ère)</td><td class="note">le 1er janvier (วันที่ 1 มกราคม)</td></tr>
+  <tr><td>2</td><td class="fr">deuxième (2ème)</td><td class="th">ที่สอง</td><td class="note">au 2ème étage (ชั้น 2)</td></tr>
+  <tr><td>3</td><td class="fr">troisième (3ème)</td><td class="th">ที่สาม</td><td class="note">la 3ème rue (ถนนสายที่ 3)</td></tr>
+  <tr><td>4</td><td class="fr">quatrième (4ème)</td><td class="th">ที่สี่</td><td></td></tr>
+  <tr><td>5</td><td class="fr">cinquième (5ème)</td><td class="th">ที่ห้า</td><td></td></tr>
+  <tr><td>10</td><td class="fr">dixième (10ème)</td><td class="th">ที่สิบ</td><td></td></tr>
+  <tr><td>20</td><td class="fr">vingtième (20ème)</td><td class="th">ที่ยี่สิบ</td><td></td></tr>
+  <tr><td>100</td><td class="fr">centième (100ème)</td><td class="th">ที่ร้อย</td><td></td></tr>
+  </tbody></table>
+  <p class="thai text-[12px] text-blue-800 mt-2">💡 กฎ: เพิ่ม <strong>-ième</strong> หลังตัวเลข (ยกเว้น premier/première สำหรับ 1)<br>ใช้บ่อยมาก: <strong>C'est à quel étage ?</strong> (อยู่ชั้นไหน?) — <strong>Au troisième étage.</strong> (ชั้น 3)</p></div>
 </div>`,
 
 "1-5": `
@@ -637,6 +677,20 @@ const LESSONS_CONTENT = {
   <tr><td>Vous</td><td class="fr">allez</td><td class="th">Vous allez bien ? (คุณสบายดีไหม?)</td></tr>
   <tr><td>Ils/Elles</td><td class="fr">vont</td><td class="th">Ils vont à Paris. (พวกเขาไปปารีส)</td></tr>
   </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">💡 Expressions essentielles avec AVOIR (ใช้ avoir ไม่ใช่ être!)</p>
+  <p class="thai text-[12px] text-blue-900 mb-2">ภาษาฝรั่งเศสใช้ "avoir" สำหรับความรู้สึกทางร่างกาย — ต่างจากภาษาไทยและอังกฤษ!</p>
+  <table class="ltable"><thead><tr><th>Expression</th><th class="thai">ความหมาย</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">avoir faim</td><td class="th">หิว</td><td class="note">J'ai très faim ! (ฉันหิวมาก!)</td></tr>
+  <tr><td class="fr">avoir soif</td><td class="th">กระหาย</td><td class="note">Tu as soif ? (คุณกระหายไหม?)</td></tr>
+  <tr><td class="fr">avoir chaud</td><td class="th">รู้สึกร้อน</td><td class="note">J'ai chaud ! (ฉันร้อน!)</td></tr>
+  <tr><td class="fr">avoir froid</td><td class="th">รู้สึกหนาว</td><td class="note">Il a froid. (เขาหนาว)</td></tr>
+  <tr><td class="fr">avoir sommeil</td><td class="th">ง่วงนอน</td><td class="note">J'ai sommeil. (ฉันง่วงนอน)</td></tr>
+  <tr><td class="fr">avoir raison</td><td class="th">พูดถูก/ถูกต้อง</td><td class="note">Tu as raison. (คุณพูดถูก)</td></tr>
+  <tr><td class="fr">avoir tort</td><td class="th">พูดผิด/คิดผิด</td><td class="note">J'ai tort. (ฉันผิด)</td></tr>
+  <tr><td class="fr">avoir l'air + adj</td><td class="th">ดูเหมือน</td><td class="note">Tu as l'air fatigué. (คุณดูเหนื่อย)</td></tr>
+  </tbody></table>
+  <p class="thai text-[12px] text-blue-800 mt-2">⚠️ ห้ามใช้ être! ❌ "Je suis faim" → ✅ "<strong>J'ai faim</strong>"</p></div>
 </div>`,
 
 "2-3": `
@@ -847,6 +901,19 @@ const LESSONS_CONTENT = {
   <tr><td class="fr">le poisson</td><td class="th">ปลา</td><td class="fr">le café</td><td class="th">กาแฟ</td></tr>
   <tr><td class="fr">les œufs</td><td class="th">ไข่</td><td class="fr">le jus d'orange</td><td class="th">น้ำส้มคั้น</td></tr>
   </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">🥐 Plats et spécialités typiques français</p>
+  <table class="ltable"><thead><tr><th>Spécialité</th><th class="thai">คำอธิบาย</th></tr></thead><tbody>
+  <tr><td class="fr">la baguette</td><td class="th">ขนมปังแท่งยาว สัญลักษณ์ฝรั่งเศส กินทุกวัน</td></tr>
+  <tr><td class="fr">le croissant</td><td class="th">ขนมปังรูปพระจันทร์เสี้ยว กินตอนเช้าพร้อมกาแฟ</td></tr>
+  <tr><td class="fr">le steak-frites</td><td class="th">สเต็กกับมันทอด อาหารแห่งชาติฝรั่งเศส</td></tr>
+  <tr><td class="fr">les crêpes</td><td class="th">แพนเค้กบางๆ — หวาน (sucré) หรือเค็ม (salé = galette)</td></tr>
+  <tr><td class="fr">la soupe à l'oignon</td><td class="th">ซุปหัวหอมกับชีสละลาย อาหารคลาสสิกฝรั่งเศส</td></tr>
+  <tr><td class="fr">la ratatouille</td><td class="th">ผักอบเมดิเตอร์เรเนียน อาหารทางใต้ของฝรั่งเศส</td></tr>
+  <tr><td class="fr">les macarons</td><td class="th">ขนมอัลมอนด์สีสันสวยงาม แบรนด์ Ladurée มีชื่อเสียงที่สุด</td></tr>
+  <tr><td class="fr">le camembert / le brie</td><td class="th">ชีสนิ่มที่มีชื่อเสียงที่สุด มากกว่า 400 ชนิดในฝรั่งเศส!</td></tr>
+  </tbody></table>
+  <p class="thai text-[12px] text-green-800 mt-2">💡 มื้ออาหารฝรั่งเศส: <strong>petit-déjeuner</strong> (เช้า) · <strong>déjeuner</strong> (กลางวัน 12h-14h สำคัญมาก!) · <strong>goûter</strong> (บ่าย — ของเด็ก) · <strong>dîner</strong> (เย็น 19h-21h)</p></div>
 </div>`,
 
 "4-1": `
@@ -946,6 +1013,23 @@ const LESSONS_CONTENT = {
 
   <div class="rule-box"><p class="sec-head">🍂 ฤดูกาล — Saisons</p>
   <p class="text-[13px]"><strong>le printemps</strong> <span class="thai">(ฤดูใบไม้ผลิ)</span> · <strong>l'été</strong> <span class="thai">(ฤดูร้อน)</span> · <strong>l'automne</strong> <span class="thai">(ฤดูใบไม้ร่วง)</span> · <strong>l'hiver</strong> <span class="thai">(ฤดูหนาว)</span></p></div>
+
+  <div><p class="sec-head">📅 Format de la date — รูปแบบวันที่</p>
+  <table class="ltable"><thead><tr><th class="thai">ภาษาไทย</th><th>Français</th><th class="thai">สังเกต</th></tr></thead><tbody>
+  <tr><td class="th">วันที่ 1 มกราคม 2024</td><td class="fr">le 1er janvier 2024</td><td class="note">ใช้ "le" นำหน้าวันที่เสมอ</td></tr>
+  <tr><td class="th">วันที่ 15 พฤษภาคม</td><td class="fr">le 15 mai</td><td class="note">ตัวเลขปกติ ยกเว้นวันที่ 1 (1er)</td></tr>
+  <tr><td class="th">วันนี้</td><td class="fr">Aujourd'hui, c'est le … (jour)</td><td class="note">Aujourd'hui c'est lundi 3 avril.</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">⏳ Expressions de temps — นิพจน์บอกเวลา</p>
+  <table class="ltable"><thead><tr><th>Expression</th><th class="thai">ความหมาย</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">il y a + durée</td><td class="th">…ที่แล้ว (อดีต)</td><td class="note">Il y a 2 ans. (2 ปีที่แล้ว)</td></tr>
+  <tr><td class="fr">dans + durée</td><td class="th">อีก…ข้างหน้า (อนาคต)</td><td class="note">Dans 5 minutes. (อีก 5 นาที)</td></tr>
+  <tr><td class="fr">depuis + durée/date</td><td class="th">มาตั้งแต่ / มานานแล้ว</td><td class="note">J'apprends le français depuis 3 mois. (เรียนมา 3 เดือนแล้ว)</td></tr>
+  <tr><td class="fr">pendant + durée</td><td class="th">นาน / ตลอดช่วง</td><td class="note">Pendant 2 heures. (นาน 2 ชั่วโมง)</td></tr>
+  <tr><td class="fr">en + durée</td><td class="th">ภายใน (ใช้เวลา)</td><td class="note">J'arrive en 10 minutes. (10 นาทีก็ถึงแล้ว)</td></tr>
+  </tbody></table>
+  <p class="thai text-[12px] text-blue-800 mt-2">⚠️ <strong>depuis</strong> ใช้กับ présent เมื่อสิ่งนั้นยังดำเนินอยู่: "J'habite à Paris <strong>depuis</strong> 2 ans." (ฉันอยู่ปารีสมา 2 ปีแล้วและยังอยู่อยู่)</p></div>
 </div>`,
 
 "4-4": `
@@ -1192,6 +1276,25 @@ const LESSONS_CONTENT = {
   <p class="text-[13px]"><strong>Bon appétit !</strong> <span class="thai text-[12.5px] text-green-800">อร่อยนะ! (พูดก่อนเริ่มกินเสมอ)</span></p>
   <p class="text-[13px] mt-1.5"><strong>C'est délicieux, vous avez bien cuisiné !</strong> <span class="thai text-[12.5px] text-green-800">อร่อยมาก คุณทำอาหารเก่งมาก!</span></p>
   <p class="text-[13px] mt-1.5"><strong>Excusez-moi de vous déranger.</strong> <span class="thai text-[12.5px] text-green-800">ขอโทษที่รบกวน</span></p></div>
+
+  <div class="rule-box"><p class="sec-head">🇫🇷 Valeurs et caractère français</p>
+  <table class="ltable"><thead><tr><th class="thai">หัวข้อ</th><th class="thai">รายละเอียด</th></tr></thead><tbody>
+  <tr><td class="th">Liberté · Égalité · Fraternité</td><td class="note">คติพจน์ชาติฝรั่งเศส — เสรีภาพ ความเสมอภาค ภราดรภาพ (บนทุกอาคารราชการ)</td></tr>
+  <tr><td class="th">La laïcité</td><td class="note">การแยกศาสนาออกจากรัฐอย่างเคร่งครัด — ห้ามแสดงสัญลักษณ์ทางศาสนาในโรงเรียนรัฐ</td></tr>
+  <tr><td class="th">Les vacances</td><td class="note">ฝรั่งเศสมีวันหยุดพักผ่อนประมาณ 5 สัปดาห์ต่อปี! เดือนสิงหาคมหลายร้านปิด</td></tr>
+  <tr><td class="th">Les grèves</td><td class="note">การนัดหยุดงานเป็นส่วนหนึ่งของวัฒนธรรม ขนส่งสาธารณะอาจหยุดได้ทุกเมื่อ</td></tr>
+  <tr><td class="th">La philosophie</td><td class="note">ชาวฝรั่งเศสรักการถกเถียงความคิด ไม่ถือว่าเสียมารยาท — ถือว่าเป็นปัญญา!</td></tr>
+  <tr><td class="th">Le pourboire</td><td class="note">ทิปไม่บังคับในฝรั่งเศส (ค่าบริการรวมอยู่แล้ว) แต่อาจฝาก 1-2€ ถ้าพอใจ</td></tr>
+  </tbody></table></div>
+
+  <div class="tip-box"><p class="sec-head">🆚 ฝรั่งเศส vs ไทย — วัฒนธรรมที่ต่างกัน</p>
+  <table class="ltable"><thead><tr><th class="thai">เรื่อง</th><th class="thai">ไทย 🇹🇭</th><th class="thai">ฝรั่งเศส 🇫🇷</th></tr></thead><tbody>
+  <tr><td class="th">การทักทาย</td><td class="note">ไหว้ (ไม่สัมผัส)</td><td class="note">La bise หรือจับมือ</td></tr>
+  <tr><td class="th">เวลากินข้าว</td><td class="note">ยืดหยุ่น ทุกเวลา</td><td class="note">12h-14h และ 19h-21h เคร่งครัด</td></tr>
+  <tr><td class="th">การต่อรองราคา</td><td class="note">ทำได้ในตลาด</td><td class="note">ไม่ทำในฝรั่งเศส ราคาคือราคา</td></tr>
+  <tr><td class="th">การถามเงินเดือน</td><td class="note">พอถามได้</td><td class="note">หัวข้อต้องห้ามมาก! อย่าถาม</td></tr>
+  <tr><td class="th">ความตรงต่อเวลา</td><td class="note">ยืดหยุ่น</td><td class="note">ธุรกิจ: ตรงเวลาสำคัญมาก แต่งานสังสรรค์ช้า 15-30 นาทีเป็นเรื่องปกติ</td></tr>
+  </tbody></table></div>
 </div>`,
 
 "1-6": `
@@ -1433,6 +1536,246 @@ const LESSONS_CONTENT = {
   <p class="text-[13px] mt-2"><strong>J'habite en Thaïlande, à Bangkok, près du parc Lumphini.</strong><br><span class="thai text-[12.5px] text-green-800">ฉันอาศัยอยู่ในประเทศไทย ที่กรุงเทพ ใกล้ๆ สวนลุมพินี</span></p></div>
 </div>`,
 
+"1-7": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">ก่อนจะพูดภาษาฝรั่งเศสได้คล่อง สิ่งสำคัญที่สุดคือการรู้จักประโยคที่ช่วยให้คุณ "อยู่รอด" ในฝรั่งเศสได้! ประโยคเหล่านี้จะช่วยคุณในทุกสถานการณ์ฉุกเฉิน</p><p class="text-[12px] text-amber-700 mt-1 italic">Ces phrases essentielles vous permettent de vous débrouiller même avec peu de français !</p></div>
+
+  <div class="rule-box"><p class="sec-head">🗣️ เมื่อไม่เข้าใจ — Quand on ne comprend pas</p>
+  <table class="ltable"><thead><tr><th>Phrase</th><th class="thai">ความหมาย</th><th class="thai">ระดับ</th></tr></thead><tbody>
+  <tr><td class="fr">Je ne comprends pas.</td><td class="th">ฉันไม่เข้าใจ</td><td class="note">ใช้บ่อยที่สุด!</td></tr>
+  <tr><td class="fr">Pardon ?</td><td class="th">อะไรนะ? (ขอโทษ?)</td><td class="note">สั้น สุภาพ</td></tr>
+  <tr><td class="fr">Pouvez-vous répéter, s'il vous plaît ?</td><td class="th">ช่วยพูดซ้ำได้ไหมครับ?</td><td class="note">ทางการ</td></tr>
+  <tr><td class="fr">Plus lentement, s'il vous plaît.</td><td class="th">ช้าๆ หน่อยได้ไหม?</td><td class="note">ขอให้พูดช้าลง</td></tr>
+  <tr><td class="fr">Parlez-vous anglais ?</td><td class="th">คุณพูดภาษาอังกฤษได้ไหม?</td><td class="note">ทางออกฉุกเฉิน</td></tr>
+  <tr><td class="fr">Je ne parle pas bien français.</td><td class="th">ฉันพูดภาษาฝรั่งเศสไม่เก่ง</td><td class="note">พูดตั้งแต่ต้น!</td></tr>
+  <tr><td class="fr">Comment dit-on … en français ?</td><td class="th">… ภาษาฝรั่งเศสพูดว่าอะไร?</td><td class="note">ถามคำศัพท์</td></tr>
+  <tr><td class="fr">Qu'est-ce que ça veut dire ?</td><td class="th">นี่แปลว่าอะไร?</td><td class="note">ถามความหมาย</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🆘 ขอความช่วยเหลือ — Demander de l'aide</p>
+  <table class="ltable"><thead><tr><th>Phrase</th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td class="fr">Excusez-moi, pouvez-vous m'aider ?</td><td class="th">ขอโทษครับ ช่วยฉันได้ไหม?</td></tr>
+  <tr><td class="fr">J'ai besoin d'aide !</td><td class="th">ฉันต้องการความช่วยเหลือ!</td></tr>
+  <tr><td class="fr">Au secours !</td><td class="th">ช่วยด้วย! (ฉุกเฉินมาก)</td></tr>
+  <tr><td class="fr">Appelez la police, s'il vous plaît !</td><td class="th">ช่วยโทรเรียกตำรวจด้วย!</td></tr>
+  <tr><td class="fr">Appelez une ambulance !</td><td class="th">ช่วยเรียกรถพยาบาลด้วย!</td></tr>
+  <tr><td class="fr">Je suis perdu(e).</td><td class="th">ฉันหลงทาง</td></tr>
+  <tr><td class="fr">J'ai perdu mon passeport.</td><td class="th">ฉันทำหนังสือเดินทางหาย</td></tr>
+  <tr><td class="fr">On m'a volé mon sac !</td><td class="th">กระเป๋าของฉันถูกขโมย!</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">📞 Numéros d'urgence en France — เบอร์ฉุกเฉินในฝรั่งเศส</p>
+  <table class="ltable"><thead><tr><th>Numéro</th><th class="thai">บริการ</th><th class="thai">ใช้เมื่อ</th></tr></thead><tbody>
+  <tr><td class="fr" style="font-size:18px;font-weight:800;color:#DC2626">15</td><td class="th">SAMU (รถพยาบาล)</td><td class="note">เจ็บป่วย ฉุกเฉินทางการแพทย์</td></tr>
+  <tr><td class="fr" style="font-size:18px;font-weight:800;color:#1D4ED8">17</td><td class="th">Police (ตำรวจ)</td><td class="note">อาชญากรรม อุบัติเหตุ</td></tr>
+  <tr><td class="fr" style="font-size:18px;font-weight:800;color:#D97706">18</td><td class="th">Pompiers (ดับเพลิง)</td><td class="note">ไฟไหม้ อุบัติเหตุร้ายแรง</td></tr>
+  <tr><td class="fr" style="font-size:18px;font-weight:800;color:#059669">112</td><td class="th">Urgences européennes</td><td class="note">เบอร์รวม ใช้ได้ทั่วยุโรป โทรฟรีจากทุกเครือข่าย</td></tr>
+  </tbody></table>
+  <p class="thai text-[12px] text-blue-800 mt-2">💡 โทร <strong>112</strong> จากโทรศัพท์ไทยในฝรั่งเศสได้เลย! ไม่ต้องมีซิมก็โทรได้!</p></div>
+
+  <div><p class="sec-head">🏥 ที่ร้านขายยา — À la pharmacie</p>
+  <table class="ltable"><thead><tr><th>Phrase</th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td class="fr">J'ai mal à la tête / au ventre / à la gorge.</td><td class="th">ปวดหัว / ปวดท้อง / เจ็บคอ</td></tr>
+  <tr><td class="fr">J'ai de la fièvre.</td><td class="th">ฉันมีไข้</td></tr>
+  <tr><td class="fr">Je suis allergique à…</td><td class="th">ฉันแพ้…</td></tr>
+  <tr><td class="fr">Avez-vous quelque chose contre la douleur ?</td><td class="th">มียาแก้ปวดไหม?</td></tr>
+  <tr><td class="fr">Je voudrais voir un médecin.</td><td class="th">ฉันอยากพบแพทย์</td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ บทสนทนาฉุกเฉิน</p>
+  <p class="text-[13px]">— <strong>Excusez-moi, je suis perdue. Pouvez-vous m'aider ?</strong><br><span class="thai text-[12.5px] text-green-800">ขอโทษค่ะ ฉันหลงทาง ช่วยฉันได้ไหม?</span></p>
+  <p class="text-[13px] mt-2">— <strong>Bien sûr ! Où voulez-vous aller ?</strong><br><span class="thai text-[12.5px] text-green-800">แน่นอน! คุณอยากไปที่ไหน?</span></p>
+  <p class="text-[13px] mt-2">— <strong>Je ne comprends pas bien. Plus lentement, s'il vous plaît.</strong><br><span class="thai text-[12.5px] text-green-800">ฉันเข้าใจไม่ค่อยได้ ช้าๆ หน่อยได้ไหม?</span></p></div>
+</div>`,
+
+"7-1": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">หนึ่งในคำถามที่ถูกถามบ่อยที่สุดในการสนทนาภาษาฝรั่งเศสคือ "Qu'est-ce que vous faites dans la vie?" (คุณทำอาชีพอะไร?) และ "Qu'est-ce que vous faites pendant votre temps libre?" (คุณทำอะไรในเวลาว่าง?) เรียนคำศัพท์เหล่านี้แล้วจะคุยได้ทุกงานสังสรรค์!</p></div>
+
+  <div><p class="sec-head">💼 อาชีพ — Les métiers</p>
+  <table class="ltable"><thead><tr><th>Métier (M/F)</th><th class="thai">ความหมาย</th><th>Métier (M/F)</th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td class="fr">médecin</td><td class="th">แพทย์ (ไม่เปลี่ยนรูป)</td><td class="fr">infirmier / infirmière</td><td class="th">พยาบาล</td></tr>
+  <tr><td class="fr">professeur / prof</td><td class="th">ครู/อาจารย์</td><td class="fr">étudiant(e)</td><td class="th">นักเรียน/นักศึกษา</td></tr>
+  <tr><td class="fr">ingénieur(e)</td><td class="th">วิศวกร</td><td class="fr">architecte</td><td class="th">สถาปนิก</td></tr>
+  <tr><td class="fr">cuisinier / cuisinière</td><td class="th">พ่อครัว/แม่ครัว</td><td class="fr">chef (cuisinier)</td><td class="th">เชฟ</td></tr>
+  <tr><td class="fr">acteur / actrice</td><td class="th">นักแสดง</td><td class="fr">chanteur / chanteuse</td><td class="th">นักร้อง</td></tr>
+  <tr><td class="fr">avocat(e)</td><td class="th">ทนายความ</td><td class="fr">journaliste</td><td class="th">นักข่าว (ไม่เปลี่ยนรูป)</td></tr>
+  <tr><td class="fr">comptable</td><td class="th">นักบัญชี</td><td class="fr">vendeur / vendeuse</td><td class="th">พนักงานขาย</td></tr>
+  <tr><td class="fr">photographe</td><td class="th">ช่างภาพ</td><td class="fr">traducteur / traductrice</td><td class="th">นักแปล</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">📌 Comment parler de son métier</p>
+  <table class="ltable"><thead><tr><th>Structure</th><th>Exemple</th><th class="thai">สังเกต</th></tr></thead><tbody>
+  <tr><td class="fr">Je suis + métier<br><span class="note">(sans article!)</span></td><td class="note">Je suis médecin.<br>Elle est professeure.</td><td class="th">ไม่ใช้ article หน้าอาชีพ!<br>✅ Je suis médecin ❌ Je suis un médecin</td></tr>
+  <tr><td class="fr">Je travaille comme + article + métier</td><td class="note">Je travaille comme ingénieur.</td><td class="th">ใช้เน้นบทบาทชั่วคราว</td></tr>
+  <tr><td class="fr">Qu'est-ce que vous faites dans la vie ?</td><td class="note">Qu'est-ce que tu fais dans la vie ?</td><td class="th">คำถามอาชีพที่ใช้บ่อยที่สุด</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🎯 งานอดิเรก — Les loisirs</p>
+  <table class="ltable"><thead><tr><th>Activité</th><th class="thai">ความหมาย</th><th>Activité</th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td class="fr">lire (des livres)</td><td class="th">อ่านหนังสือ</td><td class="fr">voyager</td><td class="th">ท่องเที่ยว</td></tr>
+  <tr><td class="fr">regarder des films / séries</td><td class="th">ดูหนัง/ซีรีส์</td><td class="fr">cuisiner</td><td class="th">ทำอาหาร</td></tr>
+  <tr><td class="fr">écouter de la musique</td><td class="th">ฟังเพลง</td><td class="fr">dessiner / peindre</td><td class="th">วาดรูป/ระบาย</td></tr>
+  <tr><td class="fr">jouer de la guitare/piano</td><td class="th">เล่นกีตาร์/เปียโน</td><td class="fr">chanter</td><td class="th">ร้องเพลง</td></tr>
+  <tr><td class="fr">faire du sport</td><td class="th">เล่นกีฬา</td><td class="fr">faire du yoga</td><td class="th">ทำโยคะ</td></tr>
+  <tr><td class="fr">faire de la natation</td><td class="th">ว่ายน้ำ</td><td class="fr">faire du vélo</td><td class="th">ปั่นจักรยาน</td></tr>
+  <tr><td class="fr">se promener</td><td class="th">เดินเล่น</td><td class="fr">faire des photos</td><td class="th">ถ่ายรูป</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">📌 J'aime / J'adore / Je n'aime pas — บอกความชอบ</p>
+  <table class="ltable"><thead><tr><th>Expression</th><th class="thai">ระดับ</th><th>Exemple</th></tr></thead><tbody>
+  <tr><td class="fr">J'adore…</td><td class="th">ชอบมากที่สุด ❤️❤️❤️</td><td class="note">J'adore voyager en Asie.</td></tr>
+  <tr><td class="fr">J'aime beaucoup…</td><td class="th">ชอบมาก ❤️❤️</td><td class="note">J'aime beaucoup cuisiner.</td></tr>
+  <tr><td class="fr">J'aime…</td><td class="th">ชอบ ❤️</td><td class="note">J'aime lire le soir.</td></tr>
+  <tr><td class="fr">J'aime bien…</td><td class="th">ชอบพอสมควร 👍</td><td class="note">J'aime bien le cinéma.</td></tr>
+  <tr><td class="fr">Je n'aime pas trop…</td><td class="th">ไม่ค่อยชอบ 😐</td><td class="note">Je n'aime pas trop faire la vaisselle.</td></tr>
+  <tr><td class="fr">Je déteste…</td><td class="th">เกลียด / ไม่ชอบเลย 😤</td><td class="note">Je déteste me lever tôt !</td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ บทสนทนาตัวอย่าง</p>
+  <p class="text-[13px]">— <strong>Qu'est-ce que tu fais dans la vie ?</strong><br><span class="thai text-[12.5px] text-green-800">คุณทำอาชีพอะไร?</span></p>
+  <p class="text-[13px] mt-2">— <strong>Je suis étudiante en langues. Et toi ?</strong><br><span class="thai text-[12.5px] text-green-800">ฉันเป็นนักศึกษาวิชาภาษา แล้วคุณล่ะ?</span></p>
+  <p class="text-[13px] mt-2">— <strong>Moi, je suis photographe. J'adore voyager pour mon travail !</strong><br><span class="thai text-[12.5px] text-green-800">ฉันเป็นช่างภาพ ฉันชอบท่องเที่ยวเพื่องานมาก!</span></p></div>
+</div>`,
+
+"8-1": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">ฝรั่งเศสเป็นประเทศที่มีชื่อเสียงด้านอาหารที่สุดในโลก! ชาวฝรั่งเศสเอาจริงเอาจังเรื่องกินมาก อาหารฝรั่งเศสได้รับการยอมรับจาก UNESCO เป็นมรดกทางวัฒนธรรมในปี 2010</p><p class="text-[12px] text-amber-700 mt-1 italic">La gastronomie française est inscrite au patrimoine culturel immatériel de l'UNESCO depuis 2010.</p></div>
+
+  <div><p class="sec-head">🍽️ โครงสร้างมื้ออาหาร — Structure des repas français</p>
+  <table class="ltable"><thead><tr><th>Repas</th><th class="thai">ความหมาย</th><th class="thai">เวลาและรายละเอียด</th></tr></thead><tbody>
+  <tr><td class="fr">le petit-déjeuner</td><td class="th">อาหารเช้า</td><td class="note">7h-9h · croissant/tartine + café/jus d'orange · เบาๆ ไม่ใช่มื้อหลัก</td></tr>
+  <tr><td class="fr">le déjeuner</td><td class="th">อาหารกลางวัน</td><td class="note">12h-14h · มื้อสำคัญที่สุด! หลายบริษัทปิด 2 ชั่วโมง · 3 คอร์ส</td></tr>
+  <tr><td class="fr">le goûter</td><td class="th">อาหารว่างบ่าย</td><td class="note">16h · สำหรับเด็กเป็นหลัก · pain au chocolat / biscuits</td></tr>
+  <tr><td class="fr">le dîner</td><td class="th">อาหารเย็น</td><td class="note">19h30-21h · มื้อครอบครัว สำคัญมาก · เบากว่าเที่ยง</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🥐 Spécialités françaises incontournables</p>
+  <table class="ltable"><thead><tr><th>Spécialité</th><th class="thai">คำอธิบาย</th><th class="thai">ภูมิภาค</th></tr></thead><tbody>
+  <tr><td class="fr">la baguette</td><td class="th">ขนมปังแท่งยาวสัญลักษณ์ฝรั่งเศส — ซื้อสดทุกวันที่ boulangerie</td><td class="note">ทั่วประเทศ</td></tr>
+  <tr><td class="fr">le croissant</td><td class="th">ขนมปังเนยรูปพระจันทร์เสี้ยว กินตอนเช้า</td><td class="note">ทั่วประเทศ</td></tr>
+  <tr><td class="fr">le steak-frites</td><td class="th">สเต็กกับมันฝรั่งทอด — อาหารจานหลักที่ฝรั่งเศสรัก!</td><td class="note">ทั่วประเทศ</td></tr>
+  <tr><td class="fr">les crêpes</td><td class="th">แพนเค้กบางมาก — sucré (หวาน) หรือ galette (เค็ม ใช้แป้ง sarrasin)</td><td class="note">Bretagne</td></tr>
+  <tr><td class="fr">la bouillabaisse</td><td class="th">ซุปปลาและอาหารทะเลรสเข้มข้น</td><td class="note">Marseille</td></tr>
+  <tr><td class="fr">la ratatouille</td><td class="th">ผักตุ๋นเมดิเตอร์เรเนียน (มะเขือยาว มะเขือเทศ พริกหวาน)</td><td class="note">Provence</td></tr>
+  <tr><td class="fr">la quiche lorraine</td><td class="th">พายไข่กับเบคอนและครีม</td><td class="note">Lorraine</td></tr>
+  <tr><td class="fr">les escargots</td><td class="th">หอยทากปรุงรสเนยกระเทียม — อาหารแปลกสำหรับคนไทย!</td><td class="note">Bourgogne</td></tr>
+  <tr><td class="fr">les macarons</td><td class="th">ขนมอัลมอนด์สีสัน มีไส้ครีม — Ladurée มีชื่อมาก</td><td class="note">Paris</td></tr>
+  <tr><td class="fr">la tarte tatin</td><td class="th">พายแอปเปิ้ลกลับหัว</td><td class="note">Val de Loire</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">🧀 Le fromage — ชีสฝรั่งเศส (มากกว่า 400 ชนิด!)</p>
+  <table class="ltable"><thead><tr><th>Fromage</th><th class="thai">ลักษณะ</th><th class="thai">วิธีกิน</th></tr></thead><tbody>
+  <tr><td class="fr">le camembert</td><td class="th">ชีสนิ่ม เปลือกขาว กลิ่นแรง จาก Normandie</td><td class="note">กับขนมปัง ไวน์แดง</td></tr>
+  <tr><td class="fr">le brie</td><td class="th">ชีสนิ่มเหมือน camembert แต่อ่อนกว่า มาจาก Île-de-France</td><td class="note">กับผลไม้</td></tr>
+  <tr><td class="fr">le roquefort</td><td class="th">ชีสสีเขียว (moisissures) รสเค็มเข้มข้น จากถ้ำใต้ดิน</td><td class="note">สลัด ซอส</td></tr>
+  <tr><td class="fr">le comté</td><td class="th">ชีสแข็ง รสหวานนุ่ม จาก Jura</td><td class="note">บนแซนด์วิช ชีสกาต็อง</td></tr>
+  <tr><td class="fr">le chèvre</td><td class="th">ชีสแพะ รสเปรี้ยวเบา</td><td class="note">สลัด สด ๆ</td></tr>
+  </tbody></table>
+  <p class="thai text-[12px] text-blue-800 mt-2">💡 ในมื้ออาหารฝรั่งเศส ชีสเป็น <strong>คอร์สแยก</strong> มาหลังอาหารหลัก ก่อนของหวาน! พร้อมกับไวน์และขนมปัง</p></div>
+
+  <div><p class="sec-head">🍷 Le vin — วัฒนธรรมไวน์ฝรั่งเศส</p>
+  <table class="ltable"><thead><tr><th>Type</th><th class="thai">ลักษณะ</th><th class="thai">กินกับ</th></tr></thead><tbody>
+  <tr><td class="fr">le vin rouge</td><td class="th">ไวน์แดง — หนัก อุ่น</td><td class="note">เนื้อแดง ชีส</td></tr>
+  <tr><td class="fr">le vin blanc</td><td class="th">ไวน์ขาว — เบา สด</td><td class="note">ปลา อาหารทะเล ไก่</td></tr>
+  <tr><td class="fr">le vin rosé</td><td class="th">ไวน์โรเซ่ — กลาง สดชื่น</td><td class="note">ฤดูร้อน อาหารเบา</td></tr>
+  <tr><td class="fr">le champagne</td><td class="th">ไวน์ฟองจากแคว้น Champagne</td><td class="note">ฉลอง เมนูพิเศษ</td></tr>
+  </tbody></table>
+  <p class="thai text-[12px] text-gray-600 mt-2">💡 ภาษาฝรั่งเศสมักพูดว่า "Un verre de vin rouge, s'il vous plaît." (ขอไวน์แดงหนึ่งแก้ว) ไม่ต้องระบุยี่ห้อในชีวิตทั่วไป</p></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ประโยคที่ใช้บ่อยเรื่องอาหาร</p>
+  <p class="text-[13px]"><strong>C'est délicieux ! Qu'est-ce que c'est ?</strong><br><span class="thai text-[12.5px] text-green-800">อร่อยมาก! นี่คืออะไร?</span></p>
+  <p class="text-[13px] mt-2"><strong>Je suis végétarienne. Est-ce qu'il y a des plats sans viande ?</strong><br><span class="thai text-[12.5px] text-green-800">ฉันกินมังสวิรัติ มีเมนูไม่มีเนื้อไหม?</span></p>
+  <p class="text-[13px] mt-2"><strong>Je voudrais un café, s'il vous plaît. — Un expresso ou un allongé ?</strong><br><span class="thai text-[12.5px] text-green-800">ขอกาแฟหนึ่งแก้ว — เอสเปรสโซหรืออเมริกาโน่? (กาแฟในฝรั่งเศสเล็กและเข้มมาก!)</span></p></div>
+</div>`,
+
+"8-2": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">ฝรั่งเศสมีวันหยุดราชการ 11 วันต่อปี และเทศกาลที่น่าสนใจมากมาย! รู้จักเทศกาลเหล่านี้จะช่วยให้เข้าใจวัฒนธรรมฝรั่งเศสได้ลึกขึ้น</p></div>
+
+  <div><p class="sec-head">🎉 Jours fériés et fêtes principales</p>
+  <table class="ltable"><thead><tr><th>Fête</th><th class="thai">วันที่/ช่วง</th><th class="thai">ความหมายและประเพณี</th></tr></thead><tbody>
+  <tr><td class="fr">Le 1er janvier (Jour de l'An)</td><td class="th">1 มกราคม</td><td class="note">ปีใหม่ — "Bonne année !" · ดอกไม้ไฟเที่ยงคืน · อาหารค่ำพิเศษ</td></tr>
+  <tr><td class="fr">L'Épiphanie (Fête des Rois)</td><td class="th">มกราคม (อาทิตย์แรก)</td><td class="note">กิน "galette des rois" — พายอัลมอนด์ที่มีของเล็กซ่อนอยู่ ใครเจอได้สวมมงกุฎ!</td></tr>
+  <tr><td class="fr">La Saint-Valentin</td><td class="th">14 กุมภาพันธ์</td><td class="note">วันแห่งความรัก — ของขวัญ ดอกไม้ บัตรอวยพร</td></tr>
+  <tr><td class="fr">Mardi Gras / Carnaval</td><td class="th">ก่อนเทศกาลถือศีล</td><td class="note">แต่งตัวสวมหน้ากาก กิน crêpes · Carnaval de Nice มีชื่อเสียง</td></tr>
+  <tr><td class="fr">Pâques (อีสเตอร์)</td><td class="th">มีนาคม-เมษายน (เปลี่ยนทุกปี)</td><td class="note">ไข่ช็อคโกแลต · กระต่ายช็อคโกแลต · เด็กๆ หาของที่ซ่อน</td></tr>
+  <tr><td class="fr">La Fête du Travail</td><td class="th">1 พฤษภาคม</td><td class="note">วันแรงงาน — หยุดราชการ · ให้ดอก muguet (ดอกลิลลี่แห่งหุบเขา) เป็นสัญลักษณ์</td></tr>
+  <tr><td class="fr">Le 8 Mai (Victoire 1945)</td><td class="th">8 พฤษภาคม</td><td class="note">ฉลองชัยชนะสงครามโลกครั้งที่สอง</td></tr>
+  <tr><td class="fr">La Fête de la Musique</td><td class="th">21 มิถุนายน</td><td class="note">คอนเสิร์ตฟรีทั่วฝรั่งเศส ทุกคนออกมาเล่นดนตรีบนถนน!</td></tr>
+  <tr><td class="fr">Le 14 Juillet (Fête Nationale)</td><td class="th">14 กรกฎาคม</td><td class="note">วันชาติฝรั่งเศส — ดอกไม้ไฟที่หอไอเฟล · ขบวนพาเหรดทหาร · "Bastille Day"</td></tr>
+  <tr><td class="fr">Le 15 Août (Assomption)</td><td class="th">15 สิงหาคม</td><td class="note">หยุดราชการ — ช่วงหน้าร้อนที่ทุกคนพักผ่อน ร้านหลายแห่งปิด!</td></tr>
+  <tr><td class="fr">La Toussaint</td><td class="th">1 พฤศจิกายน</td><td class="note">วันนักบุญ — วางดอกไม้บนหลุมฝังศพของคนที่รัก</td></tr>
+  <tr><td class="fr">Noël (คริสต์มาส)</td><td class="th">25 ธันวาคม</td><td class="note">ของขวัญ ต้นคริสต์มาส · มื้อ réveillon วันที่ 24 ธ.ค. · "Joyeux Noël !"</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">🎊 ประโยคอวยพรสำหรับโอกาสต่างๆ</p>
+  <table class="ltable"><thead><tr><th>Occasion</th><th>Voeux</th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td class="note">ปีใหม่</td><td class="fr">Bonne année ! / Meilleurs vœux !</td><td class="th">สุขสันต์ปีใหม่! / ขอให้สุขสันต์!</td></tr>
+  <tr><td class="note">คริสต์มาส</td><td class="fr">Joyeux Noël !</td><td class="th">สุขสันต์วันคริสต์มาส!</td></tr>
+  <tr><td class="note">วันเกิด</td><td class="fr">Bon anniversaire ! / Joyeux anniversaire !</td><td class="th">สุขสันต์วันเกิด!</td></tr>
+  <tr><td class="note">วันสำคัญทั่วไป</td><td class="fr">Félicitations !</td><td class="th">ยินดีด้วย!</td></tr>
+  <tr><td class="note">งานแต่งงาน</td><td class="fr">Tous mes vœux de bonheur !</td><td class="th">ขอให้มีความสุข!</td></tr>
+  <tr><td class="note">ก่อนกิน</td><td class="fr">Bon appétit !</td><td class="th">อร่อยนะ! (บังคับพูดก่อนกินเสมอ)</td></tr>
+  <tr><td class="note">ก่อนดื่ม</td><td class="fr">Santé ! / À votre santé !</td><td class="th">ชนแก้ว! (ต้องสบตาเสมอ!)</td></tr>
+  </tbody></table>
+  <p class="thai text-[12px] text-blue-800 mt-2">⚠️ เมื่อชนแก้ว (trinquer) ต้องมองตากับทุกคนรอบวง! ไม่มองตาถือว่าโชคร้าย 7 ปี ตามความเชื่อฝรั่งเศส!</p></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ประโยคในเทศกาลต่างๆ</p>
+  <p class="text-[13px]"><strong>Joyeux Noël et bonne année à toute ta famille !</strong><br><span class="thai text-[12.5px] text-green-800">สุขสันต์วันคริสต์มาสและปีใหม่แก่ครอบครัวทั้งหมดของคุณ!</span></p>
+  <p class="text-[13px] mt-2"><strong>Le 14 juillet, on regarde le feu d'artifice devant la Tour Eiffel !</strong><br><span class="thai text-[12.5px] text-green-800">วันที่ 14 กรกฎาคม เราดูดอกไม้ไฟหน้าหอไอเฟล!</span></p>
+  <p class="text-[13px] mt-2"><strong>À Noël, on se retrouve en famille pour le réveillon.</strong><br><span class="thai text-[12.5px] text-green-800">ช่วงคริสต์มาส เรามารวมตัวกับครอบครัวเพื่อกินมื้อค่ำ réveillon</span></p></div>
+</div>`,
+
+"8-3": `
+<div class="space-y-3">
+  <div class="tip-box"><p class="sec-head">🇹🇭 บทนำ</p><p class="thai text-[13.5px] text-amber-900 leading-relaxed">ฝรั่งเศสไม่ใช่แค่ปารีส! ประเทศนี้มีภูมิทัศน์หลากหลาย ตั้งแต่ชายหาดเมดิเตอร์เรเนียนไปจนถึงยอดเขาแอลป์ รู้จักฝรั่งเศสให้ลึกขึ้นจะทำให้การสนทนากับชาวฝรั่งเศสน่าสนใจมากขึ้น!</p></div>
+
+  <div><p class="sec-head">🗺️ ภูมิศาสตร์ — Géographie</p>
+  <table class="ltable"><thead><tr><th class="thai">หัวข้อ</th><th class="thai">รายละเอียด</th></tr></thead><tbody>
+  <tr><td class="th">พื้นที่</td><td class="note">551,695 km² (ใหญ่กว่าไทยเล็กน้อย) · "L'Hexagone" เพราะมี 6 ด้าน</td></tr>
+  <tr><td class="th">เมืองหลวง</td><td class="note">Paris — มีคนอาศัยอยู่ในเขตเมือง 12 ล้านคน (เกือบ 1/5 ของประชากรฝรั่งเศส)</td></tr>
+  <tr><td class="th">แม่น้ำสำคัญ</td><td class="note">La Seine (ปารีส) · La Loire (ปราสาทโบราณ) · Le Rhône (Lyon)</td></tr>
+  <tr><td class="th">ภูเขา</td><td class="note">Les Alpes (Mont Blanc 4,808m = สูงที่สุดในยุโรปตะวันตก) · Les Pyrénées</td></tr>
+  <tr><td class="th">ทะเล</td><td class="note">Méditerranée (Nice, Marseille) · Atlantique (Bordeaux, Brest) · Manche</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🏙️ Villes importantes — เมืองสำคัญ</p>
+  <table class="ltable"><thead><tr><th>Ville</th><th class="thai">ชื่อเล่น/ความโดดเด่น</th><th class="thai">สิ่งที่มีชื่อเสียง</th></tr></thead><tbody>
+  <tr><td class="fr">Paris</td><td class="th">La Ville Lumière (เมืองแห่งแสงสว่าง)</td><td class="note">Tour Eiffel, Louvre, Notre-Dame, Champs-Élysées</td></tr>
+  <tr><td class="fr">Lyon</td><td class="th">Capital de la gastronomie (เมืองหลวงอาหาร)</td><td class="note">bouchons lyonnais, Paul Bocuse, soie (ผ้าไหม)</td></tr>
+  <tr><td class="fr">Marseille</td><td class="th">เมืองท่าที่เก่าแก่ที่สุด (600 ปีก่อน ค.ศ.)</td><td class="note">Vieux-Port, bouillabaisse, OM (ทีมฟุตบอล)</td></tr>
+  <tr><td class="fr">Nice</td><td class="th">เมืองริเวียร่า (Côte d'Azur)</td><td class="note">ชายหาด Promenade des Anglais, Carnaval</td></tr>
+  <tr><td class="fr">Bordeaux</td><td class="th">เมืองไวน์โลก</td><td class="note">ไวน์แดงระดับโลก, สถาปัตยกรรมสวยงาม</td></tr>
+  <tr><td class="fr">Strasbourg</td><td class="th">เมืองหลวงของสหภาพยุโรป</td><td class="note">ที่ตั้งของ Parlement Européen, ตลาดคริสต์มาส</td></tr>
+  </tbody></table></div>
+
+  <div class="rule-box"><p class="sec-head">🏛️ Monuments célèbres — สถานที่สำคัญ</p>
+  <table class="ltable"><thead><tr><th>Monument</th><th class="thai">ข้อมูลน่าสนใจ</th></tr></thead><tbody>
+  <tr><td class="fr">La Tour Eiffel</td><td class="note">สร้างปี 1889 · สูง 330m · มีคนมาเยี่ยม 7 ล้านคนต่อปี · ระยิบระยับทุกคืน</td></tr>
+  <tr><td class="fr">Le Musée du Louvre</td><td class="note">พิพิธภัณฑ์ที่มีผู้เยี่ยมชมมากที่สุดในโลก · Mona Lisa ของ Leonardo da Vinci</td></tr>
+  <tr><td class="fr">Le Château de Versailles</td><td class="note">พระราชวังของพระเจ้าหลุยส์ที่ 14 · สวนที่สวยที่สุดในยุโรป</td></tr>
+  <tr><td class="fr">La Cathédrale Notre-Dame de Paris</td><td class="note">ก็อทิคศตวรรษที่ 12 · ไฟไหม้ปี 2019 กำลังบูรณะ</td></tr>
+  <tr><td class="fr">Le Mont-Saint-Michel</td><td class="note">เกาะอารามในนอร์มังดี · มรดกโลก UNESCO</td></tr>
+  <tr><td class="fr">Le Pont du Gard</td><td class="note">สะพานส่งน้ำโรมันโบราณ อายุ 2,000 ปี ใกล้ Nîmes</td></tr>
+  </tbody></table></div>
+
+  <div><p class="sec-head">🔵⬜🔴 อัตลักษณ์ฝรั่งเศส — Identité française</p>
+  <table class="ltable"><thead><tr><th class="thai">สัญลักษณ์</th><th class="thai">ความหมาย</th></tr></thead><tbody>
+  <tr><td class="th">Devise nationale</td><td class="note"><strong>Liberté · Égalité · Fraternité</strong> — คติพจน์ตั้งแต่การปฏิวัติฝรั่งเศส 1789</td></tr>
+  <tr><td class="th">Marianne</td><td class="note">สัญลักษณ์หญิงสาวสวมหมวกฟรีเจียน = ใบหน้าของสาธารณรัฐฝรั่งเศส</td></tr>
+  <tr><td class="th">Le coq gaulois</td><td class="note">ไก่กอล (ไก่สีทอง) = สัตว์ประจำชาติ ใช้กับทีมกีฬาชาติ</td></tr>
+  <tr><td class="th">La Marseillaise</td><td class="note">เพลงชาติ — เขียนปี 1792 · ร้องกันทุกงานกีฬาชาติ</td></tr>
+  <tr><td class="th">La laïcité</td><td class="note">การแยกศาสนาและรัฐ — ค่านิยมหลักของฝรั่งเศส ตั้งแต่ปี 1905</td></tr>
+  <tr><td class="th">Les DOM-TOM</td><td class="note">ดินแดนโพ้นทะเล: Martinique, Guadeloupe (แคริบเบียน), La Réunion (มหาสมุทรอินเดีย), Guyane (อเมริกาใต้) — ยังเป็นส่วนหนึ่งของฝรั่งเศส!</td></tr>
+  </tbody></table></div>
+
+  <div class="ex-box"><p class="sec-head">✅ ประโยคที่ใช้บ่อยเรื่องฝรั่งเศส</p>
+  <p class="text-[13px]"><strong>J'ai toujours rêvé de voir la Tour Eiffel de près !</strong><br><span class="thai text-[12.5px] text-green-800">ฉันฝันมาตลอดที่จะเห็นหอไอเฟลใกล้ๆ!</span></p>
+  <p class="text-[13px] mt-2"><strong>Quelle est la capitale de la France ? — C'est Paris, bien sûr !</strong><br><span class="thai text-[12.5px] text-green-800">เมืองหลวงของฝรั่งเศสคืออะไร? — ปารีสไง แน่นอน!</span></p>
+  <p class="text-[13px] mt-2"><strong>La devise française est : Liberté, Égalité, Fraternité.</strong><br><span class="thai text-[12.5px] text-green-800">คติพจน์ฝรั่งเศสคือ: เสรีภาพ ความเสมอภาค ภราดรภาพ</span></p></div>
+</div>`
+
 };
 
 // ============================================================
@@ -1497,6 +1840,14 @@ const COLORS = {
         btn:    'bg-teal-500 hover:bg-teal-600',
         light:  'bg-teal-50 border-teal-200',
         text:   'text-teal-800',
+    },
+    orange: {
+        icon:   'bg-orange-50 text-orange-600',
+        badge:  'bg-orange-100 text-orange-700',
+        dot:    'bg-orange-400',
+        btn:    'bg-orange-500 hover:bg-orange-600',
+        light:  'bg-orange-50 border-orange-200',
+        text:   'text-orange-800',
     },
 };
 
